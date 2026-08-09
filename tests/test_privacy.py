@@ -2,7 +2,7 @@
 
 The source is public, but resident free text, exact addresses and coordinates are
 not republished here. These tests fail if any suppressed field, or anything
-shaped like one, reaches a published artefact.
+shaped like one, reaches a published artifact.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ import pytest
 
 from src import config
 
-# Artefacts a reader can actually see. Raw CSVs are git-ignored and excluded.
+# Artifacts a reader can actually see. Raw CSVs are git-ignored and excluded.
 PUBLISHED_GLOBS = (
     "data/aggregates/*.csv",
     "05_dashboard/dashboard.html",
@@ -71,7 +71,7 @@ def test_resident_description_never_reaches_an_aggregate(fixture_db):
 
 
 @pytest.mark.parametrize("field", config.SUPPRESSED_SOURCE_FIELDS)
-def test_no_published_artefact_contains_a_suppressed_column_header(field):
+def test_no_published_artifact_contains_a_suppressed_column_header(field):
     """A suppressed field name appearing as a CSV header means it was exported."""
     offenders = []
     for path in published_files():
@@ -83,8 +83,8 @@ def test_no_published_artefact_contains_a_suppressed_column_header(field):
     assert not offenders, f"{field} exported in: {offenders}"
 
 
-def test_no_published_artefact_contains_an_email_address():
-    """The raw referral text carries staff and vendor addresses; it must be normalised."""
+def test_no_published_artifact_contains_an_email_address():
+    """The raw referral text carries staff and vendor addresses; it must be normalized."""
     offenders = []
     for path in published_files():
         text = path.read_text(errors="ignore")
@@ -97,7 +97,7 @@ def test_no_published_artefact_contains_an_email_address():
     assert not offenders, f"email addresses found in published output: {offenders[:5]}"
 
 
-def test_no_published_artefact_contains_a_street_address():
+def test_no_published_artifact_contains_a_street_address():
     offenders = []
     for path in published_files():
         if path.name in ("test_privacy.py",):
@@ -107,7 +107,7 @@ def test_no_published_artefact_contains_a_street_address():
     assert not offenders, f"street addresses found: {offenders[:5]}"
 
 
-def test_no_published_artefact_contains_point_coordinates():
+def test_no_published_artifact_contains_point_coordinates():
     offenders = []
     for path in published_files():
         if SD_COORDINATE.search(path.read_text(errors="ignore")):

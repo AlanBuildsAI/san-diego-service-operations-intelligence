@@ -77,7 +77,7 @@ def test_charts_emit_valid_single_root_svg():
     assert svg.count("<svg") == 1
 
 
-def test_charts_use_theme_tokens_not_hard_coded_colours():
+def test_charts_use_theme_tokens_not_hard_coded_colors():
     """Hard-coded hex would break dark mode."""
     svg = charts.dumbbell(["a"], [1.0], [10.0])
     assert "var(--series-" in svg
@@ -105,9 +105,59 @@ def test_every_relative_markdown_link_resolves():
     assert not broken, "broken relative links:\n" + "\n".join(broken)
 
 
-def test_readme_carries_the_data_boundary_note():
-    readme = (config.REPO_ROOT / "README.md").read_text()
-    assert "not verified maintenance completion" in readme
+RECRUITER_FACING = (
+    "README.md",
+    "04_analysis/findings.md",
+    "06_executive_memo/executive_memo.md",
+    "05_dashboard/dashboard.html",
+)
+
+
+def normalized_prose(relative_path: str) -> str:
+    """Document text with wrapping and emphasis removed.
+
+    These assertions are about content, not typography — a phrase broken across a
+    line or wrapped in bold is still present for the reader.
+    """
+    text = (config.REPO_ROOT / relative_path).read_text()
+    text = re.sub(r"[*_`>]", " ", text)
+    return re.sub(r"\s+", " ", text).lower()
+
+
+@pytest.mark.parametrize("relative_path", RECRUITER_FACING)
+def test_recruiter_facing_artifacts_carry_the_data_boundary(relative_path):
+    """A reader must not be able to reach a finding without the boundary note."""
+    assert "not verified maintenance completion" in normalized_prose(relative_path), \
+        relative_path
+
+
+@pytest.mark.parametrize("relative_path", RECRUITER_FACING)
+def test_recruiter_facing_artifacts_disclose_portfolio_status(relative_path):
+    """This work was not commissioned by the City; every public surface says so."""
+    prose = normalized_prose(relative_path)
+    assert "independent portfolio case study" in prose, relative_path
+    assert "not commissioned by" in prose, relative_path
+
+
+def test_no_artifact_claims_a_city_engagement():
+    """Guard against wording that would imply real City employment or contracting."""
+    banned = [
+        r"\bcommissioned by the city\b(?!,| ,)",
+        r"\bon behalf of the city\b",
+        r"\bmy client\b",
+        r"\bwhile (?:working|employed) (?:at|for) the city\b",
+        r"\bcontracted (?:by|to) the city\b",
+    ]
+    offenders = []
+    for path in markdown_files():
+        text = path.read_text()
+        for pattern in banned:
+            for match in re.finditer(pattern, text, flags=re.IGNORECASE):
+                context = text[max(0, match.start() - 60):match.end() + 20]
+                if "not commissioned by" in context.lower():
+                    continue
+                offenders.append(f"{path.relative_to(config.REPO_ROOT)}: {match.group(0)!r}")
+    assert not offenders, f"implied City engagement: {offenders}"
 
 
 def test_no_document_claims_an_unsupported_outcome():

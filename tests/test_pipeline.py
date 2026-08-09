@@ -187,7 +187,7 @@ def test_council_district_is_only_ever_1_to_9_or_null(fixture_db):
 
 
 def test_geography_aggregate_reconciles_to_the_backlog(fixture_db):
-    """Unknown geography is kept as a labelled group, so shares sum to the whole."""
+    """Unknown geography is kept as a labeled group, so shares sum to the whole."""
     active = fixture_db.execute(
         "SELECT COUNT(*) FROM fct_requests WHERE is_active").fetchone()[0]
     in_district_table = fixture_db.execute(
@@ -195,7 +195,7 @@ def test_geography_aggregate_reconciles_to_the_backlog(fixture_db):
     assert in_district_table == active
 
 
-def test_missing_dimensions_become_labelled_groups(fixture_db):
+def test_missing_dimensions_become_labeled_groups(fixture_db):
     """Fixture record 1998 has no service name, community or channel."""
     service, community, origin = fixture_db.execute(
         "SELECT service_name, community, case_origin FROM fct_requests "
@@ -234,7 +234,7 @@ def test_referral_scope_columns_reconcile_to_referred_total(fixture_db):
 
 
 def test_incomplete_demand_months_are_flagged(fixture_db):
-    """Months the scope cannot fully cover must never be labelled complete."""
+    """Months the scope cannot fully cover must never be labeled complete."""
     bad = fixture_db.execute(
         "SELECT COUNT(*) FROM agg_demand_monthly "
         "WHERE month_start < DATE '2025-01-01' AND coverage_status = 'complete'"

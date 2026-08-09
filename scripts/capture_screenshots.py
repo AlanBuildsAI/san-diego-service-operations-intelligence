@@ -34,8 +34,10 @@ CHROME_CANDIDATES = (
     "chromium-browser",
 )
 
+# Heights are the rendered page height at 1280px wide. If a panel is added the
+# full-page shot must be re-measured, or the capture silently truncates.
 SHOTS = (
-    ("dashboard_full.png", 1280, 4300),
+    ("dashboard_full.png", 1280, 6650),
     ("dashboard_overview.png", 1280, 1000),
 )
 

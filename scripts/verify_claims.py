@@ -157,6 +157,7 @@ def check_traceability(documents: dict[str, str]) -> dict[str, list[str]]:
         body = re.sub(r"\]\([^)]*\)", "]()", body)
         body = ISO_DATE.sub(" ", body)          # dates are not claims
         body = re.sub(r"`[^`]*`", " ", body)    # inline code: file paths, columns
+        body = re.sub(r"\bDQ-\d+\b", " ", body)  # audit check IDs, not figures
         found: list[str] = []
         for token in NUMBER_TOKEN.findall(body):
             token = token.rstrip(".")

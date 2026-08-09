@@ -169,7 +169,7 @@ def main() -> int:
     a("| `public_description` | Resident-submitted free text |")
     a("| `street_address` | Exact point address |")
     a("| `lat`, `lng` | Exact coordinates; geography is published at district / community / ZIP |")
-    a("| `referred` (raw text) | Contains staff and vendor email addresses; normalised to a destination label |")
+    a("| `referred` (raw text) | Contains staff and vendor email addresses; normalized to a destination label |")
     a("| `iamfloc`, `floc` | Internal asset identifiers, no analytical value here |")
     a("| `sap_notification_number` | Internal system identifier |")
     a("")

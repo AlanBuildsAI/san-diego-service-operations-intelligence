@@ -1,6 +1,6 @@
 """Generate REVIEW_PACKET.md — everything a reviewer needs to check this project.
 
-Assembled from the real run artefacts: the download manifest, run metadata, audit
+Assembled from the real run artifacts: the download manifest, run metadata, audit
 results, aggregate row counts, a live pytest run and a live claims verification.
 Nothing is asserted that was not measured at generation time.
 
@@ -164,27 +164,35 @@ def main() -> int:
     a("## 4. Main findings")
     a("")
     c = built_claims
-    a(f"1. **Intake is fast; a specific queue is not clearing.** "
-      f"{c['cohort_pct_resolved'].formatted} of requests submitted Jan–Jun 2026 are already "
-      f"resolved, median {c['cohort_median_lifecycle'].formatted} days — yet "
-      f"{c['active_backlog'].formatted} requests are active with a median age of "
-      f"{c['active_median_age_days'].formatted} days.")
-    a(f"2. **{c['active_aged_90_plus_pct'].formatted} of the active backlog is past 90 days** "
+    a(f"1. **Recent submissions settle quickly; the standing inventory is old.** "
+      f"{c['cohort_pct_resolved'].formatted} of requests submitted Jan-Jun 2026 had reached a "
+      f"terminal status by the snapshot (median {c['cohort_median_lifecycle'].formatted} days "
+      f"among those) - yet {c['active_backlog'].formatted} requests are active with a median "
+      f"age of {c['active_median_age_days'].formatted} days.")
+    a(f"2. **{c['active_aged_90_plus_pct'].formatted} of the active inventory is past 90 days** "
       f"({c['active_aged_90_plus'].formatted} records); "
       f"{c['active_aged_365_plus_pct'].formatted} is past a year.")
-    a(f"3. **Four categories hold {c['top4_share_pct'].formatted} of the backlog**, all under "
-      f"the TSW record type ({c['tsw_pct_of_backlog'].formatted} of active work).")
-    a(f"4. **Ageing is not geographic** — the aged-concentration index spans only "
-      f"{c['aging_index_min'].formatted} to {c['aging_index_max'].formatted} across the nine "
-      f"council districts. Reported as a negative finding.")
+    a(f"3. **Four categories hold {c['top4_share_pct'].formatted} of active records.** TSW is "
+      f"the modal case_record_type for all four ({c['tsw_pct_of_backlog'].formatted} of active "
+      f"records carry that label - a staff-group label, not a confirmed department owner).")
+    a(f"4. **No strong district-level over-concentration is evident** - the descriptive "
+      f"aged-concentration index varies only {c['aging_index_min'].formatted} to "
+      f"{c['aging_index_max'].formatted} across the nine council districts. This does not "
+      f"prove geography is irrelevant.")
     a(f"5. **Duplicates are {c['duplicate_rate_active_pct'].formatted} of the active queue** "
-      f"({c['duplicate_children_active'].formatted} records) but move no category more than "
-      f"{c['dup_max_rank_shift'].formatted} rank positions.")
+      f"({c['duplicate_children_active'].formatted} records). Collapsing them moves top-20 "
+      f"volume rankings by no more than {c['dup_max_rank_shift'].formatted} positions; the "
+      f"composite priority score was not re-derived on deduplicated inputs.")
     a(f"6. **Two metrics are traps and both are handled**: the "
-      f"{c['closed_median_lifecycle'].formatted}-day closure median is a cohort artefact "
+      f"{c['closed_median_lifecycle'].formatted}-day closure median is a cohort artifact "
       f"({c['closure_cohort_same_year_pct'].formatted} of this year's closures were also "
-      f"submitted this year), and the apparent channel effect collapses to "
+      f"submitted this year), and the apparent channel difference falls to "
       f"{c['channel_median_gap_days'].formatted} days once service category is held constant.")
+    a(f"7. **The priority ranking is a heuristic sensitive to its weights.** Across "
+      f"{c['weight_schemes_tested'].formatted} weighting schemes, Sidewalk and Pavement hold "
+      f"the top two in all {c['weight_schemes_tested'].formatted}, but Street Light "
+      f"Maintenance is top-three in only {c['streetlight_top3_scheme_count'].formatted}. An "
+      f"earlier 'stable top three' claim was tested, disproved and removed.")
     a("")
     a("Full reasoning: [`04_analysis/findings.md`](04_analysis/findings.md).")
     a("")
@@ -200,13 +208,18 @@ def main() -> int:
     a("- **Duplicate counts are a floor** — the City's own determinations only; no fuzzy")
     a("  matching was attempted.")
     a("- **Category-level year-over-year is invalid** across the 2025/2026 boundary because")
-    a("  of a confirmed service relabelling. Reported citywide and by record type instead.")
+    a("  of a confirmed service relabeling. Reported citywide and by record type instead.")
     a("- **One level of duplicate nesting is collapsed.** 428 children point at another")
     a("  child (0.06% of records).")
     a("- **Referral destination parsing is rule-based**; `City – Other department` is a")
     a("  residual bucket, not one department.")
-    a("- **Priority-score weights (0.45 / 0.35 / 0.20) are a documented judgement**, not a")
-    a("  derivation. The top three are stable under reweighting; the middle of the list is not.")
+    a("- **Priority-score weights (0.45 / 0.35 / 0.20) are a documented judgment**, not a")
+    a("  derivation. Measured sensitivity: the top two hold across all five tested schemes;")
+    a("  the third position does not.")
+    a("- **The cohort lifecycle median is right-censored** - computed only over records that")
+    a("  had reached a terminal status by the snapshot. The terminal-status share is not.")
+    a("- **`case_record_type` is a staff-group label**, many-to-many with `service_name`, and")
+    a("  not a confirmed mapping to a current City department.")
     a("")
 
     # --- 6. unverified -------------------------------------------------------
@@ -228,7 +241,11 @@ def main() -> int:
       "when opened. |")
     a("| Streamlit app under load | **PARTIAL** | Verified to start and serve HTTP 200 with a "
       "healthy `/_stcore/health`; not click-tested page by page. |")
-    a("| Cause of the ageing backlog | **UNRESOLVED BY DESIGN** | Requires the City's "
+    a("| Reproducing the exact snapshot from the source URLs | **NOT POSSIBLE** | The City's "
+      "files are rolling datasets refreshed daily; a later download returns current records. "
+      "The committed aggregates, hashes, tests and claim registry are what make the published "
+      "snapshot auditable. |")
+    a("| Cause of the aging inventory | **UNRESOLVED BY DESIGN** | Requires the City's "
       "maintenance work-order system, which is not in this dataset. This is why the "
       "recommendations say *investigate*. |")
     a("| `(Unclassified)` category growth | **NOT EXPLAINED** | Grew from 173 to 2,919 "
