@@ -296,7 +296,10 @@ def check_geography_validity(con) -> CheckResult:
 def check_service_taxonomy(con) -> CheckResult:
     multi = con.execute("""
         SELECT service_name, COUNT(DISTINCT case_record_type) AS n_types,
-               STRING_AGG(DISTINCT case_record_type, ' | ') AS types
+               -- ORDER BY is required: without it DuckDB's aggregate order varies
+               -- between runs and the generated report is no longer byte-stable.
+               STRING_AGG(DISTINCT case_record_type, ' | '
+                          ORDER BY case_record_type) AS types
         FROM fct_requests GROUP BY 1 HAVING COUNT(DISTINCT case_record_type) > 1
         ORDER BY n_types DESC, service_name
     """).fetchall()
