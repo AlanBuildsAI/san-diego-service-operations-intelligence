@@ -138,7 +138,7 @@ name or address/email-shaped string appears in a published artefact.
 | [`07_methodology/`](07_methodology/) | [Methodology](07_methodology/methodology.md) — decisions, trade-offs and known weaknesses |
 | [`08_interview_defense/`](08_interview_defense/) | [Interview guide](08_interview_defense/interview_guide.md) — 28 questions with grounded answers |
 | [`src/`](src/) · [`scripts/`](scripts/) | Pipeline runner, audit harness, claim registry, output builders |
-| [`tests/`](tests/) | 60+ tests over a synthetic fixture, plus privacy and link checks |
+| [`tests/`](tests/) | 84 tests over a synthetic fixture, plus privacy and link checks |
 | [`docs/`](docs/) | [Source manifest](docs/source_manifest.md) — files, hashes, row counts, licensing |
 
 ### SQL layer
