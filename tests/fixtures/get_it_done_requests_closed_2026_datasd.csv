@@ -1,0 +1,83 @@
+service_request_id,service_request_parent_id,sap_notification_number,date_requested,case_age_days,case_record_type,service_name,service_name_detail,date_closed,status,lat,lng,street_address,zipcode,council_district,comm_plan_code,comm_plan_name,park_name,case_origin,referred,iamfloc,floc,public_description
+2000,,,2026-04-13 11:00:00.000,1,TSW,Sidewalk Repair Issue,,2026-04-14,Referred,,,0 Elm Ave,92101,1,,DOWNTOWN,,Mobile,This report has been referred to Caltrans San Diego at null,,,synthetic text
+2001,,,2026-06-03 11:00:00.000,0,TSW,Street Light Maintenance,,2026-06-03,Closed,,,1 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2002,,,2024-06-18 11:00:00.000,700,TSW,Pothole,,2026-05-19,Closed,,,2 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2003,,,2024-08-10 11:00:00.000,700,TSW,Parking - 72-Hours,,2026-07-11,Closed,,,3 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2004,,,2026-06-10 11:00:00.000,2,TSW,Encampment,,2026-06-12,Closed,,,4 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2005,,,2026-03-20 11:00:00.000,30,TSW,Sidewalk Repair Issue,,2026-04-19,Closed,,,5 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2006,,,2024-05-03 11:00:00.000,700,TSW,Street Light Maintenance,,2026-04-03,Closed,,,6 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2007,2006,,2024-02-09 11:00:00.000,700,TSW,Pothole,,2026-01-09,Closed,,,7 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2008,,,2026-06-17 11:00:00.000,5,TSW,Parking - 72-Hours,,2026-06-22,Closed,,,8 Elm Ave,92101,9,,NORTH PARK,,Phone,,,,synthetic text
+2009,,,2026-01-24 11:00:00.000,0,TSW,Encampment,,2026-01-24,Referred,,,9 Elm Ave,92101,1,,DOWNTOWN,,Mobile,"Your request has been referred to SDG&E. To contact SDG&E, please call 800-411-7343.",,,synthetic text
+2010,,,2025-11-21 11:00:00.000,120,TSW,Sidewalk Repair Issue,,2026-03-21,Closed,,,10 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2011,,,2026-05-28 11:00:00.000,30,TSW,Street Light Maintenance,,2026-06-27,Closed,,,11 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2012,,,2026-03-18 11:00:00.000,5,TSW,Pothole,,2026-03-23,Closed,,,12 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2013,,,2026-06-07 11:00:00.000,5,TSW,Parking - 72-Hours,,2026-06-12,Closed,,,13 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2014,2013,,2026-04-12 11:00:00.000,0,TSW,Encampment,,2026-04-12,Closed,,,14 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2015,,,2026-05-03 11:00:00.000,1,TSW,Sidewalk Repair Issue,,2026-05-04,Closed,,,15 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2016,,,2026-01-02 11:00:00.000,5,TSW,Street Light Maintenance,,2026-01-07,Closed,,,16 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2017,,,2024-04-04 11:00:00.000,700,TSW,Pothole,,2026-03-05,Closed,,,17 Elm Ave,92101,9,,NORTH PARK,,Phone,,,,synthetic text
+2018,,,2025-10-16 11:00:00.000,120,TSW,Parking - 72-Hours,,2026-02-13,Referred,,,18 Elm Ave,92101,1,,DOWNTOWN,,Mobile,This report has been referred to Caltrans San Diego at null,,,synthetic text
+2019,,,2026-07-11 11:00:00.000,5,TSW,Encampment,,2026-07-16,Closed,,,19 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2020,,,2026-02-15 11:00:00.000,0,TSW,Sidewalk Repair Issue,,2026-02-15,Closed,,,20 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2021,2020,,2026-05-04 11:00:00.000,5,TSW,Street Light Maintenance,,2026-05-09,Closed,,,21 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2022,,,2026-07-13 11:00:00.000,1,TSW,Pothole,,2026-07-14,Closed,,,22 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2023,,,2024-06-08 11:00:00.000,700,TSW,Parking - 72-Hours,,2026-05-09,Closed,,,23 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2024,,,2025-12-13 11:00:00.000,120,TSW,Encampment,,2026-04-12,Closed,,,24 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2025,,,2025-12-09 11:00:00.000,120,TSW,Sidewalk Repair Issue,,2026-04-08,Closed,,,25 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2026,,,2026-01-05 11:00:00.000,1,TSW,Street Light Maintenance,,2026-01-06,Closed,,,26 Elm Ave,92101,9,,NORTH PARK,,Phone,,,,synthetic text
+2027,,,2026-02-21 11:00:00.000,1,TSW,Pothole,,2026-02-22,Referred,,,27 Elm Ave,92101,1,,DOWNTOWN,,Mobile,"Your request has been referred to SDG&E. To contact SDG&E, please call 800-411-7343.",,,synthetic text
+2028,2027,,2026-01-15 11:00:00.000,1,TSW,Parking - 72-Hours,,2026-01-16,Closed,,,28 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2029,,,2024-06-05 11:00:00.000,700,TSW,Encampment,,2026-05-06,Closed,,,29 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2030,,,2026-02-27 11:00:00.000,2,TSW,Sidewalk Repair Issue,,2026-03-01,Closed,,,30 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2031,,,2026-04-17 11:00:00.000,1,TSW,Street Light Maintenance,,2026-04-18,Closed,,,31 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2032,,,2026-05-17 11:00:00.000,2,TSW,Pothole,,2026-05-19,Closed,,,32 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2033,,,2026-02-21 11:00:00.000,2,TSW,Parking - 72-Hours,,2026-02-23,Closed,,,33 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2034,,,2024-06-19 11:00:00.000,700,TSW,Encampment,,2026-05-20,Closed,,,34 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2035,2034,,2026-02-24 11:00:00.000,120,TSW,Sidewalk Repair Issue,,2026-06-24,Closed,,,35 Elm Ave,92101,9,,NORTH PARK,,Phone,,,,synthetic text
+2036,,,2026-04-28 11:00:00.000,0,TSW,Street Light Maintenance,,2026-04-28,Referred,,,36 Elm Ave,92101,1,,DOWNTOWN,,Mobile,This report has been referred to Caltrans San Diego at null,,,synthetic text
+2037,,,2024-08-21 11:00:00.000,700,TSW,Pothole,,2026-07-22,Closed,,,37 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2038,,,2024-06-12 11:00:00.000,700,TSW,Parking - 72-Hours,,2026-05-13,Closed,,,38 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2039,,,2026-04-08 11:00:00.000,5,TSW,Encampment,,2026-04-13,Closed,,,39 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2040,,,2026-04-21 11:00:00.000,0,TSW,Sidewalk Repair Issue,,2026-04-21,Closed,,,40 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2041,,,2026-01-02 11:00:00.000,5,TSW,Street Light Maintenance,,2026-01-07,Closed,,,41 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2042,2041,,2026-02-15 11:00:00.000,0,TSW,Pothole,,2026-02-15,Closed,,,42 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2043,,,2026-01-10 11:00:00.000,1,TSW,Parking - 72-Hours,,2026-01-11,Closed,,,43 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2044,,,2025-12-05 11:00:00.000,30,TSW,Encampment,,2026-01-04,Closed,,,44 Elm Ave,92101,9,,NORTH PARK,,Phone,,,,synthetic text
+2045,,,2026-05-05 11:00:00.000,0,TSW,Sidewalk Repair Issue,,2026-05-05,Referred,,,45 Elm Ave,92101,1,,DOWNTOWN,,Mobile,"Your request has been referred to SDG&E. To contact SDG&E, please call 800-411-7343.",,,synthetic text
+2046,,,2025-12-13 11:00:00.000,30,TSW,Street Light Maintenance,,2026-01-12,Closed,,,46 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2047,,,2025-12-04 11:00:00.000,30,TSW,Pothole,,2026-01-03,Closed,,,47 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2048,,,2024-03-22 11:00:00.000,700,TSW,Parking - 72-Hours,,2026-02-20,Closed,,,48 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2049,2048,,2026-02-16 11:00:00.000,5,TSW,Encampment,,2026-02-21,Closed,,,49 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2050,,,2026-03-18 11:00:00.000,2,TSW,Sidewalk Repair Issue,,2026-03-20,Closed,,,50 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2051,,,2026-04-02 11:00:00.000,2,TSW,Street Light Maintenance,,2026-04-04,Closed,,,51 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2052,,,2026-07-16 11:00:00.000,0,TSW,Pothole,,2026-07-16,Closed,,,52 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2053,,,2026-04-11 11:00:00.000,5,TSW,Parking - 72-Hours,,2026-04-16,Closed,,,53 Elm Ave,92101,9,,NORTH PARK,,Phone,,,,synthetic text
+2054,,,2026-01-03 11:00:00.000,2,TSW,Encampment,,2026-01-05,Referred,,,54 Elm Ave,92101,1,,DOWNTOWN,,Mobile,This report has been referred to Caltrans San Diego at null,,,synthetic text
+2055,,,2026-06-11 11:00:00.000,0,TSW,Sidewalk Repair Issue,,2026-06-11,Closed,,,55 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2056,2055,,2025-11-16 11:00:00.000,120,TSW,Street Light Maintenance,,2026-03-16,Closed,,,56 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2057,,,2024-07-06 11:00:00.000,700,TSW,Pothole,,2026-06-06,Closed,,,57 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2058,,,2025-12-08 11:00:00.000,30,TSW,Parking - 72-Hours,,2026-01-07,Closed,,,58 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2059,,,2026-02-03 11:00:00.000,30,TSW,Encampment,,2026-03-05,Closed,,,59 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2060,,,2026-01-01 11:00:00.000,120,TSW,Sidewalk Repair Issue,,2026-05-01,Closed,,,60 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2061,,,2024-06-09 11:00:00.000,700,TSW,Street Light Maintenance,,2026-05-10,Closed,,,61 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2062,,,2026-03-05 11:00:00.000,120,TSW,Pothole,,2026-07-03,Closed,,,62 Elm Ave,92101,9,,NORTH PARK,,Phone,,,,synthetic text
+2063,2062,,2026-03-11 11:00:00.000,120,TSW,Parking - 72-Hours,,2026-07-09,Referred,,,63 Elm Ave,92101,1,,DOWNTOWN,,Mobile,"Your request has been referred to SDG&E. To contact SDG&E, please call 800-411-7343.",,,synthetic text
+2064,,,2026-02-04 11:00:00.000,30,TSW,Encampment,,2026-03-06,Closed,,,64 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2065,,,2026-07-06 11:00:00.000,2,TSW,Sidewalk Repair Issue,,2026-07-08,Closed,,,65 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2066,,,2026-04-25 11:00:00.000,30,TSW,Street Light Maintenance,,2026-05-25,Closed,,,66 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2067,,,2026-02-19 11:00:00.000,30,TSW,Pothole,,2026-03-21,Closed,,,67 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2068,,,2026-05-25 11:00:00.000,1,TSW,Parking - 72-Hours,,2026-05-26,Closed,,,68 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2069,,,2024-08-27 11:00:00.000,700,TSW,Encampment,,2026-07-28,Closed,,,69 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2070,2069,,2026-07-07 11:00:00.000,1,TSW,Sidewalk Repair Issue,,2026-07-08,Closed,,,70 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2071,,,2024-05-24 11:00:00.000,700,TSW,Street Light Maintenance,,2026-04-24,Closed,,,71 Elm Ave,92101,9,,NORTH PARK,,Phone,,,,synthetic text
+2072,,,2024-03-09 11:00:00.000,700,TSW,Pothole,,2026-02-07,Referred,,,72 Elm Ave,92101,1,,DOWNTOWN,,Mobile,This report has been referred to Caltrans San Diego at null,,,synthetic text
+2073,,,2026-03-13 11:00:00.000,30,TSW,Parking - 72-Hours,,2026-04-12,Closed,,,73 Elm Ave,92101,2,,LA JOLLA,,Web,,,,synthetic text
+2074,,,2025-09-03 11:00:00.000,120,TSW,Encampment,,2026-01-01,Closed,,,74 Elm Ave,92101,3,,NORTH PARK,,Phone,,,,synthetic text
+2075,,,2024-04-15 11:00:00.000,700,TSW,Sidewalk Repair Issue,,2026-03-16,Closed,,,75 Elm Ave,92101,4,,DOWNTOWN,,Mobile,,,,synthetic text
+2076,,,2026-02-21 11:00:00.000,2,TSW,Street Light Maintenance,,2026-02-23,Closed,,,76 Elm Ave,92101,5,,LA JOLLA,,Web,,,,synthetic text
+2077,2076,,2026-02-13 11:00:00.000,30,TSW,Pothole,,2026-03-15,Closed,,,77 Elm Ave,92101,6,,NORTH PARK,,Phone,,,,synthetic text
+2078,,,2024-07-12 11:00:00.000,700,TSW,Parking - 72-Hours,,2026-06-12,Closed,,,78 Elm Ave,92101,7,,DOWNTOWN,,Mobile,,,,synthetic text
+2079,,,2026-01-06 11:00:00.000,2,TSW,Encampment,,2026-01-08,Closed,,,79 Elm Ave,92101,8,,LA JOLLA,,Web,,,,synthetic text
+2999,,,2026-03-01 09:00:00.000,10,TSW,Pothole,,2026-03-11,Closed,,,,,1,,DOWNTOWN,,Web,This report has been referred to Parks Intake,,,
+2998,,,2026-04-10 09:00:00.000,-2,TSW,Pothole,,2026-04-08,Closed,,,,,2,,LA JOLLA,,Mobile,,,,

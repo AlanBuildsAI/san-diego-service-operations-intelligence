@@ -1,0 +1,52 @@
+service_request_id,service_request_parent_id,sap_notification_number,date_requested,case_age_days,case_record_type,service_name,service_name_detail,date_closed,status,lat,lng,street_address,zipcode,council_district,comm_plan_code,comm_plan_name,park_name,case_origin,referred,iamfloc,floc,public_description
+3000,,,2025-04-16 14:30:00.000,0,Parking,Sidewalk Repair Issue,,2025-04-16,Closed,,,,,1,,DOWNTOWN,,Mobile,,,,synthetic text
+3001,,,2025-06-06 14:30:00.000,1,Parking,Street Light Maintenance,,2025-06-07,Closed,,,,,2,,LA JOLLA,,Mobile,,,,synthetic text
+3002,,,2025-09-30 14:30:00.000,20,Parking,Pothole,,2025-10-20,Closed,,,,,3,,NORTH PARK,,Mobile,,,,synthetic text
+3003,,,2025-08-21 14:30:00.000,0,Parking,Parking - 72-Hours,,2025-08-21,Closed,,,,,4,,DOWNTOWN,,Mobile,,,,synthetic text
+3004,,,2025-10-30 14:30:00.000,4,Parking,Encampment,,2025-11-03,Closed,,,,,5,,LA JOLLA,,Mobile,,,,synthetic text
+3005,,,2024-01-10 14:30:00.000,400,Parking,Sidewalk Repair Issue,,2025-02-13,Closed,,,,,6,,NORTH PARK,,Mobile,,,,synthetic text
+3006,,,2024-03-12 14:30:00.000,400,Parking,Street Light Maintenance,,2025-04-16,Closed,,,,,7,,DOWNTOWN,,Mobile,,,,synthetic text
+3007,,,2025-07-25 14:30:00.000,1,Parking,Pothole,,2025-07-26,Closed,,,,,8,,LA JOLLA,,Mobile,,,,synthetic text
+3008,,,2024-04-29 14:30:00.000,400,Parking,Parking - 72-Hours,,2025-06-03,Closed,,,,,9,,NORTH PARK,,Mobile,,,,synthetic text
+3009,,,2024-06-10 14:30:00.000,400,Parking,Encampment,,2025-07-15,Closed,,,,,1,,DOWNTOWN,,Mobile,,,,synthetic text
+3010,,,2025-11-13 14:30:00.000,20,Parking,Sidewalk Repair Issue,,2025-12-03,Closed,,,,,2,,LA JOLLA,,Mobile,,,,synthetic text
+3011,,,2024-01-31 14:30:00.000,400,Parking,Street Light Maintenance,,2025-03-06,Closed,,,,,3,,NORTH PARK,,Mobile,,,,synthetic text
+3012,,,2025-01-04 14:30:00.000,1,Parking,Pothole,,2025-01-05,Closed,,,,,4,,DOWNTOWN,,Mobile,,,,synthetic text
+3013,,,2025-05-28 14:30:00.000,90,Parking,Parking - 72-Hours,,2025-08-26,Closed,,,,,5,,LA JOLLA,,Mobile,,,,synthetic text
+3014,,,2024-02-14 14:30:00.000,400,Parking,Encampment,,2025-03-20,Closed,,,,,6,,NORTH PARK,,Mobile,,,,synthetic text
+3015,,,2025-05-24 14:30:00.000,90,Parking,Sidewalk Repair Issue,,2025-08-22,Closed,,,,,7,,DOWNTOWN,,Mobile,,,,synthetic text
+3016,,,2025-03-14 14:30:00.000,4,Parking,Street Light Maintenance,,2025-03-18,Closed,,,,,8,,LA JOLLA,,Mobile,,,,synthetic text
+3017,,,2024-12-01 14:30:00.000,90,Parking,Pothole,,2025-03-01,Closed,,,,,9,,NORTH PARK,,Mobile,,,,synthetic text
+3018,,,2025-12-21 14:30:00.000,0,Parking,Parking - 72-Hours,,2025-12-21,Closed,,,,,1,,DOWNTOWN,,Mobile,,,,synthetic text
+3019,,,2025-09-24 14:30:00.000,0,Parking,Encampment,,2025-09-24,Closed,,,,,2,,LA JOLLA,,Mobile,,,,synthetic text
+3020,,,2025-07-27 14:30:00.000,1,Parking,Sidewalk Repair Issue,,2025-07-28,Closed,,,,,3,,NORTH PARK,,Mobile,,,,synthetic text
+3021,,,2025-03-31 14:30:00.000,1,Parking,Street Light Maintenance,,2025-04-01,Closed,,,,,4,,DOWNTOWN,,Mobile,,,,synthetic text
+3022,,,2025-04-06 14:30:00.000,4,Parking,Pothole,,2025-04-10,Closed,,,,,5,,LA JOLLA,,Mobile,,,,synthetic text
+3023,,,2025-01-25 14:30:00.000,90,Parking,Parking - 72-Hours,,2025-04-25,Closed,,,,,6,,NORTH PARK,,Mobile,,,,synthetic text
+3024,,,2025-03-11 14:30:00.000,90,Parking,Encampment,,2025-06-09,Closed,,,,,7,,DOWNTOWN,,Mobile,,,,synthetic text
+3025,,,2025-04-28 14:30:00.000,90,Parking,Sidewalk Repair Issue,,2025-07-27,Closed,,,,,8,,LA JOLLA,,Mobile,,,,synthetic text
+3026,,,2025-01-23 14:30:00.000,1,Parking,Street Light Maintenance,,2025-01-24,Closed,,,,,9,,NORTH PARK,,Mobile,,,,synthetic text
+3027,,,2025-08-18 14:30:00.000,4,Parking,Pothole,,2025-08-22,Closed,,,,,1,,DOWNTOWN,,Mobile,,,,synthetic text
+3028,,,2025-06-16 14:30:00.000,90,Parking,Parking - 72-Hours,,2025-09-14,Closed,,,,,2,,LA JOLLA,,Mobile,,,,synthetic text
+3029,,,2024-12-18 14:30:00.000,90,Parking,Encampment,,2025-03-18,Closed,,,,,3,,NORTH PARK,,Mobile,,,,synthetic text
+3030,,,2025-09-16 14:30:00.000,1,Parking,Sidewalk Repair Issue,,2025-09-17,Closed,,,,,4,,DOWNTOWN,,Mobile,,,,synthetic text
+3031,,,2025-08-25 14:30:00.000,0,Parking,Street Light Maintenance,,2025-08-25,Closed,,,,,5,,LA JOLLA,,Mobile,,,,synthetic text
+3032,,,2025-09-30 14:30:00.000,1,Parking,Pothole,,2025-10-01,Closed,,,,,6,,NORTH PARK,,Mobile,,,,synthetic text
+3033,,,2025-03-04 14:30:00.000,1,Parking,Parking - 72-Hours,,2025-03-05,Closed,,,,,7,,DOWNTOWN,,Mobile,,,,synthetic text
+3034,,,2025-10-04 14:30:00.000,20,Parking,Encampment,,2025-10-24,Closed,,,,,8,,LA JOLLA,,Mobile,,,,synthetic text
+3035,,,2025-09-02 14:30:00.000,0,Parking,Sidewalk Repair Issue,,2025-09-02,Closed,,,,,9,,NORTH PARK,,Mobile,,,,synthetic text
+3036,,,2025-11-13 14:30:00.000,4,Parking,Street Light Maintenance,,2025-11-17,Closed,,,,,1,,DOWNTOWN,,Mobile,,,,synthetic text
+3037,,,2025-06-18 14:30:00.000,90,Parking,Pothole,,2025-09-16,Closed,,,,,2,,LA JOLLA,,Mobile,,,,synthetic text
+3038,,,2025-09-02 14:30:00.000,0,Parking,Parking - 72-Hours,,2025-09-02,Closed,,,,,3,,NORTH PARK,,Mobile,,,,synthetic text
+3039,,,2025-04-08 14:30:00.000,1,Parking,Encampment,,2025-04-09,Closed,,,,,4,,DOWNTOWN,,Mobile,,,,synthetic text
+3040,,,2025-02-17 14:30:00.000,0,Parking,Sidewalk Repair Issue,,2025-02-17,Closed,,,,,5,,LA JOLLA,,Mobile,,,,synthetic text
+3041,,,2025-08-12 14:30:00.000,20,Parking,Street Light Maintenance,,2025-09-01,Closed,,,,,6,,NORTH PARK,,Mobile,,,,synthetic text
+3042,,,2025-08-11 14:30:00.000,0,Parking,Pothole,,2025-08-11,Closed,,,,,7,,DOWNTOWN,,Mobile,,,,synthetic text
+3043,,,2025-06-22 14:30:00.000,90,Parking,Parking - 72-Hours,,2025-09-20,Closed,,,,,8,,LA JOLLA,,Mobile,,,,synthetic text
+3044,,,2025-01-23 14:30:00.000,90,Parking,Encampment,,2025-04-23,Closed,,,,,9,,NORTH PARK,,Mobile,,,,synthetic text
+3045,,,2025-08-13 14:30:00.000,4,Parking,Sidewalk Repair Issue,,2025-08-17,Closed,,,,,1,,DOWNTOWN,,Mobile,,,,synthetic text
+3046,,,2025-05-19 14:30:00.000,90,Parking,Street Light Maintenance,,2025-08-17,Closed,,,,,2,,LA JOLLA,,Mobile,,,,synthetic text
+3047,,,2025-12-16 14:30:00.000,1,Parking,Pothole,,2025-12-17,Closed,,,,,3,,NORTH PARK,,Mobile,,,,synthetic text
+3048,,,2025-09-03 14:30:00.000,4,Parking,Parking - 72-Hours,,2025-09-07,Closed,,,,,4,,DOWNTOWN,,Mobile,,,,synthetic text
+3049,,,2025-02-22 14:30:00.000,20,Parking,Encampment,,2025-03-14,Closed,,,,,5,,LA JOLLA,,Mobile,,,,synthetic text
+2000,,,2025-01-05 10:00:00.000,30,TSW,Pothole,,2025-02-04,Closed,,,,,3,,DOWNTOWN,,Mobile,,,,

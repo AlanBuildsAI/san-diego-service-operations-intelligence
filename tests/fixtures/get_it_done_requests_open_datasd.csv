@@ -1,0 +1,63 @@
+service_request_id,service_request_parent_id,sap_notification_number,date_requested,case_age_days,case_record_type,service_name,service_name_detail,date_closed,status,lat,lng,street_address,zipcode,council_district,comm_plan_code,comm_plan_name,park_name,case_origin,referred,iamfloc,floc,public_description
+1000,,,2025-07-05 09:15:00.000,400,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,100 Main St,92101,1,4,DOWNTOWN,,Mobile,,,,A synthetic description that must never be published.
+1001,,,2026-06-25 09:15:00.000,45,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,101 Main St,92101,2,4,LA JOLLA,,Web,,,,A synthetic description that must never be published.
+1002,,,2024-02-21 09:15:00.000,900,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,102 Main St,92101,3,4,NORTH PARK,,Phone,,,,A synthetic description that must never be published.
+1003,,,2026-08-06 09:15:00.000,3,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,103 Main St,92101,4,4,DOWNTOWN,,Worker App,,,,A synthetic description that must never be published.
+1004,1003,,2026-07-25 09:15:00.000,15,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,104 Main St,92101,5,4,LA JOLLA,,Mobile,,,,A synthetic description that must never be published.
+1005,,,2026-07-25 09:15:00.000,15,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,105 Main St,92101,6,4,NORTH PARK,,Web,,,,A synthetic description that must never be published.
+1006,,,2025-07-05 09:15:00.000,400,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,106 Main St,92101,7,4,DOWNTOWN,,Phone,,,,A synthetic description that must never be published.
+1007,,,2026-08-06 09:15:00.000,3,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,107 Main St,92101,8,4,LA JOLLA,,Worker App,,,,A synthetic description that must never be published.
+1008,1007,,2026-05-21 09:15:00.000,80,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,108 Main St,92101,9,4,NORTH PARK,,Mobile,,,,A synthetic description that must never be published.
+1009,,,2026-08-06 09:15:00.000,3,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,109 Main St,92101,1,4,DOWNTOWN,,Web,,,,A synthetic description that must never be published.
+1010,,,2026-07-25 09:15:00.000,15,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,110 Main St,92101,2,4,LA JOLLA,,Phone,,,,A synthetic description that must never be published.
+1011,,,2024-02-21 09:15:00.000,900,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,111 Main St,92101,3,4,NORTH PARK,,Worker App,,,,A synthetic description that must never be published.
+1012,1011,,2024-02-21 09:15:00.000,900,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,112 Main St,92101,4,4,DOWNTOWN,,Mobile,,,,A synthetic description that must never be published.
+1013,,,2026-07-25 09:15:00.000,15,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,113 Main St,92101,5,4,LA JOLLA,,Web,,,,A synthetic description that must never be published.
+1014,,,2026-05-21 09:15:00.000,80,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,114 Main St,92101,6,4,NORTH PARK,,Phone,,,,A synthetic description that must never be published.
+1015,,,2026-07-25 09:15:00.000,15,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,115 Main St,92101,7,4,DOWNTOWN,,Worker App,,,,A synthetic description that must never be published.
+1016,1015,,2024-02-21 09:15:00.000,900,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,116 Main St,92101,8,4,LA JOLLA,,Mobile,,,,A synthetic description that must never be published.
+1017,,,2026-08-06 09:15:00.000,3,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,117 Main St,92101,9,4,NORTH PARK,,Web,,,,A synthetic description that must never be published.
+1018,,,2026-07-25 09:15:00.000,15,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,118 Main St,92101,1,4,DOWNTOWN,,Phone,,,,A synthetic description that must never be published.
+1019,,,2026-05-21 09:15:00.000,80,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,119 Main St,92101,2,4,LA JOLLA,,Worker App,,,,A synthetic description that must never be published.
+1020,1019,,2026-08-06 09:15:00.000,3,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,120 Main St,92101,3,4,NORTH PARK,,Mobile,,,,A synthetic description that must never be published.
+1021,,,2024-02-21 09:15:00.000,900,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,121 Main St,92101,4,4,DOWNTOWN,,Web,,,,A synthetic description that must never be published.
+1022,,,2026-08-06 09:15:00.000,3,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,122 Main St,92101,5,4,LA JOLLA,,Phone,,,,A synthetic description that must never be published.
+1023,,,2026-05-21 09:15:00.000,80,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,123 Main St,92101,6,4,NORTH PARK,,Worker App,,,,A synthetic description that must never be published.
+1024,1023,,2026-08-06 09:15:00.000,3,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,124 Main St,92101,7,4,DOWNTOWN,,Mobile,,,,A synthetic description that must never be published.
+1025,,,2026-06-25 09:15:00.000,45,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,125 Main St,92101,8,4,LA JOLLA,,Web,,,,A synthetic description that must never be published.
+1026,,,2026-03-12 09:15:00.000,150,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,126 Main St,92101,9,4,NORTH PARK,,Phone,,,,A synthetic description that must never be published.
+1027,,,2024-02-21 09:15:00.000,900,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,127 Main St,92101,1,4,DOWNTOWN,,Worker App,,,,A synthetic description that must never be published.
+1028,1027,,2026-06-25 09:15:00.000,45,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,128 Main St,92101,2,4,LA JOLLA,,Mobile,,,,A synthetic description that must never be published.
+1029,,,2026-07-25 09:15:00.000,15,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,129 Main St,92101,3,4,NORTH PARK,,Web,,,,A synthetic description that must never be published.
+1030,,,2026-03-12 09:15:00.000,150,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,130 Main St,92101,4,4,DOWNTOWN,,Phone,,,,A synthetic description that must never be published.
+1031,,,2026-06-25 09:15:00.000,45,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,131 Main St,92101,5,4,LA JOLLA,,Worker App,,,,A synthetic description that must never be published.
+1032,1031,,2026-07-25 09:15:00.000,15,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,132 Main St,92101,6,4,NORTH PARK,,Mobile,,,,A synthetic description that must never be published.
+1033,,,2026-05-21 09:15:00.000,80,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,133 Main St,92101,7,4,DOWNTOWN,,Web,,,,A synthetic description that must never be published.
+1034,,,2025-07-05 09:15:00.000,400,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,134 Main St,92101,8,4,LA JOLLA,,Phone,,,,A synthetic description that must never be published.
+1035,,,2026-07-25 09:15:00.000,15,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,135 Main St,92101,9,4,NORTH PARK,,Worker App,,,,A synthetic description that must never be published.
+1036,1035,,2026-07-25 09:15:00.000,15,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,136 Main St,92101,1,4,DOWNTOWN,,Mobile,,,,A synthetic description that must never be published.
+1037,,,2026-08-06 09:15:00.000,3,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,137 Main St,92101,2,4,LA JOLLA,,Web,,,,A synthetic description that must never be published.
+1038,,,2026-05-21 09:15:00.000,80,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,138 Main St,92101,3,4,NORTH PARK,,Phone,,,,A synthetic description that must never be published.
+1039,,,2022-07-01 09:15:00.000,1500,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,139 Main St,92101,4,4,DOWNTOWN,,Worker App,,,,A synthetic description that must never be published.
+1040,1039,,2024-02-21 09:15:00.000,900,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,140 Main St,92101,5,4,LA JOLLA,,Mobile,,,,A synthetic description that must never be published.
+1041,,,2025-07-05 09:15:00.000,400,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,141 Main St,92101,6,4,NORTH PARK,,Web,,,,A synthetic description that must never be published.
+1042,,,2022-07-01 09:15:00.000,1500,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,142 Main St,92101,7,4,DOWNTOWN,,Phone,,,,A synthetic description that must never be published.
+1043,,,2022-07-01 09:15:00.000,1500,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,143 Main St,92101,8,4,LA JOLLA,,Worker App,,,,A synthetic description that must never be published.
+1044,1043,,2025-07-05 09:15:00.000,400,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,144 Main St,92101,9,4,NORTH PARK,,Mobile,,,,A synthetic description that must never be published.
+1045,,,2026-03-12 09:15:00.000,150,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,145 Main St,92101,1,4,DOWNTOWN,,Web,,,,A synthetic description that must never be published.
+1046,,,2026-05-21 09:15:00.000,80,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,146 Main St,92101,2,4,LA JOLLA,,Phone,,,,A synthetic description that must never be published.
+1047,,,2026-06-25 09:15:00.000,45,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,147 Main St,92101,3,4,NORTH PARK,,Worker App,,,,A synthetic description that must never be published.
+1048,1047,,2026-05-21 09:15:00.000,80,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,148 Main St,92101,4,4,DOWNTOWN,,Mobile,,,,A synthetic description that must never be published.
+1049,,,2026-07-25 09:15:00.000,15,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,149 Main St,92101,5,4,LA JOLLA,,Web,,,,A synthetic description that must never be published.
+1050,,,2026-03-12 09:15:00.000,150,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,150 Main St,92101,6,4,NORTH PARK,,Phone,,,,A synthetic description that must never be published.
+1051,,,2022-07-01 09:15:00.000,1500,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,151 Main St,92101,7,4,DOWNTOWN,,Worker App,,,,A synthetic description that must never be published.
+1052,1051,,2025-07-05 09:15:00.000,400,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,152 Main St,92101,8,4,LA JOLLA,,Mobile,,,,A synthetic description that must never be published.
+1053,,,2022-07-01 09:15:00.000,1500,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,153 Main St,92101,9,4,NORTH PARK,,Web,,,,A synthetic description that must never be published.
+1054,,,2026-03-12 09:15:00.000,150,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,154 Main St,92101,1,4,DOWNTOWN,,Phone,,,,A synthetic description that must never be published.
+1055,,,2026-07-25 09:15:00.000,15,TSW,Sidewalk Repair Issue,DETAIL,,New,32.7,-117.1,155 Main St,92101,2,4,LA JOLLA,,Worker App,,,,A synthetic description that must never be published.
+1056,1055,,2026-07-25 09:15:00.000,15,TSW,Street Light Maintenance,DETAIL,,In Process,32.7,-117.1,156 Main St,92101,3,4,NORTH PARK,,Mobile,,,,A synthetic description that must never be published.
+1057,,,2024-02-21 09:15:00.000,900,TSW,Pothole,DETAIL,,In Process,32.7,-117.1,157 Main St,92101,4,4,DOWNTOWN,,Web,,,,A synthetic description that must never be published.
+1058,,,2026-06-25 09:15:00.000,45,TSW,Parking - 72-Hours,DETAIL,,In Process,32.7,-117.1,158 Main St,92101,5,4,LA JOLLA,,Phone,,,,A synthetic description that must never be published.
+1059,,,2025-07-05 09:15:00.000,400,TSW,Encampment,DETAIL,,In Process,32.7,-117.1,159 Main St,92101,6,4,NORTH PARK,,Worker App,,,,A synthetic description that must never be published.
+1999,,,2026-01-01 08:00:00.000,200,TSW,Pothole,,,In Process,,,,,3,,DOWNTOWN,,Mobile,,,,
+1998,,,2025-02-01 08:00:00.000,554,TSW,,,,New,,,,,,,,,,,,,
