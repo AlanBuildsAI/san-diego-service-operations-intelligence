@@ -1,25 +1,25 @@
-investigation_rank,service_name,most_common_record_type,active_records,active_distinct_issues,pct_of_scored_backlog,median_age_days,p90_age_days,aged_90_plus,pct_of_own_queue_aged_90,pct_of_scored_aged_90_backlog,aged_365_plus,aged_0_30,duplicate_rate_pct,priority_score,why_flagged
-1,Sidewalk Repair Issue,TSW,14614,10979,18.6,1090.0,2617.0,13839,94.7,22.7,11892,344,25.3,93.7,Large share of the aged backlog and almost the entire queue is aged
-2,Pavement Maintenance,TSW,5590,4398,7.1,1295.5,2710.1000000000004,5351,95.7,8.8,4689,88,21.7,91.1,Nearly all active requests in this category are 90+ days old
-3,Street Light Maintenance,TSW,13665,7490,17.4,467.0,1358.6000000000004,12328,90.2,20.2,7758,608,45.3,86.1,Large share of the aged backlog and almost the entire queue is aged
-4,ROW Maintenance,TSW,10245,7847,13.0,450.0,1312.0,8782,85.7,14.4,5911,523,23.8,80.2,Large share of the aged backlog and almost the entire queue is aged
-5,Stormwater,TSW,2337,1940,3.0,874.0,2141.0000000000005,2087,89.3,3.4,1698,111,18.2,76.5,Nearly all active requests in this category are 90+ days old
+investigation_rank,service_name,most_common_record_type,active_records,active_distinct_issues,pct_of_city_active_backlog,median_age_days,p90_age_days,aged_90_plus,pct_of_own_queue_aged_90,pct_of_city_aged_90_backlog,aged_365_plus,aged_0_30,duplicate_rate_pct,priority_score,why_flagged
+1,Sidewalk Repair Issue,TSW,14614,10979,18.0,1090.0,2617.0,13839,94.7,22.3,11892,344,25.3,93.7,Large share of the aged backlog and almost the entire queue is aged
+2,Pavement Maintenance,TSW,5590,4398,6.9,1295.5,2710.1000000000004,5351,95.7,8.6,4689,88,21.7,91.1,Nearly all active requests in this category are 90+ days old
+3,Street Light Maintenance,TSW,13665,7490,16.8,467.0,1358.6000000000004,12328,90.2,19.9,7758,608,45.3,86.1,Large share of the aged backlog and almost the entire queue is aged
+4,ROW Maintenance,TSW,10245,7847,12.6,450.0,1312.0,8782,85.7,14.2,5911,523,23.8,80.2,Large share of the aged backlog and almost the entire queue is aged
+5,Stormwater,TSW,2337,1940,2.9,874.0,2141.0000000000005,2087,89.3,3.4,1698,111,18.2,76.5,Nearly all active requests in this category are 90+ days old
 6,Development Services - Code Enforcement,DSD,1101,1029,1.4,488.0,2378.0,1101,100.0,1.8,891,0,11.1,75.4,Nearly all active requests in this category are 90+ days old
-7,Traffic Sign Maintenance,TSW,706,506,0.9,1146.5,1453.5,706,100.0,1.2,705,0,42.8,72.2,Nearly all active requests in this category are 90+ days old
-8,Parks Issue,Parks & Recreation,4030,3103,5.1,203.0,1133.1,2631,65.3,4.3,1580,756,26.3,63.7,Mid-range on volume and ageing
-9,Vegetation Encroachment,TSW ROW,2910,2411,3.7,239.0,818.2999999999997,2034,69.9,3.3,1083,364,18.9,62.6,Mid-range on volume and ageing
-10,Graffiti - Code Enforcement,TSW ROW,3774,2516,4.8,195.0,716.0,2611,69.2,4.3,1244,477,34.5,61.5,Mid-range on volume and ageing
-11,Traffic Engineering,Traffic Engineering,1784,1704,2.3,201.0,1181.0,1257,70.5,2.1,631,175,4.8,59.6,Mid-range on volume and ageing
-12,Building and Land Use Enforcement,DSD,1612,1407,2.0,186.0,473.0,1248,77.4,2.0,308,120,14.6,58.9,Mid-range on volume and ageing
+7,Traffic Sign Maintenance,TSW,706,506,0.9,1146.5,1453.5,706,100.0,1.1,705,0,42.8,72.2,Nearly all active requests in this category are 90+ days old
+8,Parks Issue,Parks & Recreation,4030,3103,5.0,203.0,1133.1,2631,65.3,4.2,1580,756,26.3,63.7,Mid-range on volume and aging
+9,Vegetation Encroachment,TSW ROW,2910,2411,3.6,239.0,818.2999999999997,2034,69.9,3.3,1083,364,18.9,62.6,Mid-range on volume and aging
+10,Graffiti - Code Enforcement,TSW ROW,3774,2516,4.6,195.0,716.0,2611,69.2,4.2,1244,477,34.5,61.5,Mid-range on volume and aging
+11,Traffic Engineering,Traffic Engineering,1784,1704,2.2,201.0,1181.0,1257,70.5,2.0,631,175,4.8,59.6,Mid-range on volume and aging
+12,Building and Land Use Enforcement,DSD,1612,1407,2.0,186.0,473.0,1248,77.4,2.0,308,120,14.6,58.9,Mid-range on volume and aging
 13,(Unclassified),ESD Complaint/Report,741,741,0.9,184.0,185.0,677,91.4,1.1,0,20,0.0,50.4,Nearly all active requests in this category are 90+ days old
-14,Street Sweeping,TSW,647,449,0.8,279.0,1079.1999999999998,477,73.7,0.8,253,97,33.2,41.1,Mid-range on volume and ageing
-15,Tree Maintenance,TSW,1289,1126,1.6,158.0,821.6000000000001,772,59.9,1.3,408,370,15.6,38.0,Mid-range on volume and ageing
-16,STRO Violation,DSD,1378,1064,1.8,139.0,564.0,760,55.2,1.2,257,147,22.9,32.0,Mid-range on volume and ageing
-17,Graffiti - Private,TSW,1109,998,1.4,121.0,511.60000000000036,685,61.8,1.1,168,177,16.9,31.7,Mid-range on volume and ageing
-18,Environmental Services Code Compliance,ESD Complaint/Report,1079,1006,1.4,155.0,537.8000000000004,668,61.9,1.1,176,256,11.7,30.0,Mid-range on volume and ageing
-19,Other,TSW,676,593,0.9,208.0,1082.5,416,61.5,0.7,305,142,41.6,25.2,Mid-range on volume and ageing
-20,Stormwater Code Enforcement,Storm Water Code Enforcement,608,530,0.8,149.0,538.5000000000003,383,63.0,0.6,127,107,17.8,20.9,Mid-range on volume and ageing
-21,Parking - 72-Hours,Parking,4694,3828,6.0,21.0,140.0,684,14.6,1.1,131,2913,24.7,16.5,Queue turns over quickly; low investigation priority
-22,Graffiti - Public,TSW,1045,985,1.3,89.0,763.6000000000006,521,49.9,0.9,170,327,9.9,15.0,Mid-range on volume and ageing
-23,Encampment,Neighborhood Policing,2243,1590,2.9,15.0,1006.0,645,28.8,1.1,512,1428,38.5,11.3,Queue turns over quickly; low investigation priority
-24,Illegal Dumping,ESD Complaint/Report,768,619,1.0,41.5,610.0,315,41.0,0.5,125,354,29.0,4.8,Mid-range on volume and ageing
+14,Street Sweeping,TSW,647,449,0.8,279.0,1079.1999999999998,477,73.7,0.8,253,97,33.2,41.1,Mid-range on volume and aging
+15,Tree Maintenance,TSW,1289,1126,1.6,158.0,821.6000000000001,772,59.9,1.2,408,370,15.6,38.0,Mid-range on volume and aging
+16,STRO Violation,DSD,1378,1064,1.7,139.0,564.0,760,55.2,1.2,257,147,22.9,32.0,Mid-range on volume and aging
+17,Graffiti - Private,TSW,1109,998,1.4,121.0,511.60000000000036,685,61.8,1.1,168,177,16.9,31.7,Mid-range on volume and aging
+18,Environmental Services Code Compliance,ESD Complaint/Report,1079,1006,1.3,155.0,537.8000000000004,668,61.9,1.1,176,256,11.7,30.0,Mid-range on volume and aging
+19,Other,TSW,676,593,0.8,208.0,1082.5,416,61.5,0.7,305,142,41.6,25.2,Mid-range on volume and aging
+20,Stormwater Code Enforcement,Storm Water Code Enforcement,608,530,0.7,149.0,538.5000000000003,383,63.0,0.6,127,107,17.8,20.9,Mid-range on volume and aging
+21,Parking - 72-Hours,Parking,4694,3828,5.8,21.0,140.0,684,14.6,1.1,131,2913,24.7,16.5,Queue turns over quickly; low investigation priority
+22,Graffiti - Public,TSW,1045,985,1.3,89.0,763.6000000000006,521,49.9,0.8,170,327,9.9,15.0,Mid-range on volume and aging
+23,Encampment,Neighborhood Policing,2243,1590,2.8,15.0,1006.0,645,28.8,1.0,512,1428,38.5,11.3,Queue turns over quickly; low investigation priority
+24,Illegal Dumping,ESD Complaint/Report,768,619,0.9,41.5,610.0,315,41.0,0.5,125,354,29.0,4.8,Mid-range on volume and aging

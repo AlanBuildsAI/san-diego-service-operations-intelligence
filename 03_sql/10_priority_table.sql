@@ -15,13 +15,23 @@
 -- (0 = lowest, 1 = highest) so that measures on different units combine without
 -- one dominating by scale. Weights are stated here and repeated in
 -- 01_business_brief/metric_definitions.md.
---     0.45  share of the scored set's 90+ day backlog held    (how much aged work)
+--     0.45  share of the citywide 90+ day active backlog held  (how much aged work)
 --     0.35  share of the category's own queue aged 90+ days  (how stuck it is)
 --     0.20  median active age                                (how old typically)
 -- =============================================================================
 
 CREATE OR REPLACE TABLE agg_priority_table AS
-WITH base AS (
+-- Citywide totals, computed over EVERY active record with no volume floor.
+-- These are the denominators for any column labeled "of city". The scored set
+-- below applies a 500-record floor, and using that subset as the denominator for
+-- a citywide-labeled metric would overstate each category's share.
+WITH citywide AS (
+    SELECT
+        COUNT(*)                                      AS city_active_records,
+        COUNT(*) FILTER (WHERE active_age_days >= 90) AS city_aged_90_plus
+    FROM v_active
+),
+base AS (
     SELECT
         service_name,
         -- Modal, not arbitrary: audit check DQ-08 found service_name and
@@ -43,15 +53,24 @@ WITH base AS (
 shares AS (
     SELECT
         b.*,
-        1.0 * aged_90_plus / NULLIF(SUM(aged_90_plus) OVER (), 0)    AS share_of_scored_aged_90,
-        1.0 * aged_90_plus / NULLIF(active_records, 0)               AS own_queue_aged_90_rate,
-        1.0 * duplicate_children / NULLIF(active_records, 0)         AS duplicate_rate
+        c.city_active_records,
+        c.city_aged_90_plus,
+        -- The reported share, against the citywide 90+ day active inventory.
+        1.0 * aged_90_plus / NULLIF(c.city_aged_90_plus, 0)           AS share_of_city_aged_90,
+        1.0 * active_records / NULLIF(c.city_active_records, 0)       AS share_of_city_active,
+        1.0 * aged_90_plus / NULLIF(active_records, 0)                AS own_queue_aged_90_rate,
+        1.0 * duplicate_children / NULLIF(active_records, 0)          AS duplicate_rate
     FROM base AS b
+    CROSS JOIN citywide AS c
 ),
 scored AS (
     SELECT
         s.*,
-        PERCENT_RANK() OVER (ORDER BY share_of_scored_aged_90)  AS pr_aged_volume,
+        -- PERCENT_RANK is invariant to the choice of denominator here: both the
+        -- citywide and the scored-subset share are aged_90_plus divided by a
+        -- constant, so they induce the same ordering. Switching the denominator
+        -- corrects the reported percentage without moving the score.
+        PERCENT_RANK() OVER (ORDER BY share_of_city_aged_90)  AS pr_aged_volume,
         PERCENT_RANK() OVER (ORDER BY own_queue_aged_90_rate) AS pr_aged_rate,
         PERCENT_RANK() OVER (ORDER BY median_age_days)        AS pr_median_age
     FROM shares AS s
@@ -70,16 +89,14 @@ SELECT
     most_common_record_type,
     active_records,
     active_distinct_issues,
-    ROUND(100.0 * active_records / SUM(active_records) OVER (), 1) AS pct_of_scored_backlog,
+    ROUND(100.0 * share_of_city_active, 1)                        AS pct_of_city_active_backlog,
     median_age_days,
     p90_age_days,
     aged_90_plus,
     ROUND(100.0 * own_queue_aged_90_rate, 1)                      AS pct_of_own_queue_aged_90,
-    -- Denominator is the scored subset (categories with 500+ active records),
-    -- not the whole city. Named accordingly so it cannot be misread as a
-    -- citywide share; the citywide figure is pct_of_aged_90_backlog in
-    -- agg_service_backlog, which uses every category as its denominator.
-    ROUND(100.0 * share_of_scored_aged_90, 1)                       AS pct_of_scored_aged_90_backlog,
+    -- Denominator is every active record aged 90+ days citywide, with no volume
+    -- floor applied, so this column means what its name says.
+    ROUND(100.0 * share_of_city_aged_90, 1)                       AS pct_of_city_aged_90_backlog,
     aged_365_plus,
     aged_0_30,
     ROUND(100.0 * duplicate_rate, 1)                              AS duplicate_rate_pct,
@@ -87,9 +104,9 @@ SELECT
     -- A short, evidence-anchored reason, so the ranking is never presented as an
     -- unexplained score.
     CASE
-        WHEN share_of_scored_aged_90 >= 0.10 AND own_queue_aged_90_rate >= 0.80
+        WHEN share_of_city_aged_90 >= 0.10 AND own_queue_aged_90_rate >= 0.80
             THEN 'Large share of the aged backlog and almost the entire queue is aged'
-        WHEN share_of_scored_aged_90 >= 0.10
+        WHEN share_of_city_aged_90 >= 0.10
             THEN 'Holds a large share of the 90+ day active backlog'
         WHEN own_queue_aged_90_rate >= 0.80
             THEN 'Nearly all active requests in this category are 90+ days old'
@@ -97,7 +114,7 @@ SELECT
             THEN 'Typical active request in this category is over a year old'
         WHEN own_queue_aged_90_rate <= 0.30
             THEN 'Queue turns over quickly; low investigation priority'
-        ELSE 'Mid-range on volume and ageing'
+        ELSE 'Mid-range on volume and aging'
     END AS why_flagged
 FROM composite
 ORDER BY priority_score DESC;
@@ -144,3 +161,76 @@ SELECT
     ROUND(100.0 * aged_90_plus / NULLIF(total_scored_aged_90, 0), 2) AS pct_of_scored_aged_90
 FROM indexed
 ORDER BY aged_90_plus DESC;
+
+-- =============================================================================
+-- Weight sensitivity.
+--
+-- The 0.45 / 0.35 / 0.20 weighting is an analyst judgment, not a derivation.
+-- Any claim that the leading categories survive a different weighting has to be
+-- tested rather than asserted, so the same three percentile-rank components are
+-- recombined under five schemes and the resulting top ranks compared.
+--
+-- Components (identical in every scheme, only the weights change):
+--     pr_aged_volume  share of the citywide 90+ day active backlog held
+--     pr_aged_rate    share of the category's own active queue aged 90+ days
+--     pr_median_age   median active age
+-- =============================================================================
+CREATE OR REPLACE TABLE agg_priority_weight_sensitivity AS
+WITH citywide AS (
+    SELECT COUNT(*) FILTER (WHERE active_age_days >= 90) AS city_aged_90_plus
+    FROM v_active
+),
+base AS (
+    SELECT
+        service_name,
+        COUNT(*)                                      AS active_records,
+        MEDIAN(active_age_days)                       AS median_age_days,
+        COUNT(*) FILTER (WHERE active_age_days >= 90) AS aged_90_plus
+    FROM v_active
+    GROUP BY service_name
+    HAVING COUNT(*) >= 500
+),
+components AS (
+    SELECT
+        b.service_name,
+        PERCENT_RANK() OVER (ORDER BY 1.0 * b.aged_90_plus / c.city_aged_90_plus) AS pr_aged_volume,
+        PERCENT_RANK() OVER (ORDER BY 1.0 * b.aged_90_plus / b.active_records)    AS pr_aged_rate,
+        PERCENT_RANK() OVER (ORDER BY b.median_age_days)                          AS pr_median_age
+    FROM base AS b CROSS JOIN citywide AS c
+),
+schemes(scheme, w_volume, w_rate, w_age) AS (
+    VALUES
+        ('baseline 0.45 / 0.35 / 0.20',    0.45, 0.35, 0.20),
+        ('equal 1/3 each',                 0.3333, 0.3333, 0.3334),
+        ('volume-heavy 0.60 / 0.25 / 0.15', 0.60, 0.25, 0.15),
+        ('aged-rate-heavy 0.25 / 0.60 / 0.15', 0.25, 0.60, 0.15),
+        ('age-heavy 0.25 / 0.25 / 0.50',   0.25, 0.25, 0.50)
+),
+scored AS (
+    SELECT
+        s.scheme,
+        c.service_name,
+        ROUND(100.0 * (s.w_volume * c.pr_aged_volume
+                     + s.w_rate   * c.pr_aged_rate
+                     + s.w_age    * c.pr_median_age), 1) AS score,
+        RANK() OVER (PARTITION BY s.scheme
+                     ORDER BY s.w_volume * c.pr_aged_volume
+                            + s.w_rate   * c.pr_aged_rate
+                            + s.w_age    * c.pr_median_age DESC) AS rank_in_scheme
+    FROM components AS c
+    CROSS JOIN schemes AS s
+)
+SELECT
+    scheme,
+    rank_in_scheme,
+    service_name,
+    score,
+    -- Flags whether this category is in the baseline top three, so a reader can
+    -- see membership churn directly rather than inferring it from rank numbers.
+    service_name IN (
+        SELECT service_name FROM scored
+        WHERE scheme = 'baseline 0.45 / 0.35 / 0.20' AND rank_in_scheme <= 3
+    ) AS in_baseline_top_3
+FROM scored
+WHERE rank_in_scheme <= 5
+ORDER BY scheme, rank_in_scheme;

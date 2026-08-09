@@ -93,6 +93,9 @@ def build_claims() -> dict[str, Claim]:
     def svc(name: str, column: str) -> float:
         return float(service.loc[service["service_name"] == name, column].iloc[0])
 
+    def prio(name: str, column: str) -> float:
+        return float(priority.loc[priority["service_name"] == name, column].iloc[0])
+
     top4 = service.nlargest(4, "active_records")
     top4_pct = float(top4["pct_of_active_backlog"].sum())
     top4_names = list(top4["service_name"])
@@ -126,6 +129,10 @@ def build_claims() -> dict[str, Claim]:
 
     top3_priority = list(priority.nsmallest(3, "investigation_rank")["service_name"])
 
+    def prio_share(name: str) -> float:
+        return float(priority.loc[priority["service_name"] == name,
+                                  "pct_of_city_aged_90_backlog"].iloc[0])
+
     mobile = channel.loc[channel["case_origin"] == "Mobile"].iloc[0]
     web = channel.loc[channel["case_origin"] == "Web"].iloc[0]
 
@@ -136,6 +143,31 @@ def build_claims() -> dict[str, Claim]:
     ]
     index_max = float(districts_only["aged_concentration_index"].max())
     index_min = float(districts_only["aged_concentration_index"].min())
+
+    sidewalk_pavement_aged = round(
+        prio_share("Sidewalk Repair Issue") + prio_share("Pavement Maintenance"), 1)
+
+    sensitivity = agg("agg_priority_weight_sensitivity")
+    n_schemes = sensitivity["scheme"].nunique()
+    top3 = sensitivity[sensitivity["rank_in_scheme"] <= 3]
+    top2 = sensitivity[sensitivity["rank_in_scheme"] <= 2]
+    top2_schemes = int(
+        top2.groupby("scheme")["service_name"]
+        .apply(lambda s: set(s) == {"Sidewalk Repair Issue", "Pavement Maintenance"})
+        .sum())
+    streetlight_top3 = int(
+        top3.groupby("scheme")["service_name"]
+        .apply(lambda s: "Street Light Maintenance" in set(s))
+        .sum())
+
+    # month_start carries a time component, so compare as dates rather than
+    # strings — "2025-12-01 00:00:00" > "2025-12-01" lexically.
+    monthly = agg("agg_demand_monthly").copy()
+    monthly["month_start"] = pd.to_datetime(monthly["month_start"])
+    monthly_2025 = monthly[(monthly["month_start"].dt.year == 2025)
+                           & (monthly["coverage_status"] == "complete")]
+    assert len(monthly_2025) == 12, "2025 must contribute 12 complete months"
+    submissions_2025 = float(monthly_2025["submissions"].sum())
 
     cohort_bias = agg("agg_closure_cohort_bias")
     cohort = agg("agg_submission_cohort").iloc[0]
@@ -209,11 +241,11 @@ def build_claims() -> dict[str, Claim]:
         Claim("sidewalk_active", "Sidewalk Repair Issue active records",
               svc("Sidewalk Repair Issue", "active_records"),
               _int(svc("Sidewalk Repair Issue", "active_records")),
-              "agg_service_backlog", (README, MEMO, FINDINGS)),
+              "agg_service_backlog", (README, FINDINGS)),
         Claim("sidewalk_median_age", "Sidewalk Repair Issue median active age",
               svc("Sidewalk Repair Issue", "median_age_days"),
               _int(svc("Sidewalk Repair Issue", "median_age_days")),
-              "agg_service_backlog", (README, MEMO, FINDINGS)),
+              "agg_service_backlog", (README, FINDINGS)),
         Claim("sidewalk_pct_aged_90", "Sidewalk Repair Issue share aged 90+",
               svc("Sidewalk Repair Issue", "pct_aged_90_plus"),
               _pct(svc("Sidewalk Repair Issue", "pct_aged_90_plus")),
@@ -225,13 +257,31 @@ def build_claims() -> dict[str, Claim]:
               f'{svc("Pavement Maintenance", "median_age_days"):,.1f}',
               "agg_service_backlog", (README, FINDINGS)),
         Claim("sidewalk_pct_of_city_aged", "Sidewalk share of the citywide 90+ day backlog",
-              svc("Sidewalk Repair Issue", "pct_of_aged_90_backlog"),
-              _pct(svc("Sidewalk Repair Issue", "pct_of_aged_90_backlog")),
-              "agg_service_backlog.pct_of_aged_90_backlog", (FINDINGS,)),
+              prio("Sidewalk Repair Issue", "pct_of_city_aged_90_backlog"),
+              _pct(prio("Sidewalk Repair Issue", "pct_of_city_aged_90_backlog")),
+              "agg_priority_table.pct_of_city_aged_90_backlog", (FINDINGS,)),
         Claim("streetlight_pct_of_city_aged", "Street Light share of the citywide 90+ day backlog",
-              svc("Street Light Maintenance", "pct_of_aged_90_backlog"),
-              _pct(svc("Street Light Maintenance", "pct_of_aged_90_backlog")),
-              "agg_service_backlog.pct_of_aged_90_backlog", (FINDINGS,)),
+              prio("Street Light Maintenance", "pct_of_city_aged_90_backlog"),
+              _pct(prio("Street Light Maintenance", "pct_of_city_aged_90_backlog")),
+              "agg_priority_table.pct_of_city_aged_90_backlog", (FINDINGS,)),
+        Claim("pavement_pct_of_city_aged", "Pavement share of the citywide 90+ day backlog",
+              prio("Pavement Maintenance", "pct_of_city_aged_90_backlog"),
+              _pct(prio("Pavement Maintenance", "pct_of_city_aged_90_backlog")),
+              "agg_priority_table.pct_of_city_aged_90_backlog", (FINDINGS,)),
+        Claim("sidewalk_pavement_combined_aged", "Sidewalk + Pavement share of citywide 90+ backlog",
+              sidewalk_pavement_aged, _pct(sidewalk_pavement_aged),
+              "agg_priority_table.pct_of_city_aged_90_backlog, summed", (MEMO, FINDINGS)),
+
+        # ---- priority weight sensitivity (#7) --------------------------------
+        Claim("weight_schemes_tested", "Weighting schemes tested",
+              float(n_schemes), str(n_schemes),
+              "agg_priority_weight_sensitivity", (FINDINGS,)),
+        Claim("top2_stable_scheme_count", "Schemes where Sidewalk and Pavement are the top two",
+              float(top2_schemes), str(top2_schemes),
+              "agg_priority_weight_sensitivity", (FINDINGS,)),
+        Claim("streetlight_top3_scheme_count", "Schemes where Street Light is top three",
+              float(streetlight_top3), str(streetlight_top3),
+              "agg_priority_weight_sensitivity", (FINDINGS,)),
         Claim("streetlight_active", "Street Light Maintenance active records",
               svc("Street Light Maintenance", "active_records"),
               _int(svc("Street Light Maintenance", "active_records")),
@@ -380,14 +430,17 @@ def build_claims() -> dict[str, Claim]:
               "agg_channel_gap_summary", (FINDINGS,)),
 
         # ---- concentration by owning staff group ----------------------------
-        Claim("tsw_pct_of_backlog", "Share of the active backlog owned by the TSW record type",
+        Claim("tsw_pct_of_backlog", "Share of active records carrying the TSW case_record_type label",
               float(tsw["pct_of_active_backlog"]), _pct(float(tsw["pct_of_active_backlog"])),
-              "agg_backlog_aging_by_record_type", (README, MEMO, FINDINGS)),
+              "agg_backlog_aging_by_record_type", (README, FINDINGS)),
         Claim("tsw_active_records", "Active records in the TSW record type",
               float(tsw["active_records"]), _int(float(tsw["active_records"])),
               "agg_backlog_aging_by_record_type", (FINDINGS,)),
 
         # ---- Q11 trends ------------------------------------------------------
+        Claim("submissions_2025_full_year", "Submissions during calendar 2025 (12 complete months)",
+              submissions_2025, _int(submissions_2025),
+              "agg_demand_monthly, complete months of 2025", (README,)),
         Claim("demand_ytd_current", "Submissions Jan-Jul 2026",
               kpi("demand_ytd_current"), _int(kpi("demand_ytd_current")),
               "agg_executive_kpis.demand_ytd_current", (README, FINDINGS)),
@@ -396,7 +449,7 @@ def build_claims() -> dict[str, Claim]:
               "agg_executive_kpis.demand_ytd_prior", (README, FINDINGS)),
         Claim("demand_yoy_change_pct", "Year-over-year change in submissions",
               kpi("demand_yoy_change_pct"), _pct(kpi("demand_yoy_change_pct")),
-              "agg_executive_kpis.demand_yoy_change_pct", (README, MEMO, FINDINGS)),
+              "agg_executive_kpis.demand_yoy_change_pct", (README, FINDINGS)),
         Claim("yoy_flagged_categories", "Service categories flagged as not comparable",
               n_flagged, str(n_flagged),
               "agg_demand_yoy_by_service.taxonomy_flag", (FINDINGS,)),
