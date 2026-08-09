@@ -1,6 +1,6 @@
 {
   "snapshot_date": "2026-08-09",
-  "generated_at_utc": "2026-08-09 19:08 UTC",
+  "generated_at_utc": "2026-08-09 19:10 UTC",
   "checks": [
     {
       "check_id": "DQ-01",
@@ -229,77 +229,77 @@
           {
             "service_name": "Other",
             "n_record_types": 8,
-            "record_types": "TSW | Traffic Engineering | Special Situation | DSD | Neighborhood Policing | Storm Water Code Enforcement | Parks & Recreation | ESD Complaint/Report"
+            "record_types": "DSD | ESD Complaint/Report | Traffic Engineering | Special Situation | Storm Water Code Enforcement | Parks & Recreation | TSW | Neighborhood Policing"
           },
           {
             "service_name": "Encampment",
             "n_record_types": 6,
-            "record_types": "DSD | Neighborhood Policing | ESD Complaint/Report | Parks & Recreation | TSW ROW | ESD Abatement"
+            "record_types": "DSD | ESD Complaint/Report | ESD Abatement | Parks & Recreation | TSW ROW | Neighborhood Policing"
           },
           {
             "service_name": "Graffiti - Public",
             "n_record_types": 6,
-            "record_types": "DSD | Neighborhood Policing | ESD Complaint/Report | Parks & Recreation | TSW | Traffic Engineering"
+            "record_types": "Traffic Engineering | DSD | ESD Complaint/Report | TSW | Parks & Recreation | Neighborhood Policing"
           },
           {
             "service_name": "ROW Maintenance",
             "n_record_types": 6,
-            "record_types": "Traffic Engineering | ESD Complaint/Report | TSW ROW | Parks & Recreation | TSW | Storm Water Code Enforcement"
+            "record_types": "TSW ROW | Parks & Recreation | Storm Water Code Enforcement | TSW | Traffic Engineering | ESD Complaint/Report"
           },
           {
             "service_name": "Sidewalk Repair Issue",
             "n_record_types": 6,
-            "record_types": "DSD | Storm Water Code Enforcement | Parks & Recreation | ESD Complaint/Report | Traffic Engineering | TSW"
+            "record_types": "TSW | Parks & Recreation | Storm Water Code Enforcement | DSD | ESD Complaint/Report | Traffic Engineering"
           },
           {
             "service_name": "Illegal Dumping",
             "n_record_types": 5,
-            "record_types": "DSD | Parks & Recreation | ESD Complaint/Report | Neighborhood Policing | TSW"
+            "record_types": "Neighborhood Policing | TSW | Parks & Recreation | DSD | ESD Complaint/Report"
           },
           {
             "service_name": "Parking",
             "n_record_types": 5,
-            "record_types": "DSD | Storm Water Code Enforcement | TSW | Traffic Engineering | Parking"
+            "record_types": "Traffic Engineering | Parking | DSD | TSW | Storm Water Code Enforcement"
           },
           {
             "service_name": "Stormwater Code Enforcement",
             "n_record_types": 5,
-            "record_types": "Storm Water Code Enforcement | Parks & Recreation | TSW | DSD | ESD Complaint/Report"
+            "record_types": "Parks & Recreation | Storm Water Code Enforcement | DSD | ESD Complaint/Report | TSW"
           },
           {
             "service_name": "Vegetation Encroachment",
             "n_record_types": 5,
-            "record_types": "TSW ROW | Parks & Recreation | TSW | Traffic Engineering | DSD"
+            "record_types": "TSW ROW | Parks & Recreation | Traffic Engineering | DSD | TSW"
           },
           {
             "service_name": "Environmental Services Code Compliance",
             "n_record_types": 4,
-            "record_types": "Parks & Recreation | Parking | DSD | ESD Complaint/Report"
+            "record_types": "ESD Complaint/Report | DSD | Parking | Parks & Recreation"
           },
           {
             "service_name": "Parking Violation",
             "n_record_types": 4,
-            "record_types": "Parking | Traffic Engineering | ESD Complaint/Report | TSW"
+            "record_types": "TSW | ESD Complaint/Report | Parking | Traffic Engineering"
           },
           {
             "service_name": "Pavement Maintenance",
             "n_record_types": 4,
-            "record_types": "ESD Complaint/Report | TSW | Traffic Engineering | Storm Water Code Enforcement"
+            "record_types": "Traffic Engineering | ESD Complaint/Report | Storm Water Code Enforcement | TSW"
           },
           {
             "service_name": "Stormwater",
             "n_record_types": 4,
-            "record_types": "Traffic Engineering | Parks & Recreation | Storm Water Code Enforcement | TSW"
+            "record_types": "TSW | Storm Water Code Enforcement | Parks & Recreation | Traffic Engineering"
           },
           {
             "service_name": "Street Light Maintenance",
             "n_record_types": 4,
-            "record_types": "DSD | Parks & Recreation | Traffic Engineering | TSW"
+            "record_types": "TSW | Parks & Recreation | DSD | Traffic Engineering"
           },
           {
             "service_name": "Street Sweeping",
             "n_record_types": 4,
-            "record_types": "Storm Water Code Enforcement | ESD Complaint/Report | Traffic Engineering | TSW"
+            "record_types": "TSW | Storm Water Code Enforcement | ESD Complaint/Report | Traffic Engineering"
           },
           {
             "service_name": "Bicycle-Related Issue",
@@ -309,12 +309,12 @@
           {
             "service_name": "Development Services - Code Enforcement",
             "n_record_types": 3,
-            "record_types": "Traffic Engineering | ESD Complaint/Report | DSD"
+            "record_types": "ESD Complaint/Report | DSD | Traffic Engineering"
           },
           {
             "service_name": "Graffiti - Code Enforcement",
             "n_record_types": 3,
-            "record_types": "TSW ROW | Parks & Recreation | TSW"
+            "record_types": "TSW | TSW ROW | Parks & Recreation"
           },
           {
             "service_name": "Graffiti - Private",
@@ -324,32 +324,32 @@
           {
             "service_name": "Oversized Vehicle",
             "n_record_types": 3,
-            "record_types": "ESD Complaint/Report | Neighborhood Policing | Parking"
+            "record_types": "Parking | Neighborhood Policing | ESD Complaint/Report"
           },
           {
             "service_name": "Parks Issue",
             "n_record_types": 3,
-            "record_types": "ESD Complaint/Report | Parks & Recreation | TSW"
+            "record_types": "Parks & Recreation | TSW | ESD Complaint/Report"
           },
           {
             "service_name": "Traffic Sign Maintenance",
             "n_record_types": 3,
-            "record_types": "TSW | Traffic Engineering | Parks & Recreation"
+            "record_types": "Parks & Recreation | TSW | Traffic Engineering"
           },
           {
             "service_name": "Tree Maintenance",
             "n_record_types": 3,
-            "record_types": "Traffic Engineering | TSW | Parks & Recreation"
+            "record_types": "TSW | Traffic Engineering | Parks & Recreation"
           },
           {
             "service_name": "Waste on Private Property",
             "n_record_types": 3,
-            "record_types": "ESD Complaint/Report | DSD | Neighborhood Policing"
+            "record_types": "DSD | Neighborhood Policing | ESD Complaint/Report"
           },
           {
             "service_name": "Weed Cleanup",
             "n_record_types": 3,
-            "record_types": "TSW | Traffic Engineering | Parks & Recreation"
+            "record_types": "Traffic Engineering | Parks & Recreation | TSW"
           },
           {
             "service_name": "(Unclassified)",
@@ -359,7 +359,7 @@
           {
             "service_name": "ADA Compliance",
             "n_record_types": 2,
-            "record_types": "Traffic Engineering | ESD Complaint/Report"
+            "record_types": "ESD Complaint/Report | Traffic Engineering"
           },
           {
             "service_name": "Building and Land Use Enforcement",
@@ -369,12 +369,12 @@
           {
             "service_name": "Parking - 72-Hours",
             "n_record_types": 2,
-            "record_types": "ESD Complaint/Report | Parking"
+            "record_types": "Parking | ESD Complaint/Report"
           },
           {
             "service_name": "Pothole",
             "n_record_types": 2,
-            "record_types": "Traffic Engineering | TSW"
+            "record_types": "TSW | Traffic Engineering"
           },
           {
             "service_name": "Right-of-Way Code Enforcement",
@@ -389,7 +389,7 @@
           {
             "service_name": "Street Flooded",
             "n_record_types": 2,
-            "record_types": "TSW | Traffic Engineering"
+            "record_types": "Traffic Engineering | TSW"
           },
           {
             "service_name": "Traffic Engineering",
@@ -399,12 +399,12 @@
           {
             "service_name": "Traffic Signal Issue",
             "n_record_types": 2,
-            "record_types": "TSW | Traffic Engineering"
+            "record_types": "Traffic Engineering | TSW"
           },
           {
             "service_name": "Traffic Signal Timing",
             "n_record_types": 2,
-            "record_types": "TSW | Traffic Engineering"
+            "record_types": "Traffic Engineering | TSW"
           }
         ],
         "categories_whose_share_of_citywide_demand_shifted_2pp_or_more": [
