@@ -9,9 +9,9 @@ chart in the dashboard:
     --series-1 (blue)   typical / recent / within threshold
     --series-2 (orange) tail / aged / duplicated
 
-Nothing is coloured decoratively. Where only one series is present there is no
+Nothing is colored decoratively. Where only one series is present there is no
 legend; where two are present a legend is always shown, so identity is never
-carried by colour alone.
+carried by color alone.
 """
 
 from __future__ import annotations
@@ -47,19 +47,37 @@ def nice_ticks(scale_max: float, target: int = 4) -> list[float]:
 
     Axis ticks read as reference points, so they must be numbers a person would
     choose (5,000 / 10,000), not arbitrary fractions of the series maximum.
+
+    Candidate steps are scored on how close they bring the tick count to
+    `target`, rather than taking the first step above max/target — that shortcut
+    produced two gridlines on a 42,000 range, which is too sparse to read a value
+    off the chart.
     """
     if scale_max <= 0:
         return [0.0]
-    raw = scale_max / target
-    magnitude = 10 ** math.floor(math.log10(raw))
-    for multiple in (1, 2, 2.5, 5, 10):
-        step = multiple * magnitude
-        if raw <= step:
-            break
-    ticks, value = [], step
+
+    magnitude = 10 ** math.floor(math.log10(scale_max / max(target, 1)))
+    candidates = [m * magnitude * decade
+                  for decade in (0.1, 1, 10)
+                  for m in (1, 2, 2.5, 5)]
+
+    best, best_cost = None, None
+    for step in sorted(set(candidates)):
+        if step <= 0:
+            continue
+        count = int(scale_max / step + 1e-9)
+        if count < 2 or count > 8:
+            continue
+        cost = abs(count - target)
+        if best_cost is None or cost < best_cost:
+            best, best_cost = step, cost
+    if best is None:
+        best = scale_max
+
+    ticks, value = [], best
     while value <= scale_max * 1.0001:
         ticks.append(value)
-        value += step
+        value += best
     return ticks or [scale_max]
 
 
@@ -97,7 +115,7 @@ def horizontal_bars(
     """Horizontal bars, optionally stacked into two meaningful segments.
 
     Stacked segments are separated by a 2px surface gap so the boundary reads as
-    a division rather than a colour change.
+    a division rather than a color change.
     """
     secondary = secondary or [0.0] * len(labels)
     totals = [p + s for p, s in zip(primary, secondary)]
@@ -359,17 +377,25 @@ def line_chart(
             f'<title>{esc(label)}: {_fmt(value)} submissions'
             f'{"" if complete else " (month incomplete at snapshot)"}</title></circle>'
         )
-        if i % 3 == 0 or i == len(values) - 1:
+        # Label every third point, plus the last — but skip the last if it would
+        # collide with the preceding label.
+        is_last = i == len(values) - 1
+        if i % 3 == 0 or is_last:
+            # Anchor the outermost labels inward so a wide label at either end
+            # cannot be clipped by the viewBox.
+            anchor = "start" if i == 0 else ("end" if is_last else "middle")
             parts.append(
                 f'<text class="ax-label" x="{x:.1f}" y="{height - 24}" '
-                f'text-anchor="middle">{esc(label)}</text>'
+                f'text-anchor="{anchor}">{esc(label)}</text>'
             )
 
     parts.append(f'<line class="axis" x1="{pad_left}" y1="{pad_top + plot_h}" '
                  f'x2="{width - pad_right}" y2="{pad_top + plot_h}"/>')
+    caption = ("Submission month — complete months only"
+               if all(complete_flags) else
+               "Submission month — hollow marker = month incomplete at snapshot")
     parts.append(f'<text class="ax-caption" x="{pad_left + plot_w / 2}" y="{height - 5}" '
-                 f'text-anchor="middle">Submission month — hollow marker = month '
-                 f'incomplete at snapshot</text>')
+                 f'text-anchor="middle">{esc(caption)}</text>')
     return (
         f'<svg class="chart" viewBox="0 0 {width} {height}" role="img" '
         f'preserveAspectRatio="xMinYMin meet">{"".join(parts)}</svg>'

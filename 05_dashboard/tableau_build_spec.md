@@ -50,11 +50,11 @@ should format and present, not recompute.
 | `Under 90 days` | A | `[active_records] - [aged_90_plus]` | second segment of the stacked bar |
 | `Aged share label` | A | `STR(ROUND([pct_aged_90_plus],1)) + "%"` | direct label |
 | `Bucket order` | B | `CASE [age_bucket] WHEN "0-7" THEN 1 WHEN "8-30" THEN 2 WHEN "31-60" THEN 3 WHEN "61-90" THEN 4 WHEN "91-180" THEN 5 WHEN "181-365" THEN 6 WHEN "366-730" THEN 7 ELSE 8 END` | **required** — alphabetical sort is wrong |
-| `Bucket colour` | B | `IF [Bucket order] <= 4 THEN "Under 90 days" ELSE "90+ days" END` | drives the two-colour encoding |
+| `Bucket color` | B | `IF [Bucket order] <= 4 THEN "Under 90 days" ELSE "90+ days" END` | drives the two-color encoding |
 | `District label` | C | `"District " + [council_district]` | |
 | `Under 90 (district)` | C | `[active_records] - [aged_90_plus]` | |
 | `Index vs baseline` | D | `[aged_concentration_index] - 1` | deviation from the city average |
-| `Index above average` | D | `[aged_concentration_index] >= 1` | boolean, colours the lollipop |
+| `Index above average` | D | `[aged_concentration_index] >= 1` | boolean, colors the lollipop |
 | `Duplicate children` | E | `[active_records] - [active_distinct_issues]` | |
 | `Is external referral` | F | `[referral_scope] = "External (non-City entity)"` | |
 | `Month complete` | G | `[coverage_status] = "complete"` | |
@@ -65,7 +65,7 @@ should format and present, not recompute.
 
 ## 3. Colour palette
 
-Two colours carry meaning across every sheet. Do not add a third for decoration.
+Two colors carry meaning across every sheet. Do not add a third for decoration.
 
 Create a custom categorical palette in `Preferences.tps`:
 
@@ -82,7 +82,7 @@ Create a custom categorical palette in `Preferences.tps`:
 
 Assign `#2a78d6` to "Under 90 days" / "Distinct issues" / "Routed within the City", and
 `#eb6834` to "90+ days" / "Duplicate children" / "Routed outside the City" on every sheet.
-This pair is validated for colour-vision deficiency separation against both light and dark
+This pair is validated for color-vision deficiency separation against both light and dark
 backgrounds.
 
 ---
@@ -93,7 +93,7 @@ backgrounds.
 - **Marks:** Bar (vertical)
 - **Columns:** `age_bucket`, sorted manually by `Bucket order`
 - **Rows:** `SUM(n_records)`
-- **Colour:** `Bucket colour`
+- **Colour:** `Bucket color`
 - **Label:** `SUM(n_records)`, above the bar
 - **Tooltip:** bucket, records, `pct_of_active_backlog`, `cumulative_pct`
 - **Title:** "Age profile of the active queue"
@@ -103,14 +103,14 @@ backgrounds.
 - **Marks:** Bar (horizontal), stacked
 - **Rows:** `service_name`, sorted descending by `SUM(active_records)`, Top 12 filter
 - **Columns:** `SUM(Under 90 days)` and `SUM(Aged 90+ (records))` as measure values
-- **Colour:** Measure Names, using the two-colour palette
+- **Colour:** Measure Names, using the two-color palette
 - **Label:** `SUM(active_records)` at the end of the bar
 - **Title:** "Where the active workload sits"
 
 ### Sheet 3 — Median vs P90 age by category *(source A)*
 - **Marks:** Circle, dual-axis with a Line to draw the connector
-  1. `AVG(median_age_days)` on Columns → Circle, colour `#2a78d6`
-  2. `AVG(p90_age_days)` on Columns → Circle, colour `#eb6834`
+  1. `AVG(median_age_days)` on Columns → Circle, color `#2a78d6`
+  2. `AVG(p90_age_days)` on Columns → Circle, color `#eb6834`
   3. Dual-axis, **Synchronise Axis** (mandatory — the two must share one scale)
 - **Rows:** `service_name`, sorted descending by `AVG(p90_age_days)`
 - **Filter:** `active_records >= 250`
@@ -130,7 +130,7 @@ backgrounds.
 - **Rows:** `area`, filtered to `area_type = "Council district"`, sorted by index descending
 - **Columns:** `AVG(aged_concentration_index)`
 - **Colour:** `Index above average`
-- **Reference line:** constant at **1.0**, dashed, labelled "City average"
+- **Reference line:** constant at **1.0**, dashed, labeled "City average"
 - **Axis:** fixed 0.75 to 1.15 — do not let Tableau auto-scale, or a 0.826–1.085 spread
   will look dramatic
 - **Title:** "Aged-concentration index by district"
@@ -175,7 +175,7 @@ backgrounds.
 ```
 ┌────────────────────────────────────────────────────────────────┐
 │ TITLE  San Diego Service Operations Intelligence               │
-│ SUBTITLE  Active backlog, ageing and routing · snapshot        │
+│ SUBTITLE  Active backlog, aging and routing · snapshot        │
 ├────────────────────────────────────────────────────────────────┤
 │ DATA BOUNDARY BANNER  (text object, orange left border, 60px)  │
 ├──────────┬──────────┬──────────┬──────────┬──────────┬─────────┤

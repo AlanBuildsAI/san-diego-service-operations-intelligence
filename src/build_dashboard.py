@@ -31,6 +31,10 @@ BOUNDARY_NOTE = (
     "Get It Done records represent submitted service requests and case statuses, "
     "not verified maintenance completion."
 )
+DISCLOSURE = (
+    "Independent portfolio case study using public City of San Diego data. Not "
+    "commissioned by, affiliated with, or endorsed by the City of San Diego."
+)
 
 STYLE = """
 :root{
@@ -72,6 +76,12 @@ header.top{margin-bottom:22px}
 h1{font-size:26px;margin:0 0 6px;letter-spacing:-0.01em}
 .sub{color:var(--text-secondary);font-size:14px;margin:0}
 .meta{color:var(--muted);font-size:13px;margin-top:8px}
+.disclosure{color:var(--muted);font-size:12.5px;margin:6px 0 0;font-style:italic}
+.section{margin:34px 0 14px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.section-n{font-size:12px;font-weight:700;color:var(--series-1);letter-spacing:.1em;
+  border:1px solid var(--series-1);border-radius:4px;padding:2px 7px;flex:none}
+.section-t{font-size:18px;margin:0;letter-spacing:-0.01em}
+.section-s{flex-basis:100%;margin:2px 0 0;color:var(--text-secondary);font-size:13.5px}
 .boundary{
   margin:18px 0 26px;padding:12px 14px;border-radius:8px;
   border:1px solid var(--border);border-left:3px solid var(--series-2);
@@ -85,6 +95,9 @@ h1{font-size:26px;margin:0 0 6px;letter-spacing:-0.01em}
 .tile .n{font-size:12.5px;color:var(--text-secondary)}
 section.panel{background:var(--surface-1);border:1px solid var(--border);border-radius:10px;
   padding:18px 20px 20px;margin-bottom:18px;overflow:hidden}
+section.panel.emphasis{border-left:4px solid var(--series-1);
+  box-shadow:0 1px 3px rgba(0,0,0,0.06)}
+section.panel.emphasis h2{font-size:18px}
 .panel h2{font-size:16px;margin:0 0 3px;letter-spacing:-0.005em}
 .panel .q{font-size:13px;color:var(--muted);margin:0 0 4px}
 .panel .read{font-size:13.5px;color:var(--text-secondary);margin:8px 0 12px}
@@ -122,10 +135,23 @@ def tile(key: str, value: str, note: str) -> str:
             f'<div class="n">{charts.esc(note)}</div></div>')
 
 
-def panel(title: str, question: str, reading: str, body: str) -> str:
-    return (f'<section class="panel"><h2>{charts.esc(title)}</h2>'
+def panel(title: str, question: str, reading: str, body: str,
+          emphasis: bool = False) -> str:
+    """One analysis panel. `emphasis` marks the decision-relevant panels so the
+    layout is not visually flat — the reader's eye should land on the findings
+    that change what leadership would do."""
+    css = "panel emphasis" if emphasis else "panel"
+    return (f'<section class="{css}"><h2>{charts.esc(title)}</h2>'
             f'<p class="q">{charts.esc(question)}</p>'
             f'<p class="read">{reading}</p>{body}</section>')
+
+
+def section(number: str, title: str, standfirst: str) -> str:
+    """A tier heading, so the dashboard reads as an argument rather than a pile
+    of charts."""
+    return (f'<div class="section"><span class="section-n">{charts.esc(number)}</span>'
+            f'<h2 class="section-t">{charts.esc(title)}</h2>'
+            f'<p class="section-s">{charts.esc(standfirst)}</p></div>')
 
 
 def build_html() -> str:
@@ -140,16 +166,19 @@ def build_html() -> str:
     parts.append(
         '<header class="top">'
         '<h1>San Diego Service Operations Intelligence</h1>'
-        '<p class="sub">Active request backlog, ageing and routing — '
-        'City of San Diego Get It Done programme</p>'
+        '<p class="sub">Active request inventory, aging and routing — '
+        'City of San Diego Get It Done program</p>'
         f'<p class="meta">Data snapshot {charts.esc(snapshot)} · '
         f'built {charts.esc(generated)} · source: City of San Diego Open Data Portal</p>'
+        f'<p class="disclosure">{charts.esc(DISCLOSURE)}</p>'
         '</header>'
     )
     parts.append(
         f'<div class="boundary"><strong>Data boundary.</strong> {charts.esc(BOUNDARY_NOTE)} '
-        'A closed case records a case closure, not a completed repair. Nothing on this page '
-        'measures crew performance, and no relationship shown here is causal.</div>'
+        'A record reaching Closed or Referred status means it reached a terminal Get It Done '
+        'status, not that a repair occurred. This source carries no work-order, staffing or '
+        'capacity data, so nothing here measures crew performance and no relationship shown '
+        'is causal.</div>'
     )
 
     # ---- KPI tiles ----------------------------------------------------------
@@ -172,22 +201,36 @@ def build_html() -> str:
     two_series = charts.legend([("Under 90 days", "var(--series-1)"),
                                 ("90+ days", "var(--series-2)")])
 
-    # ---- Q1 ageing profile --------------------------------------------------
+    parts.append(section(
+        "01", "How large is the active inventory, and how old is it?",
+        "The starting position: volume and age of everything currently in an active "
+        "status, across all vintages."))
+
+    # ---- Q1 aging profile --------------------------------------------------
     buckets = agg("agg_backlog_aging_buckets").sort_values("bucket_order")
     colors = ["var(--series-1)" if b in ("0-7", "8-30", "31-60", "61-90")
               else "var(--series-2)" for b in buckets["age_bucket"]]
     parts.append(panel(
-        "Age profile of the active queue",
-        "Q1 · How large is the active backlog, and how old is it?",
-        f'The queue is not a short-lived inflow. '
-        f'<strong>{c["active_aged_90_plus_pct"].formatted}</strong> of active requests are '
-        f'already past 90 days and <strong>{c["active_aged_365_plus_pct"].formatted}</strong> '
-        f'past a year. The single largest bucket is the oldest one.',
+        "Age profile of the active inventory",
+        "Q1 · How large is the active inventory, and how old is it?",
+        f'As of the snapshot, <strong>{c["active_aged_90_plus_pct"].formatted}</strong> of '
+        f'active requests are past 90 days and '
+        f'<strong>{c["active_aged_365_plus_pct"].formatted}</strong> past a year. The single '
+        f'largest age bucket is the oldest one. By contrast, '
+        f'<strong>{c["cohort_pct_resolved"].formatted}</strong> of requests submitted '
+        f'Jan–Jun 2026 had reached a terminal status by the snapshot — recent intake and the '
+        f'standing inventory behave very differently.',
         two_series + '<div class="chart-scroll">'
         + charts.vertical_bars(list(buckets["age_bucket"]),
                                [float(v) for v in buckets["n_records"]], colors)
         + '</div>',
+        emphasis=True,
     ))
+
+    parts.append(section(
+        "02", "Where is it concentrated?",
+        "Which service categories hold the workload, which hold the oldest records, and "
+        "which have a long tail rather than a uniformly slow queue."))
 
     # ---- Q2/Q3 service backlog ---------------------------------------------
     service = agg("agg_service_backlog").nlargest(12, "active_records")
@@ -197,16 +240,18 @@ def build_html() -> str:
         "Where the active workload sits",
         "Q2 · Which service categories account for the largest share of active workload?",
         f'The top four categories — {charts.esc(c["top4_category_names"].formatted)} — hold '
-        f'<strong>{c["top4_share_pct"].formatted}</strong> of the entire active backlog. In each '
-        f'of them the aged segment dominates.',
+        f'<strong>{c["top4_share_pct"].formatted}</strong> of all active records, and in each '
+        f'the aged segment dominates. TSW is the modal case_record_type for all four; that is '
+        f'a staff-group label in the source, not a confirmed department owner.',
         two_series + '<div class="chart-scroll">'
         + charts.horizontal_bars(list(service["service_name"]), under90, aged90,
                                  primary_label="Under 90 days",
                                  secondary_label="Aged 90+ days")
         + '</div>',
+        emphasis=True,
     ))
 
-    # ---- Q3/Q4 ageing by category ------------------------------------------
+    # ---- Q3/Q4 aging by category ------------------------------------------
     tail = agg("agg_service_tail_risk").nlargest(12, "p90_age_days")
     parts.append(panel(
         "Typical age against tail age, by category",
@@ -221,6 +266,11 @@ def build_html() -> str:
                           [float(v) for v in tail["p90_age_days"]])
         + '</div>',
     ))
+
+    parts.append(section(
+        "03", "What materially affects how these numbers should be read?",
+        "Four factors that change the interpretation before any conclusion is drawn: "
+        "geography, duplicate reporting, referrals out of the queue, and demand coverage."))
 
     # ---- Q5/Q6 geography ----------------------------------------------------
     district = agg("agg_geography_district")
@@ -238,13 +288,15 @@ def build_html() -> str:
     parts.append(panel(
         "Geography: volume against aged concentration",
         "Q5 & Q6 · Which districts carry the most work, and is any district's queue unusually old?",
-        f'District 3 holds the largest backlog at <strong>{c["d3_active"].formatted}</strong> '
-        f'active records ({c["d3_pct"].formatted}). The index on the right divides each '
-        f'district\'s share of the 90+ day backlog by its share of all active work — it ranges '
-        f'only from <strong>{c["aging_index_min"].formatted}</strong> to '
-        f'<strong>{c["aging_index_max"].formatted}</strong>, so aged work is spread roughly in '
-        f'proportion to queue size rather than concentrated anywhere. District counts are not '
-        f'comparable as service levels: this dataset has no population or asset denominators.',
+        f'District 3 holds the largest active inventory at '
+        f'<strong>{c["d3_active"].formatted}</strong> records ({c["d3_pct"].formatted}). The '
+        f'index on the right divides each district\'s share of the citywide 90+ day inventory '
+        f'by its share of all active records. It varies only from '
+        f'<strong>{c["aging_index_min"].formatted}</strong> to '
+        f'<strong>{c["aging_index_max"].formatted}</strong> — no strong district-level '
+        f'over-concentration is evident under this metric. That does not prove geography is '
+        f'irrelevant: district counts carry no population or asset denominator, and an effect '
+        f'could exist in reporting propensity or at a finer level than a district.',
         two_series + '<div class="grid2">'
         + '<div class="chart-scroll">'
         + charts.horizontal_bars(["District " + str(d) for d in district["council_district"]],
@@ -308,10 +360,14 @@ def build_html() -> str:
     ))
 
     # ---- Q11 demand trend ---------------------------------------------------
+    # Complete months only. A partial month plotted at its partial value draws a
+    # cliff that looks like a collapse in demand, which is the exact misreading
+    # the coverage logic exists to prevent.
     monthly = agg("agg_demand_monthly")
-    monthly = monthly[monthly["month_start"] >= "2025-01-01"].copy()
+    monthly = monthly[(monthly["month_start"] >= "2025-01-01")
+                      & (monthly["coverage_status"] == "complete")].copy()
     labels = [str(m)[:7] for m in monthly["month_start"]]
-    complete = [s == "complete" for s in monthly["coverage_status"]]
+    complete = [True] * len(monthly)
     parts.append(panel(
         "Demand over time",
         "Q11 · How has demand changed where the source data allows a fair comparison?",
@@ -319,11 +375,17 @@ def build_html() -> str:
         f'year over year ({c["demand_ytd_prior"].formatted} to '
         f'{c["demand_ytd_current"].formatted}). Only months from January 2025 are shown: earlier '
         f'months are not fully covered by the three extracts in scope, and plotting them would '
-        f'show a fake decline.',
+        f'show a decline that is an artifact of coverage. Category-level year-over-year is not '
+        f'comparable across the 2025/26 boundary — see the taxonomy check in the audit.',
         '<div class="chart-scroll">'
         + charts.line_chart(labels, [float(v) for v in monthly["submissions"]], complete)
         + '</div>',
     ))
+
+    parts.append(section(
+        "04", "What should a stakeholder investigate first?",
+        "A triage order with the reason for each entry, plus how sensitive that order is "
+        "to the weights an analyst chose."))
 
     # ---- Q12 priority table -------------------------------------------------
     prio = agg("agg_priority_table").nsmallest(10, "investigation_rank")
@@ -334,10 +396,10 @@ def build_html() -> str:
             f'<td class="num">{r.investigation_rank}</td>'
             f"<td>{charts.esc(r.service_name)}</td>"
             f'<td class="num">{r.active_records:,}</td>'
-            f'<td class="num">{r.median_age_days:,.0f}</td>'
+            f'<td class="num">{r.median_age_days:,.9g}</td>'
             f'<td class="num">{r.aged_90_plus:,}</td>'
             f'<td class="num">{r.pct_of_own_queue_aged_90:.1f}%</td>'
-            f'<td class="num">{r.pct_of_scored_aged_90_backlog:.1f}%</td>'
+            f'<td class="num">{r.pct_of_city_aged_90_backlog:.1f}%</td>'
             f'<td class="num">{r.priority_score:.1f}</td>'
             f'<td><span class="tag">{charts.esc(r.why_flagged)}</span></td>'
             "</tr>"
@@ -346,19 +408,58 @@ def build_html() -> str:
         '<div class="table-scroll"><table><thead><tr>'
         '<th class="num">#</th><th>Service category</th><th class="num">Active</th>'
         '<th class="num">Median age</th><th class="num">Aged 90+</th>'
-        '<th class="num">% of own queue</th><th class="num">% of city aged</th>'
+        '<th class="num">% of own queue aged 90+</th>'
+        '<th class="num">% of citywide 90+ inventory</th>'
         '<th class="num">Score</th><th>Why flagged</th>'
         "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>"
     )
     parts.append(panel(
         "Investigation priority",
-        "Q12 · Which operational areas should leadership look at first?",
-        'A triage order, not a performance ranking. Score combines share of the city\'s 90+ day '
-        'backlog (0.45), share of the category\'s own queue that is aged (0.35) and median active '
-        'age (0.20), each as a percentile rank across categories with 500+ active records. '
-        'This dataset contains no staffing, budget or work-completion data, so nothing here '
-        'indicates that any area is under-resourced or under-performing.',
+        "Q12 · Which operational areas should a stakeholder look at first?",
+        'A triage order, not a performance ranking. The score is a prioritization heuristic: '
+        'percentile ranks of share of the citywide 90+ day inventory (0.45), share of the '
+        'category\'s own active queue aged 90+ (0.35) and median active age (0.20), across '
+        'categories with 500+ active records. This dataset contains no staffing, budget or '
+        'work-completion data, so nothing here indicates that any area is under-resourced or '
+        'under-performing.',
         table,
+        emphasis=True,
+    ))
+
+    # ---- weight sensitivity -------------------------------------------------
+    sens = agg("agg_priority_weight_sensitivity")
+    top3 = sens[sens["rank_in_scheme"] <= 3].copy()
+    # Baseline first; the alternatives are what it is being compared against.
+    top3["_order"] = (~top3["scheme"].str.startswith("baseline")).astype(int)
+    top3 = top3.sort_values(["_order", "scheme", "rank_in_scheme"])
+    rows = []
+    for scheme, group in top3.groupby("scheme", sort=False):
+        ordered = group.sort_values("rank_in_scheme")
+        names = " → ".join(ordered["service_name"])
+        is_baseline = scheme.startswith("baseline")
+        rows.append(
+            "<tr>"
+            f'<td>{charts.esc(scheme)}{" <span class=\"tag\">baseline</span>" if is_baseline else ""}</td>'
+            f"<td>{charts.esc(names)}</td>"
+            "</tr>")
+    sens_table = (
+        '<div class="table-scroll"><table><thead><tr>'
+        '<th>Weighting scheme (volume / aged rate / median age)</th>'
+        '<th>Top three, in order</th>'
+        "</tr></thead><tbody>" + "".join(rows) + "</tbody></table></div>")
+
+    parts.append(panel(
+        "How sensitive is that order to the weights?",
+        "Q12b · Would a different analyst, weighting differently, reach the same shortlist?",
+        f'Tested rather than assumed. Sidewalk Repair Issue and Pavement Maintenance hold the '
+        f'top two positions under all <strong>{c["weight_schemes_tested"].formatted}</strong> '
+        f'schemes, though their order swaps. Street Light Maintenance is top-three in '
+        f'<strong>{c["streetlight_top3_scheme_count"].formatted}</strong> of '
+        f'{c["weight_schemes_tested"].formatted} — under aged-rate-heavy weighting it falls to '
+        f'fifth and Development Services – Code Enforcement enters at third. The third position '
+        f'is a stakeholder judgment about whether volume of aged work or proportion of a queue '
+        f'matters more, not an analytical result.',
+        sens_table,
     ))
 
     parts.append(

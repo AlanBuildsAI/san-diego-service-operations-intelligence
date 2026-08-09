@@ -26,11 +26,18 @@ sys.path.insert(0, str(REPO_ROOT))
 
 from src import claims as claims_mod, config  # noqa: E402
 
+DISCLOSURE = (
+    "*Independent portfolio case study using public City of San Diego data. Not "
+    "commissioned by, affiliated with, or endorsed by the City of San Diego. "
+    "The stakeholder is hypothetical.*"
+)
+
 BOUNDARY_NOTE = (
     "**Data boundary.** Get It Done records represent submitted service requests and case "
-    "statuses, not verified maintenance completion. A closed case records a case closure, "
-    "not a completed repair. Nothing here measures crew performance, and no relationship "
-    "shown is causal."
+    "statuses, not verified maintenance completion. A record reaching Closed or Referred "
+    "means it reached a terminal Get It Done status, not that a repair occurred. This "
+    "source carries no work-order, staffing or capacity data, so nothing here measures crew "
+    "performance and no relationship shown is causal."
 )
 
 SERIES_1 = "#2a78d6"   # typical / recent / within threshold
@@ -73,10 +80,11 @@ def main() -> None:
 
     st.title("San Diego Service Operations Intelligence")
     st.caption(
-        f"Active request backlog, ageing and routing — City of San Diego Get It Done "
-        f"programme · data snapshot {snapshot} · "
+        f"Active request backlog, aging and routing — City of San Diego Get It Done "
+        f"program · data snapshot {snapshot} · "
         f"source: City of San Diego Open Data Portal"
     )
+    st.caption(DISCLOSURE)
     st.warning(BOUNDARY_NOTE)
 
     # ---- KPI row ------------------------------------------------------------
@@ -97,19 +105,21 @@ def main() -> None:
                    delta_color="off")
 
     tabs = st.tabs([
-        "Backlog & ageing", "Service categories", "Geography",
+        "Backlog & aging", "Service categories", "Geography",
         "Duplicates", "Referrals", "Channels", "Trends", "Priority",
     ])
 
-    # ---- Backlog & ageing ---------------------------------------------------
+    # ---- Backlog & aging ---------------------------------------------------
     with tabs[0]:
         st.subheader("Age profile of the active queue")
         st.caption("Q1 · How large is the active backlog, and how old is it?")
         buckets = load("agg_backlog_aging_buckets").sort_values("bucket_order")
         st.markdown(
-            f"The queue is not short-lived inflow. **{c['active_aged_90_plus_pct']}** of "
-            f"active requests are past 90 days and **{c['active_aged_365_plus_pct']}** past "
-            f"a year. The single largest bucket is the oldest one."
+            f"As of the snapshot, **{c['active_aged_90_plus_pct']}** of active requests are "
+            f"past 90 days and **{c['active_aged_365_plus_pct']}** past a year. The single "
+            f"largest age bucket is the oldest one. By contrast **{c['cohort_pct_resolved']}** "
+            f"of requests submitted Jan–Jun 2026 had reached a terminal status by the "
+            f"snapshot — recent intake and the standing inventory behave differently."
         )
         st.bar_chart(buckets.set_index("age_bucket")["n_records"],
                      color=SERIES_2, height=340)
@@ -171,9 +181,10 @@ def main() -> None:
             st.bar_chart(index_df.set_index("area")["aged_concentration_index"],
                          color=SERIES_2, height=340, horizontal=True)
         st.markdown(
-            f"The index spans only **{c['aging_index_min']}** to **{c['aging_index_max']}** "
-            f"across districts, so aged work is spread roughly in proportion to queue size "
-            f"rather than concentrated in any one district."
+            f"The index varies only from **{c['aging_index_min']}** to "
+            f"**{c['aging_index_max']}** across districts — no strong district-level "
+            f"over-concentration is evident under this metric. That does not prove geography "
+            f"is irrelevant; there are no population or asset denominators in this source."
         )
         st.dataframe(district, hide_index=True, use_container_width=True)
 
@@ -225,12 +236,12 @@ def main() -> None:
     # ---- Channels -----------------------------------------------------------
     with tabs[5]:
         st.subheader("Submission channel")
-        st.caption("Q10 · Do channels show different volume, status or ageing patterns?")
+        st.caption("Q10 · Do channels show different volume, status or aging patterns?")
         st.info(
-            "Channel is chosen by the reporter and is confounded with what is being reported: "
+            "Channel is chosen by the reporter and is associated with what is being reported: "
             "waste collection arrives mostly by web and phone, parking mostly by mobile. Any "
-            "raw difference between channels is association, not effect. The controlled "
-            "comparison below holds service category constant."
+            "raw difference between channels is association, not effect. The comparison below "
+            "stratifies by service category."
         )
         st.dataframe(load("agg_channel_summary"), hide_index=True, use_container_width=True)
         st.markdown("**Within a single service category, do resident channels differ?**")
@@ -276,14 +287,25 @@ def main() -> None:
         st.subheader("Investigation priority")
         st.caption("Q12 · Which operational areas should leadership look at first?")
         st.info(
-            "A triage order, not a performance ranking. Score = 0.45 × share of the city's "
-            "90+ day backlog + 0.35 × share of the category's own queue aged 90+ + 0.20 × "
-            "median active age, each as a percentile rank across categories with 500+ active "
-            "records. This dataset holds no staffing, budget or work-completion data, so "
-            "nothing here indicates that any area is under-resourced or under-performing."
+            "A triage order, not a performance ranking — and a prioritization heuristic, not "
+            "a measurement. Score = 0.45 x share of the citywide 90+ day active inventory + "
+            "0.35 x share of the category's own active queue aged 90+ + 0.20 x median active "
+            "age, each as a percentile rank across categories with 500+ active records. This "
+            "dataset holds no staffing, budget or work-completion data, so nothing here "
+            "indicates that any area is under-resourced or under-performing."
         )
         st.dataframe(load("agg_priority_table"), hide_index=True, use_container_width=True)
-        st.markdown("**Service × council district cells with the most aged work**")
+        st.markdown(
+            f"**How sensitive is that order to the weights?** Tested across "
+            f"**{c['weight_schemes_tested']}** schemes. Sidewalk Repair Issue and Pavement "
+            f"Maintenance hold the top two in all {c['weight_schemes_tested']}; Street Light "
+            f"Maintenance is top-three in **{c['streetlight_top3_scheme_count']}** of "
+            f"{c['weight_schemes_tested']}. The third position depends on the weighting, so "
+            f"it is a stakeholder judgment rather than an analytical result."
+        )
+        st.dataframe(load("agg_priority_weight_sensitivity"), hide_index=True,
+                     use_container_width=True)
+        st.markdown("**Service x council district cells with the most aged work**")
         st.dataframe(load("agg_priority_hotspots").head(40), hide_index=True,
                      use_container_width=True)
 

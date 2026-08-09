@@ -57,11 +57,17 @@ NOTE_FONT = Font(size=9, color=MUTED, italic=True)
 THIN = Side(style="thin", color="FFD9D9D9")
 BOX = Border(left=THIN, right=THIN, top=THIN, bottom=THIN)
 
+DISCLOSURE = (
+    "Independent portfolio case study using public City of San Diego data. Not commissioned "
+    "by, affiliated with, or endorsed by the City of San Diego. The stakeholder is hypothetical."
+)
+
 BOUNDARY_NOTE = (
     "Data boundary: Get It Done records represent submitted service requests and case "
-    "statuses, not verified maintenance completion. A closed case records a case closure, "
-    "not a completed repair. Nothing in this workbook measures crew performance, and no "
-    "relationship shown is causal."
+    "statuses, not verified maintenance completion. A record reaching Closed or Referred "
+    "means it reached a terminal Get It Done status, not that a repair occurred. This source "
+    "carries no work-order, staffing or capacity data, so nothing in this workbook measures "
+    "crew performance and no relationship shown is causal."
 )
 
 
@@ -139,6 +145,10 @@ def build() -> Path:
     ws["A2"].font = SUB_FONT
     ws["A3"] = f"Generated {generated} from City of San Diego Open Data Portal extracts"
     ws["A3"].font = SUB_FONT
+    ws["A4"] = DISCLOSURE
+    ws["A4"].font = Font(size=9, color=MUTED, italic=True)
+    ws["A4"].alignment = Alignment(wrap_text=True, vertical="top")
+    ws.merge_cells("A4:G4")
 
     ws["A5"] = BOUNDARY_NOTE
     ws["A5"].font = Font(size=10, bold=True, color="FF8A3B12")
@@ -156,6 +166,13 @@ def build() -> Path:
         "metric_label": "Metric", "value": "Value", "unit": "Unit", "grouping": "Group"})
     first, last = write_table(ws, kpis_display, 10, "tblExecKPIs",
                               {"Value": "#,##0.0"})
+
+    # The Value column mixes record counts, day counts and percentages. Counts and
+    # day values read wrong with a trailing decimal, so each row is formatted to
+    # match its own unit rather than the column.
+    for offset, unit in enumerate(kpis_display["Unit"], start=first + 1):
+        cell = ws.cell(row=offset, column=2)
+        cell.number_format = "#,##0" if unit in ("records", "issues", "days") else "#,##0.0"
 
     ws.conditional_formatting.add(
         f"B{first + 1}:B{last}",
@@ -308,7 +325,7 @@ def build() -> Path:
                                "Mean age (days)": "#,##0.0", "Aged 60+": "#,##0",
                                "Aged 90+": "#,##0", "Aged 365+": "#,##0",
                                "% of own queue aged 90+": "0.0",
-                               "% of city aged 90+": "0.00"})
+                               "% of citywide 90+ inventory": "0.00"})
     ws.conditional_formatting.add(
         f"C{first + 1}:C{last}",
         DataBarRule(start_type="min", end_type="max", color="FF2A78D6", showValue=True))
@@ -356,7 +373,7 @@ def build() -> Path:
                                "Backlog per recent submission": "0.000",
                                "Median age (days)": "#,##0", "P90 age (days)": "#,##0",
                                "Aged 90+": "#,##0", "% of own queue aged 90+": "0.0",
-                               "% of city aged 90+": "0.0", "Duplicate rate %": "0.0"})
+                               "% of citywide 90+ inventory": "0.0", "Duplicate rate %": "0.0"})
     ws.conditional_formatting.add(
         f"E{first + 1}:E{last}",
         ColorScaleRule(start_type="min", start_color="FFFFFFFF",
@@ -436,13 +453,13 @@ def build() -> Path:
     priority = agg("agg_priority_table")[
         ["investigation_rank", "service_name", "active_records", "median_age_days",
          "p90_age_days", "aged_90_plus", "pct_of_own_queue_aged_90",
-         "pct_of_scored_aged_90_backlog", "priority_score", "why_flagged"]
+         "pct_of_city_aged_90_backlog", "priority_score", "why_flagged"]
     ].rename(columns={
         "investigation_rank": "Rank", "service_name": "Service category",
         "active_records": "Active records", "median_age_days": "Median age (days)",
         "p90_age_days": "P90 age (days)", "aged_90_plus": "Aged 90+",
         "pct_of_own_queue_aged_90": "% of own queue aged 90+",
-        "pct_of_scored_aged_90_backlog": "% of city aged 90+",
+        "pct_of_city_aged_90_backlog": "% of citywide 90+ inventory",
         "priority_score": "Priority score", "why_flagged": "Why flagged"})
     row2 = last + 20
     ws.cell(row=row2 - 1, column=1,
@@ -450,12 +467,25 @@ def build() -> Path:
     f2, l2 = write_table(ws, priority, row2, "tblPriority",
                          {"Active records": "#,##0", "Median age (days)": "#,##0",
                           "P90 age (days)": "#,##0", "Aged 90+": "#,##0",
-                          "% of own queue aged 90+": "0.0", "% of city aged 90+": "0.0",
+                          "% of own queue aged 90+": "0.0", "% of citywide 90+ inventory": "0.0",
                           "Priority score": "0.0"})
     ws.conditional_formatting.add(
         f"I{f2 + 1}:I{l2}",
         ColorScaleRule(start_type="min", start_color="FFFFFFFF",
                        end_type="max", end_color="FFEB6834"))
+
+    sens = agg("agg_priority_weight_sensitivity")[
+        ["scheme", "rank_in_scheme", "service_name", "score", "in_baseline_top_3"]
+    ].rename(columns={
+        "scheme": "Weighting scheme", "rank_in_scheme": "Rank",
+        "service_name": "Service category", "score": "Score",
+        "in_baseline_top_3": "In baseline top 3"})
+    row_s = l2 + 3
+    ws.cell(row=row_s - 1, column=1,
+            value="Weight sensitivity - the ranking is a heuristic; these are the top 5 "
+                  "under each weighting tested").font = H2_FONT
+    fs, ls_ = write_table(ws, sens, row_s, "tblWeightSensitivity", {"Score": "0.0"})
+    l2 = ls_
 
     hotspots = agg("agg_priority_hotspots").head(40)[
         ["rank_by_aged_volume", "service_name", "council_district", "active_records",
