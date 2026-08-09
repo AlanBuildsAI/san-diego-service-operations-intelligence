@@ -1,7 +1,7 @@
 -- =============================================================================
 -- 01_clean_base.sql
 -- Purpose : Build the analysis fact table `fct_requests` at one row per
---           service_request_id, with project-defined age metrics, normalised
+--           service_request_id, with project-defined age metrics, normalized
 --           dimensions, and every sensitive source field suppressed.
 -- Depends : 00_sources.sql
 -- Engine  : DuckDB
@@ -77,7 +77,7 @@ typed AS (
         d.n_source_extracts,
         d.source_extract,
 
-        -- Service taxonomy. Blank service names are labelled rather than dropped
+        -- Service taxonomy. Blank service names are labeled rather than dropped
         -- so that the ~0.1% of records with no classification stay countable.
         COALESCE(NULLIF(TRIM(d.case_record_type), ''), '(Unclassified)') AS case_record_type,
         COALESCE(NULLIF(TRIM(d.service_name), ''),     '(Unclassified)') AS service_name,
@@ -141,7 +141,7 @@ derived AS (
 
         -- --- referral routing -------------------------------------------------
         -- The raw `referred` message is free text containing staff and vendor
-        -- email addresses, so it is normalised to a routing destination here and
+        -- email addresses, so it is normalized to a routing destination here and
         -- never carried forward.
         CASE
             WHEN t.referred_raw IS NULL THEN NULL

@@ -9,7 +9,7 @@ Checks are graded:
     PASS    - behaves as documented, nothing to carry into the analysis
     WARN    - real but bounded; the analysis works around it and says so
     FAIL    - would invalidate a result if ignored; must be handled explicitly
-    INFO    - measured for the record, no pass/fail judgement
+    INFO    - measured for the record, no pass/fail judgment
 
 A FAIL does not stop the pipeline. The point of the audit is to make the
 condition visible and force an explicit decision, which is then documented in
@@ -346,7 +346,7 @@ def check_service_taxonomy(con) -> CheckResult:
               "pct_of_citywide_prior": m[3], "pct_of_citywide_current": m[4],
               "share_shift_pp": m[5]} for m in migrated],
     }
-    # The Parking pair is a confirmed relabelling: monthly volumes cross over
+    # The Parking pair is a confirmed relabeling: monthly volumes cross over
     # between September and December 2025, one falling as the other rises, with
     # the parent Parking record type growing only 17.3% across the same window.
     # The remaining flagged categories are not diagnosed here — the check marks
@@ -360,7 +360,7 @@ def check_service_taxonomy(con) -> CheckResult:
         WHERE requested_month_start BETWEEN DATE '2025-08-01' AND DATE '2026-01-01'
         GROUP BY 1 ORDER BY 1
     """).fetchall()
-    detail["confirmed_relabelling_parking_monthly_crossover"] = [
+    detail["confirmed_relabeling_parking_monthly_crossover"] = [
         {"month": str(c[0])[:10], "parking_violation": c[1], "parking_72_hours": c[2]}
         for c in crossover
     ]
@@ -374,13 +374,13 @@ def check_service_taxonomy(con) -> CheckResult:
         f"cannot be treated as a parent of service name. Second, {len(migrated)} categories "
         f"moved their share of citywide demand by 2 percentage points or more between "
         f"Jan-Jul 2025 and Jan-Jul 2026 ({names}). For the Parking pair this is a confirmed "
-        f"relabelling — monthly volumes cross over during autumn 2025 while the parent "
+        f"relabeling — monthly volumes cross over during autumn 2025 while the parent "
         f"Parking record type grows only 17.3% — so their year-over-year change measures the "
         f"label move. The remaining flagged categories are marked not-comparable pending "
         f"verification; this check does not claim to know why they moved.",
         detail,
         "Year-over-year demand is reported citywide and at case_record_type grain, both of "
-        "which absorb a service-name relabelling. Service-level year-over-year rows carry a "
+        "which absorb a service-name relabeling. Service-level year-over-year rows carry a "
         "taxonomy_flag and flagged rows are excluded from every written finding. Wherever a "
         "record type is shown against a service name it is the modal value, computed with "
         "MODE() rather than picked arbitrarily.",
@@ -498,7 +498,7 @@ def check_age_outliers(con) -> CheckResult:
     }
     return CheckResult(
         "DQ-11", "Age outliers",
-        "Are extreme ages real records or artefacts?",
+        "Are extreme ages real records or artifacts?",
         "INFO",
         f"The oldest active request is {row[1]:,} days old. {row[2]:,} active records "
         f"({detail['pct_active_over_5_years']}%) exceed five years. No negative active ages.",
@@ -529,7 +529,7 @@ def check_privacy_suppression(con) -> CheckResult:
         detail,
         "Resident free text, exact addresses and coordinates are dropped in "
         "01_clean_base.sql before anything is written to disk. The referral message is "
-        "normalised to a destination label because the raw text contains staff and vendor "
+        "normalized to a destination label because the raw text contains staff and vendor "
         "email addresses. src/pipeline.py refuses to export if any suppressed field is present.",
     )
 

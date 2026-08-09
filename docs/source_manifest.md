@@ -97,7 +97,7 @@ written to disk. See [`07_methodology/methodology.md`](../07_methodology/methodo
 | `public_description` | Resident-submitted free text |
 | `street_address` | Exact point address |
 | `lat`, `lng` | Exact coordinates; geography is published at district / community / ZIP |
-| `referred` (raw text) | Contains staff and vendor email addresses; normalised to a destination label |
+| `referred` (raw text) | Contains staff and vendor email addresses; normalized to a destination label |
 | `iamfloc`, `floc` | Internal asset identifiers, no analytical value here |
 | `sap_notification_number` | Internal system identifier |
 
@@ -123,4 +123,4 @@ quantified in [`02_data_audit/data_quality_report.md`](../02_data_audit/data_qua
 
 ---
 
-*Generated 2026-08-09 19:08 UTC.*
+*Generated 2026-08-09 20:48 UTC.*

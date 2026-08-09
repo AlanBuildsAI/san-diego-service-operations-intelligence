@@ -131,8 +131,8 @@ pivoted AS (
 -- Taxonomy-stability control. Between September and December 2025 the City
 -- migrated volume between service names (most visibly Parking Violation ->
 -- Parking - 72-Hours). A category whose share of *citywide* submissions moved
--- sharply between the two windows has been relabelled, and its year-over-year
--- change measures the relabelling rather than resident demand.
+-- sharply between the two windows has been relabeled, and its year-over-year
+-- change measures the relabeling rather than resident demand.
 --
 -- Share is taken against citywide volume rather than against the category's
 -- case_record_type on purpose: audit check DQ-08 established that service_name

@@ -13,7 +13,7 @@
 -- =============================================================================
 
 -- -----------------------------------------------------------------------------
--- Council district. Rows with no valid district (1-9) are kept as a labelled
+-- Council district. Rows with no valid district (1-9) are kept as a labeled
 -- group rather than dropped, so the totals still reconcile to the backlog.
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE TABLE agg_geography_district AS
@@ -49,9 +49,12 @@ SELECT
     COALESCE(d.submissions_last_12_months, 0)                          AS submissions_last_12_months,
     ROUND(100.0 * COALESCE(d.submissions_last_12_months, 0)
           / NULLIF(SUM(d.submissions_last_12_months) OVER (), 0), 1)   AS pct_of_recent_demand,
-    -- Backlog carried per unit of recent demand. This is the comparison that
-    -- separates "large district" from "district whose queue is not clearing":
-    -- a district can take many requests and still hold little open work.
+    -- Active records carried per unit of recent demand. A descriptive stock-to-
+    -- recent-inflow ratio, NOT a clearance or throughput rate: numerator and
+    -- denominator cover different populations over different time bases, and no
+    -- exit rate is observable in this source. It distinguishes a district that
+    -- simply receives many requests from one holding a large active inventory
+    -- relative to its recent volume.
     ROUND(1.0 * b.active_records
           / NULLIF(d.submissions_last_12_months, 0), 3)                AS backlog_per_recent_submission,
     b.median_age_days,

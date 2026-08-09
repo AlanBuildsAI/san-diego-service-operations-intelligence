@@ -32,7 +32,7 @@ ORDER BY case_records DESC;
 
 -- -----------------------------------------------------------------------------
 -- Where referred work is routed. The raw referral message is not exposed; it is
--- normalised to a destination in 01_clean_base.sql because it contains staff and
+-- normalized to a destination in 01_clean_base.sql because it contains staff and
 -- vendor email addresses.
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE TABLE agg_referral_destinations AS

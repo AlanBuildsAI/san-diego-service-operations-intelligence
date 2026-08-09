@@ -3,7 +3,7 @@
 Everything needed to check this project, generated from the actual run by
 [`scripts/build_review_packet.py`](scripts/build_review_packet.py).
 
-**Generated:** 2026-08-09 19:12 UTC  
+**Generated:** 2026-08-09 20:51 UTC  
 **Data snapshot:** 2026-08-09  
 **DuckDB:** 1.5.5  
 **Python:** 3.13.5
@@ -35,7 +35,7 @@ Raw files are **not committed** — `data/raw/` is git-ignored.
 | Dropped as cross-file duplicate ids | 9 |
 | **Fact table `fct_requests`** | **714,925** |
 
-Aggregate tables produced: **33**
+Aggregate tables produced: **34**
 
 <details><summary>Row count per aggregate</summary>
 
@@ -65,6 +65,7 @@ Aggregate tables produced: **33**
 | `agg_geography_district` | 10 |
 | `agg_priority_hotspots` | 94 |
 | `agg_priority_table` | 24 |
+| `agg_priority_weight_sensitivity` | 25 |
 | `agg_referral_by_district` | 10 |
 | `agg_referral_by_service` | 35 |
 | `agg_referral_destinations` | 26 |
@@ -81,7 +82,7 @@ Aggregate tables produced: **33**
 
 | Gate | Command | Result |
 |---|---|---|
-| Unit and integration tests | `make test` | **PASS** — ............                                                             [100%] |
+| Unit and integration tests | `make test` | **PASS** — ....................                                                     [100%] |
 | Written-figure verification | `make verify` | **PASS** |
 | Data-quality audit | `make audit` | 4 PASS · 6 WARN · 2 FAIL · 1 INFO |
 
@@ -92,7 +93,7 @@ so it needs no downloaded data and runs in CI on every push.
 
 ```
 Check 1 — registry: every declared claim appears in its documents
-  PASS — 117 assertions across 69 claims
+  PASS — 120 assertions across 75 claims
 
 Check 2 — traceability: every number in prose exists in the aggregates
   PASS — every number traced to a value in data/aggregates/
@@ -104,12 +105,13 @@ RESULT: PASS
 
 ## 4. Main findings
 
-1. **Intake is fast; a specific queue is not clearing.** 91.2% of requests submitted Jan–Jun 2026 are already resolved, median 2 days — yet 81,359 requests are active with a median age of 381 days.
-2. **76.1% of the active backlog is past 90 days** (61,922 records); 51.0% is past a year.
-3. **Four categories hold 54.2% of the backlog**, all under the TSW record type (64.0% of active work).
-4. **Ageing is not geographic** — the aged-concentration index spans only 0.826 to 1.085 across the nine council districts. Reported as a negative finding.
-5. **Duplicates are 27.0% of the active queue** (21,971 records) but move no category more than 2 rank positions.
-6. **Two metrics are traps and both are handled**: the 3-day closure median is a cohort artefact (88.1% of this year's closures were also submitted this year), and the apparent channel effect collapses to 2 days once service category is held constant.
+1. **Recent submissions settle quickly; the standing inventory is old.** 91.2% of requests submitted Jan-Jun 2026 had reached a terminal status by the snapshot (median 2 days among those) - yet 81,359 requests are active with a median age of 381 days.
+2. **76.1% of the active inventory is past 90 days** (61,922 records); 51.0% is past a year.
+3. **Four categories hold 54.2% of active records.** TSW is the modal case_record_type for all four (64.0% of active records carry that label - a staff-group label, not a confirmed department owner).
+4. **No strong district-level over-concentration is evident** - the descriptive aged-concentration index varies only 0.826 to 1.085 across the nine council districts. This does not prove geography is irrelevant.
+5. **Duplicates are 27.0% of the active queue** (21,971 records). Collapsing them moves top-20 volume rankings by no more than 2 positions; the composite priority score was not re-derived on deduplicated inputs.
+6. **Two metrics are traps and both are handled**: the 3-day closure median is a cohort artifact (88.1% of this year's closures were also submitted this year), and the apparent channel difference falls to 2 days once service category is held constant.
+7. **The priority ranking is a heuristic sensitive to its weights.** Across 5 weighting schemes, Sidewalk and Pavement hold the top two in all 5, but Street Light Maintenance is top-three in only 4. An earlier 'stable top three' claim was tested, disproved and removed.
 
 Full reasoning: [`04_analysis/findings.md`](04_analysis/findings.md).
 
@@ -123,13 +125,18 @@ Full reasoning: [`04_analysis/findings.md`](04_analysis/findings.md).
 - **Duplicate counts are a floor** — the City's own determinations only; no fuzzy
   matching was attempted.
 - **Category-level year-over-year is invalid** across the 2025/2026 boundary because
-  of a confirmed service relabelling. Reported citywide and by record type instead.
+  of a confirmed service relabeling. Reported citywide and by record type instead.
 - **One level of duplicate nesting is collapsed.** 428 children point at another
   child (0.06% of records).
 - **Referral destination parsing is rule-based**; `City – Other department` is a
   residual bucket, not one department.
-- **Priority-score weights (0.45 / 0.35 / 0.20) are a documented judgement**, not a
-  derivation. The top three are stable under reweighting; the middle of the list is not.
+- **Priority-score weights (0.45 / 0.35 / 0.20) are a documented judgment**, not a
+  derivation. Measured sensitivity: the top two hold across all five tested schemes;
+  the third position does not.
+- **The cohort lifecycle median is right-censored** - computed only over records that
+  had reached a terminal status by the snapshot. The terminal-status share is not.
+- **`case_record_type` is a staff-group label**, many-to-many with `service_name`, and
+  not a confirmed mapping to a current City department.
 
 ## 6. Unverified or blocked items
 
@@ -141,7 +148,8 @@ Stated explicitly rather than glossed:
 | Native Excel PivotTables | **BLOCKED** | openpyxl cannot author a PivotTable cache. The workbook uses native Excel Tables, charts, conditional formatting and live formulas, and states this on its first sheet. |
 | Excel formula recalculation | **UNVERIFIED** | openpyxl writes formulas but does not evaluate them, and no spreadsheet engine was available in this environment. The formulas are written to compare against SQL-derived values and show MATCH/REVIEW when opened. |
 | Streamlit app under load | **PARTIAL** | Verified to start and serve HTTP 200 with a healthy `/_stcore/health`; not click-tested page by page. |
-| Cause of the ageing backlog | **UNRESOLVED BY DESIGN** | Requires the City's maintenance work-order system, which is not in this dataset. This is why the recommendations say *investigate*. |
+| Reproducing the exact snapshot from the source URLs | **NOT POSSIBLE** | The City's files are rolling datasets refreshed daily; a later download returns current records. The committed aggregates, hashes, tests and claim registry are what make the published snapshot auditable. |
+| Cause of the aging inventory | **UNRESOLVED BY DESIGN** | Requires the City's maintenance work-order system, which is not in this dataset. This is why the recommendations say *investigate*. |
 | `(Unclassified)` category growth | **NOT EXPLAINED** | Grew from 173 to 2,919 submissions year over year. Surfaced, not diagnosed. |
 | 2018 bulk closure event | **NOT INVESTIGATED** | 4,515 cases submitted in 2018 were closed during 2026 with a median lifecycle of 2,753 days. Visible in `agg_closure_cohort_bias`. |
 
@@ -177,4 +185,4 @@ Stated explicitly rather than glossed:
 
 ---
 
-*Claims registry: 69 figures, 117 document assertions.*
+*Claims registry: 75 figures, 120 document assertions.*

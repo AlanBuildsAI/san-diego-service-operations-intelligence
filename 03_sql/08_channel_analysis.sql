@@ -1,7 +1,7 @@
 -- =============================================================================
 -- 08_channel_analysis.sql
 -- Purpose : Test whether submission channel is associated with different volume,
---           status mix or ageing — and, critically, whether any apparent channel
+--           status mix or aging — and, critically, whether any apparent channel
 --           effect survives controlling for what is being reported.
 -- Depends : 01_clean_base.sql
 -- Outputs : agg_channel_summary, agg_channel_status_mix, agg_channel_mix_by_service,
@@ -14,7 +14,7 @@
 -- =============================================================================
 
 -- -----------------------------------------------------------------------------
--- Volume and ageing by published channel.
+-- Volume and aging by published channel.
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE TABLE agg_channel_summary AS
 SELECT
@@ -53,7 +53,7 @@ ORDER BY channel_group, case_records DESC;
 -- -----------------------------------------------------------------------------
 -- What each channel is actually used to report. This is the confounder, made
 -- explicit: if Mobile is dominated by street lights and Phone by waste
--- collection, comparing their ageing compares service types, not channels.
+-- collection, comparing their aging compares service types, not channels.
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE TABLE agg_channel_mix_by_service AS
 WITH top_channels AS (
