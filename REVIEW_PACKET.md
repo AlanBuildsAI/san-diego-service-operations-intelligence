@@ -3,7 +3,7 @@
 Everything needed to check this project, generated from the actual run by
 [`scripts/build_review_packet.py`](scripts/build_review_packet.py).
 
-**Generated:** 2026-08-09 19:09 UTC  
+**Generated:** 2026-08-09 19:12 UTC  
 **Data snapshot:** 2026-08-09  
 **DuckDB:** 1.5.5  
 **Python:** 3.13.5
