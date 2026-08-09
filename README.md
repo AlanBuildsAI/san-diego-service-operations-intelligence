@@ -1,206 +1,196 @@
 # San Diego Service Operations Intelligence
 
-**Where is the City of San Diego's open service-request workload concentrated, how old is
-it, and which areas should leadership investigate first?**
+### Alan Ibarra — Data & Operations Analyst
 
-An end-to-end analytics case study on **714,925 real service requests** from the City of San
-Diego's Get It Done programme — from source retrieval and data audit through SQL analysis,
-reporting and a decision memo.
+**A city took 389,940 non-emergency service requests in 2025. Today 81,359 sit open — half
+of them for more than a year. Where should leadership look first?**
 
-| | |
-|---|---|
-| **Stakeholder** | City of San Diego service-operations leadership *(hypothetical engagement)* |
-| **Data source** | [City of San Diego Open Data Portal — Get It Done reports](https://data.sandiego.gov/datasets/get-it-done-reports/) (official, daily-refreshed) |
-| **Scope** | Open request queue + closures during 2025 and 2026 · **714,925** unique case records · snapshot **2026-08-09** |
-| **Stack** | Python · DuckDB · SQL · pandas · openpyxl · Streamlit · pytest · GitHub Actions |
-| **Deliverables** | [Executive memo](06_executive_memo/executive_memo.md) · [Full findings](04_analysis/findings.md) · [Dashboard](05_dashboard/dashboard.html) · [Excel workbook](05_dashboard/san_diego_ops_review.xlsx) · [SQL](03_sql/) · [Data quality report](02_data_audit/data_quality_report.md) |
+An end-to-end analyst case study on **714,925 real service requests** from the City of San
+Diego's Get It Done program: source retrieval → data quality audit → SQL analysis →
+executive dashboard → Excel workbook → one-page decision memo.
 
-> **Data boundary.** Get It Done records represent submitted service requests and case
-> statuses, **not verified maintenance completion**. A closed case records a case closure,
-> not a completed repair. Nothing in this project measures crew performance, and no
-> relationship reported is causal.
+`SQL / DuckDB` · `Python / pandas` · `Excel` · `Dashboarding` · `Data Quality` ·
+`KPI Definition` · `Cohort Analysis` · `Business Analysis` · `Executive Communication` ·
+`Git / CI`
 
-![Dashboard](05_dashboard/assets/dashboard_overview.png)
+> **Independent portfolio case study** using public City of San Diego data. Not commissioned
+> by, affiliated with, or endorsed by the City of San Diego. The stakeholder is hypothetical.
+
+**[▶ Executive dashboard](05_dashboard/dashboard.html)** · **[Executive
+memo](06_executive_memo/executive_memo.md)** · **[SQL](03_sql/)** · **[Excel
+workbook](05_dashboard/san_diego_ops_review.xlsx)** · **[Data quality
+audit](02_data_audit/data_quality_report.md)** · **[Full findings](04_analysis/findings.md)**
+
+![Executive dashboard — active inventory, aging profile, category concentration and investigation priority](05_dashboard/assets/dashboard_overview.png)
 
 ---
 
-## Findings
+## What I found
 
-Every number below is recomputed from the generated data by
-[`scripts/verify_claims.py`](scripts/verify_claims.py) and fails CI if it drifts.
+Real data: [City of San Diego Open Data Portal — Get It
+Done](https://data.sandiego.gov/datasets/get-it-done-reports/), 714,925 case records,
+snapshot 2026-08-09. Every figure below is recomputed from the generated data by
+[`scripts/verify_claims.py`](scripts/verify_claims.py) and fails the build if it drifts.
 
-**1 — Intake is fast; a specific part of the queue is not clearing.**
-Of requests submitted January–June 2026, **91.2%** have already reached a terminal state,
-typically in **2** days. Yet **81,359** requests are currently active — **60,288** distinct
-issues once duplicates collapse — with a median age of **381** days. Both are true because they describe different populations.
+**1 — Recent requests settle fast; the standing inventory is old.**
+Of requests submitted Jan–Jun 2026, **91.2%** reached a terminal status by the snapshot
+(median **2** days among those). Yet **81,359** requests are still active — **60,288**
+distinct issues once duplicates collapse — with a median age of **381** days. Two different
+populations; separating them is the core of the analysis.
 
-**2 — Three quarters of the active backlog is already past 90 days.**
-**61,922** active requests (**76.1%**) exceed 90 days and **51.0%** exceed a year; the P90 is
-**1,680** days. The largest single age bucket is the oldest one.
+**2 — Three quarters of the active inventory is past 90 days.**
+**61,922** records (**76.1%**) exceed 90 days; **51.0%** exceed a year, and the P90 is
+**1,680** days. The largest age bucket is the oldest one.
 
-**3 — Four categories hold over half the backlog, all under one owning group.**
+**3 — Four categories hold half the workload.**
 Sidewalk Repair Issue (**14,614** active, median **1,090** days), Street Light Maintenance,
-ROW Maintenance and Pavement Maintenance (median **1,295.5** days) together hold **54.2%**
-of the active queue. All four sit under the TSW record type, which carries **64.0%** of all
-active work.
+ROW Maintenance and Pavement Maintenance (median **1,295.5** days) together are **54.2%** of
+active records. Sidewalk and Pavement alone hold **30.9%** of the citywide 90+ day inventory.
+**TSW** is the modal `case_record_type` for all four — **64.0%** of active records carry it,
+though that is a staff-group label in the source, not a confirmed department owner.
 
-**4 — Ageing is not geographic. This is a negative finding, reported as one.**
-Every council district holds close to the share of aged work its queue size implies — the
-aged-concentration index spans only **0.826** to **1.085**. A district-targeted intervention
-would be aimed at the wrong axis. District 3 has the largest backlog (**18,414**, **22.6%**)
-simply because it is the largest district by demand.
+**4 — A quarter of the active queue is duplicate reports.**
+**21,971** records (**27.0%**) duplicate an already-open request. Street Light Maintenance
+carries **6,189** of them — **45.3%** of its own queue. Collapsing duplicates moves top-20
+volume rankings by no more than **2** positions.
 
-**5 — Duplicates inflate volume but do not change priorities.**
-**21,971** active records (**27.0%**) are duplicate reports of an already-open issue.
-Collapsing them shifts **11** of the top 20 categories by at most two rank positions. Street
-Light Maintenance is the worst affected: **45.3%** of its queue — **6,189** records — is
-repeat reporting.
+**5 — Two headline metrics are traps. I caught both.**
+The "**3**-day median closure time" is a cohort artifact — **88.1%** of this year's closures
+were also submitted this year, so slow records are absent by construction. And submission
+channel looks influential until you stratify by service category, after which the median
+Mobile-vs-Web difference is **2** days.
 
-**6 — Two reported metrics are traps, and both are handled.**
-The headline "median closure time of **3** days" is a closure-cohort artefact: **88.1%** of
-this year's closures were also submitted this year, so slow cases are absent by
-construction. And submission channel looks influential until service category is held
-constant, after which the median mobile-vs-web difference is **2** days.
+**6 — Two patterns are *not* in the data, and I report that too.**
+Council-district aged concentration varies only **0.826**–**1.085**, so no strong
+district-level over-concentration is evident; and no consistent channel-associated
+lifecycle difference survives stratification by service category. Neither result rules out an effect — both say service category is the more
+informative axis to investigate first. District 3 has the largest active inventory
+(**18,414**, **22.6%**) largely because it is the largest district by demand.
 
-**Supporting context:** **6.8%** of resolved records were referred rather than closed, with
-**61.8%** routed outside the City. Citywide demand for January–July rose **9.3%** year over
-year (**225,628** → **246,572**), though category-level trends are invalid across the
-2025/2026 boundary because of a service relabelling.
+**Supporting context.** **6.8%** of records reaching a terminal status were referred rather
+than closed, **61.8%** of those to entities outside the City. Citywide January–July demand
+rose **9.3%** year over year (**225,628** → **246,572**), though category-level trends are
+not comparable across the 2025/26 boundary because of a service relabeling.
 
-## Recommendations
+## What I'd recommend investigating
 
-1. **Reconcile the sidewalk and pavement queues against the capital maintenance schedule.**
-   They hold 31.0% of the city's 90+ day backlog. If most are already committed to a
-   scheduled programme, the answer is a status taxonomy that separates "scheduled" from
-   "unassigned" — not more crew capacity.
-2. **Review duplicate handling in Street Light Maintenance.** 6,189 repeat reports suggests
-   residents get no visible status after reporting. Check whether intake surfaces existing
-   open cases at submission.
-3. **Examine the Caltrans referral path.** 9,123 case records (21.1% of all referrals) are
-   routed to the State. That is intake work the City performs on reports it cannot action.
+1. **Reconcile sidewalk and pavement queues against the capital maintenance schedule** —
+   they hold 30.9% of the citywide 90+ day inventory. Measure how much is already scheduled
+   before assuming a capacity problem.
+2. **Review duplicate handling in Street Light Maintenance** — 6,189 repeat reports. Test
+   whether intake surfaces existing open cases at submission.
+3. **Examine the Caltrans referral path** — 9,123 records (21.1% of referrals) route to the
+   State for right-of-way the City cannot action.
 
-All three are framed as investigations because this dataset cannot establish cause — see
-[the memo](06_executive_memo/executive_memo.md) for the reasoning.
-
-## Limitations
-
-This analysis **cannot** tell you whether anything was repaired, how long work takes,
-anything about staff performance, why any pattern exists, true problem incidence (only
-reporting rates), or whether districts are served equally (no population or asset
-denominators). Two data-quality conditions were material and are worked around explicitly —
-see below.
+Framed as investigations, not fixes: this dataset shows *where* to look, not *why*.
+→ **[Read the memo](06_executive_memo/executive_memo.md)**
 
 ---
 
 ## What this project demonstrates
 
-**The audit changed the analysis.** Two findings in
-[`02_data_audit/data_quality_report.md`](02_data_audit/data_quality_report.md) forced design
-decisions:
+| Analyst skill | Evidence in this repo |
+|---|---|
+| **Messy real data** | 714,925 rows across 3 official extracts, deduplicated, cross-file ID conflicts resolved by documented precedence |
+| **Data quality investigation** | [13 generated checks](02_data_audit/data_quality_report.md) — two FAIL, and both changed the analysis (below) |
+| **SQL** | [11 documented files](03_sql/): CTEs, window functions, percentiles, cohort logic — runnable in the DuckDB CLI |
+| **KPI / metric definition** | [Every metric defined](01_business_brief/metric_definitions.md) with its SQL, plus the definitions I rejected and why |
+| **Cohort analysis** | Caught closure-cohort censoring; reports submission cohorts and states the right-censoring explicitly |
+| **Duplicate handling** | Two grains reported side by side, with rank impact tested rather than assumed |
+| **Excel reporting** | [Six-sheet workbook](05_dashboard/san_diego_ops_review.xlsx): tables, charts, conditional formatting, live cross-check formulas |
+| **Dashboarding** | [Self-contained HTML](05_dashboard/dashboard.html) + [Streamlit](05_dashboard/app.py); every panel answers a stated business question |
+| **Executive communication** | [One-page memo](06_executive_memo/executive_memo.md): findings → implications → limitations → next step |
+| **Analytical judgment** | Denominator validation, negative findings reported as negative, and a sensitivity test that disproved my own earlier claim |
+| **Reproducibility** | [Source manifest](docs/source_manifest.md) with hashes, 89 tests, automated figure verification in CI |
+
+### The two data-quality findings that changed the analysis
 
 - **`case_age_days` means two different things.** The official dictionary defines it as days
-  between submission and closure. That holds for resolved records (99.88% agreement) — but
-  active records have no closure date, and for them the field matches
-  *snapshot date − request date* instead (99.63%). An analyst trusting the dictionary would
-  mix two quantities in one column. The project computes its own age metrics from the dates,
-  and recovers the snapshot date from the field's behaviour so the pipeline re-dates itself
-  on each refresh.
-- **The service taxonomy is unstable.** Between September and December 2025 the City moved
-  volume between two Parking categories — monthly volumes cross over while the parent record
-  type grew only 17.3%. Taken at face value one category "grew 3,914% year over year". A
-  detector flags 9 of 35 categories as not comparable, and demand trends are reported at
-  grains that absorb a relabelling.
+  between submission and closure. That holds for terminal records (99.88% agreement) — but
+  active records have no closure date, and for them the field matches *snapshot date −
+  request date* (99.63%). Anyone trusting the dictionary would mix two quantities in one
+  column. I compute age from dates instead, and recover the snapshot date from the field's
+  behavior so the pipeline re-dates itself on refresh.
+- **The service taxonomy is unstable.** Between Sept and Dec 2025, volume moved between two
+  Parking categories — monthly volumes cross over while the parent record type grew only
+  17.3%. Taken at face value, one category "grew 3,914% year over year". A detector flags
+  **9** of 35 categories as not comparable, and trends are reported at grains that absorb a
+  relabeling.
 
-**Numbers cannot drift.** [`src/claims.py`](src/claims.py) recomputes every figure quoted in
-the README, memo and findings from the generated aggregates.
-[`scripts/verify_claims.py`](scripts/verify_claims.py) asserts each appears verbatim, then
-sweeps every number-like token in those documents and traces it back to a value in
-`data/aggregates/`. Both run in CI.
+### A claim I tested and had to weaken
 
-**Privacy is enforced, not promised.** Eight source fields — resident free text, exact
-addresses, coordinates, the raw referral message (it contains staff email addresses) and
-internal identifiers — never reach any output. The pipeline refuses to export if one is
-present, and [`tests/test_privacy.py`](tests/test_privacy.py) fails if any suppressed field
-name or address/email-shaped string appears in a published artefact.
+I originally wrote that the top three investigation priorities were "stable under any
+reasonable reweighting." Testing across **5** weighting schemes showed that is **not** true:
+Sidewalk and Pavement hold the top two in **5** of **5**, but Street Light Maintenance is
+top-three in only **4** of **5** — under aged-rate-heavy weighting it drops to fifth. The
+claim now states what was measured, and the score is presented as a heuristic whose third
+position depends on a stakeholder judgment.
+→ [`agg_priority_weight_sensitivity.csv`](data/aggregates/agg_priority_weight_sensitivity.csv)
 
 ---
+
+## Limitations
+
+Get It Done records represent submitted service requests and case statuses, **not verified
+maintenance completion**. A record reaching Closed or Referred means it reached a **terminal
+Get It Done status** — not that a repair occurred.
+
+So this analysis **cannot** show whether anything was repaired, how long physical work takes,
+anything about staffing or crew performance, why any pattern exists, true problem incidence
+(only reporting rates), or whether districts are served equally (no population or asset
+denominators). Every recommendation is framed as an investigation for that reason.
 
 ## Repository
 
 | Path | Contents |
 |---|---|
-| [`01_business_brief/`](01_business_brief/) | [Business brief](01_business_brief/business_brief.md) · [metric definitions](01_business_brief/metric_definitions.md) — every metric, its SQL, and the definitions that were rejected |
-| [`02_data_audit/`](02_data_audit/) | [Data quality report](02_data_audit/data_quality_report.md) — 13 generated checks (4 PASS · 6 WARN · 2 FAIL · 1 INFO) |
-| [`03_sql/`](03_sql/) | 11 documented SQL files — the analysis itself, runnable in the DuckDB CLI |
-| [`04_analysis/`](04_analysis/) | [Findings](04_analysis/findings.md) — all twelve business questions answered |
-| [`05_dashboard/`](05_dashboard/) | [Static dashboard](05_dashboard/dashboard.html) · [Streamlit app](05_dashboard/app.py) · [Excel workbook](05_dashboard/san_diego_ops_review.xlsx) · [Tableau build spec](05_dashboard/tableau_build_spec.md) |
-| [`06_executive_memo/`](06_executive_memo/) | [One-page memo](06_executive_memo/executive_memo.md) for leadership |
-| [`07_methodology/`](07_methodology/) | [Methodology](07_methodology/methodology.md) — decisions, trade-offs and known weaknesses |
-| [`08_interview_defense/`](08_interview_defense/) | [Interview guide](08_interview_defense/interview_guide.md) — 28 questions with grounded answers |
-| [`src/`](src/) · [`scripts/`](scripts/) | Pipeline runner, audit harness, claim registry, output builders |
-| [`tests/`](tests/) | 84 tests over a synthetic fixture, plus privacy and link checks |
+| [`01_business_brief/`](01_business_brief/) | [Brief](01_business_brief/business_brief.md) · [metric definitions](01_business_brief/metric_definitions.md) |
+| [`02_data_audit/`](02_data_audit/) | [Data quality report](02_data_audit/data_quality_report.md) — 13 checks (4 PASS · 6 WARN · 2 FAIL · 1 INFO) |
+| [`03_sql/`](03_sql/) | 11 documented SQL files — the analysis itself |
+| [`04_analysis/`](04_analysis/) | [Findings](04_analysis/findings.md) — all twelve business questions |
+| [`05_dashboard/`](05_dashboard/) | [Dashboard](05_dashboard/dashboard.html) · [Streamlit](05_dashboard/app.py) · [Excel](05_dashboard/san_diego_ops_review.xlsx) · [Tableau build spec](05_dashboard/tableau_build_spec.md) |
+| [`06_executive_memo/`](06_executive_memo/) | [One-page memo](06_executive_memo/executive_memo.md) |
+| [`07_methodology/`](07_methodology/) | [Methodology](07_methodology/methodology.md) — decisions and known weaknesses |
+| [`08_interview_defense/`](08_interview_defense/) | [Interview guide](08_interview_defense/interview_guide.md) |
+| [`src/`](src/) · [`scripts/`](scripts/) · [`tests/`](tests/) | Pipeline, audit harness, claim registry, 89 tests |
 | [`docs/`](docs/) | [Source manifest](docs/source_manifest.md) — files, hashes, row counts, licensing |
 
-### SQL layer
-
-| File | Answers |
-|---|---|
-| [`00_sources.sql`](03_sql/00_sources.sql) | Typed views over the official CSVs; derives the snapshot date from the data |
-| [`01_clean_base.sql`](03_sql/01_clean_base.sql) | Union → deduplicate → derive metrics → suppress sensitive fields |
-| [`02_executive_kpis.sql`](03_sql/02_executive_kpis.sql) | Headline metrics, long format |
-| [`03_backlog_aging.sql`](03_sql/03_backlog_aging.sql) | Q1 — queue size and age profile |
-| [`04_service_analysis.sql`](03_sql/04_service_analysis.sql) | Q2–Q4 — workload, oldest queues, tail risk |
-| [`05_geography_analysis.sql`](03_sql/05_geography_analysis.sql) | Q5–Q6 — volume and the aged-concentration index |
-| [`06_duplicates.sql`](03_sql/06_duplicates.sql) | Q7–Q8 — repeat reporting and its effect on rankings |
-| [`07_referrals.sql`](03_sql/07_referrals.sql) | Q9 — referral volume, destinations and consistency |
-| [`08_channel_analysis.sql`](03_sql/08_channel_analysis.sql) | Q10 — channel comparison, controlled for service category |
-| [`09_trends.sql`](03_sql/09_trends.sql) | Q11 — demand over time, coverage argument, taxonomy detector |
-| [`10_priority_table.sql`](03_sql/10_priority_table.sql) | Q12 — investigation priority and hotspots |
+**SQL worth opening:** [`01_clean_base.sql`](03_sql/01_clean_base.sql) (grain, deduplication,
+derived metrics, privacy suppression) · [`09_trends.sql`](03_sql/09_trends.sql) (demand
+coverage argument + taxonomy-break detector) ·
+[`10_priority_table.sql`](03_sql/10_priority_table.sql) (priority scoring + weight
+sensitivity)
 
 ---
 
-## Reproducing
+## Running it
 
-Requires Python 3.11+. The full run downloads ~245 MB from the City's portal and takes
-about three minutes.
+Requires Python 3.11+.
 
-```bash
-make install     # create .venv and install pinned dependencies
-make download    # retrieve the official extracts into data/raw/ (git-ignored)
-make audit       # build base tables and run 13 data-quality checks
-make analyze     # execute the SQL layer -> data/aggregates/
-make dashboard   # build dashboard.html, the Excel workbook and screenshots
-make test        # run the test suite against the committed fixture
-make verify      # re-check every written figure against the generated data
-make all         # everything above, in order
-```
-
-The test suite needs **no** downloaded data — it runs the project's real SQL against a
-committed synthetic fixture, which is what CI does on every push.
+**Validate the published analysis** — no download needed, outputs are committed:
 
 ```bash
-make dashboard-app     # optional: streamlit run 05_dashboard/app.py
+make install
+make test      # 89 tests, run against a synthetic fixture
+make verify    # re-check every written figure against the committed aggregates
 ```
 
----
+**Refresh against current City data:**
 
-## Notes and honest caveats
+```bash
+make download  # ~245 MB from the City's portal
+make all       # rebuild pipeline, audit, dashboard, Excel, checks
+```
 
-- **No Tableau workbook is included.** Tableau cannot be automated in this environment, so
-  rather than fabricate a `.twb` there is a complete
-  [build specification](05_dashboard/tableau_build_spec.md) — data sources, calculated
-  fields, nine sheets, layout and acceptance checks.
-- **The Excel workbook contains no native PivotTables.** openpyxl cannot author a PivotTable
-  cache. It contains native Excel Tables with filters, charts, conditional formatting and
-  live cross-check formulas instead, and says so on its first sheet.
-- **Duplicate counts are a floor**, not an exact figure — they are the City's own
-  determinations, and no additional matching was attempted.
-- **Raw data is never committed.** `data/raw/` is git-ignored;
-  [`docs/source_manifest.md`](docs/source_manifest.md) records the exact files, SHA-256
-  hashes, row counts and retrieval date.
+> **Note on reproducibility.** The City's source files are rolling datasets refreshed daily.
+> Downloading them again retrieves **current** records, not the 2026-08-09 snapshot this
+> analysis was published against, so regenerated numbers will differ. What lets a reviewer
+> validate the published snapshot is the committed aggregates, audit results, tests, claim
+> registry and [documented file hashes](docs/source_manifest.md). If you refresh the data,
+> re-run `make verify` — written findings must be re-validated before being reused.
 
 ---
 
 *Data source: City of San Diego Open Data Portal, published by the Performance & Analytics
-Department. This is an independent portfolio analysis and is not affiliated with or endorsed
-by the City of San Diego.*
+Department. Independent portfolio analysis; not affiliated with or endorsed by the City of
+San Diego.*
