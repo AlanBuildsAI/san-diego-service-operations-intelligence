@@ -1,0 +1,30 @@
+service_name,mobile_records,mobile_median_days,web_records,web_median_days,phone_records,phone_median_days,mobile_minus_web_days,max_channel_gap_days
+Development Services - Code Enforcement,1945,682.0,522,163.5,,,518.5,518.5
+Pavement Maintenance,1242,199.0,414,360.0,,,-161.0,161.0
+Vegetation Encroachment,4939,117.0,1459,177.0,,,-60.0,60.0
+Graffiti - Code Enforcement,12077,47.0,1271,67.0,,,-20.0,20.0
+Traffic Sign Maintenance,4809,60.0,1258,76.0,610,6.0,-16.0,70.0
+Sidewalk Repair Issue,5350,35.0,2220,49.0,342,707.5,-14.0,672.5
+Stormwater Code Enforcement,2235,13.0,556,24.0,,,-11.0,11.0
+Waste on Private Property,3056,11.0,1075,18.0,,,-7.0,7.0
+Street Light Maintenance,6104,189.0,2458,183.0,485,55.0,6.0,134.0
+Missed Collection,395,6.0,32590,1.0,17771,1.0,5.0,5.0
+Graffiti - Private,6478,20.0,651,25.0,,,-5.0,5.0
+Tree Maintenance,5174,5.0,3559,9.0,1473,1.0,-4.0,8.0
+Traffic Engineering,2632,70.0,1421,66.0,,,4.0,4.0
+Parking Violation,59852,2.0,35221,4.0,562,9.0,-2.0,7.0
+ROW Maintenance,7418,9.0,1796,11.0,975,2.0,-2.0,9.0
+Traffic Signal Timing,4094,2.0,2243,3.0,1165,3.0,-1.0,1.0
+Pothole,20699,5.0,7207,4.0,1082,3.0,1.0,2.0
+Parking - 72-Hours,24212,18.0,16555,19.0,,,-1.0,1.0
+Stormwater,2307,25.0,981,26.0,743,6.0,-1.0,20.0
+Environmental Services Code Compliance,7471,5.0,1797,6.0,943,4.0,-1.0,2.0
+Parks Issue,11463,11.0,1992,12.0,,,-1.0,1.0
+Oversized Vehicle,3466,7.0,2280,8.0,,,-1.0,1.0
+Street Sweeping,2159,4.0,645,5.0,589,1.0,-1.0,4.0
+Traffic Signal Issue,5931,2.0,1290,2.0,2717,2.0,0.0,0.0
+Illegal Dumping,30584,3.0,5195,3.0,1516,1.0,0.0,2.0
+Encampment,54560,5.0,13732,5.0,,,0.0,0.0
+Other,16324,0.0,1842,0.0,,,0.0,0.0
+Graffiti - Public,18351,2.0,1875,2.0,,,0.0,0.0
+Dead Animal,3576,1.0,1547,1.0,1365,1.0,0.0,0.0

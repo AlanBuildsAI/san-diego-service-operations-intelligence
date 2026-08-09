@@ -1,0 +1,21 @@
+service_name,active_records,active_distinct_issues,records_removed_by_collapsing,rank_case_records,rank_distinct_issues,rank_shift,rank_status
+Sidewalk Repair Issue,14614,10979,3635,1,1,0,unchanged
+Street Light Maintenance,13665,7490,6175,2,3,-1,moved
+ROW Maintenance,10245,7847,2398,3,2,1,moved
+Pavement Maintenance,5590,4398,1192,4,4,0,unchanged
+Parking - 72-Hours,4694,3828,866,5,5,0,unchanged
+Parks Issue,4030,3103,927,6,6,0,unchanged
+Graffiti - Code Enforcement,3774,2516,1258,7,7,0,unchanged
+Vegetation Encroachment,2910,2411,499,8,8,0,unchanged
+Stormwater,2337,1940,397,9,9,0,unchanged
+Encampment,2243,1590,653,10,11,-1,moved
+Traffic Engineering,1784,1704,80,11,10,1,moved
+Building and Land Use Enforcement,1612,1407,205,12,12,0,unchanged
+STRO Violation,1378,1064,314,13,14,-1,moved
+Tree Maintenance,1289,1126,163,14,13,1,moved
+Graffiti - Private,1109,998,111,15,17,-2,moved
+Development Services - Code Enforcement,1101,1029,72,16,15,1,moved
+Environmental Services Code Compliance,1079,1006,73,17,16,1,moved
+Graffiti - Public,1045,985,60,18,18,0,unchanged
+Illegal Dumping,768,619,149,19,20,-1,moved
+(Unclassified),741,741,0,20,19,1,moved

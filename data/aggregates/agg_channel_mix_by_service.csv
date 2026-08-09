@@ -1,0 +1,45 @@
+case_origin,service_name,case_records,pct_of_channel_volume
+CC Self Generate,Illegal Dumping,2732,78.7
+CC Self Generate,Parking Violation,359,10.3
+CC Self Generate,Parking - 72-Hours,262,7.5
+CC Self Generate,Encampment,105,3.0
+CC Self Generate,Missed Collection,7,0.2
+CC Self Generate,ROW Maintenance,5,0.1
+CC Self Generate,Sidewalk Repair Issue,1,0.0
+CC Self Generate,Pothole,1,0.0
+Crew/Self Generated,Graffiti - Public,15980,100.0
+Crew/Self Generated,ROW Maintenance,2,0.0
+Mobile,Parking Violation,60033,23.2
+Mobile,Encampment,56265,21.7
+Mobile,Illegal Dumping,31148,12.0
+Mobile,Parking - 72-Hours,27010,10.4
+Mobile,Pothole,20933,8.1
+Mobile,Graffiti - Public,19160,7.4
+Mobile,Sidewalk Repair Issue,15203,5.9
+Mobile,Street Light Maintenance,14599,5.6
+Mobile,ROW Maintenance,14555,5.6
+Mobile,Missed Collection,403,0.2
+Phone,Missed Collection,17946,70.8
+Phone,ROW Maintenance,1570,6.2
+Phone,Illegal Dumping,1539,6.1
+Phone,Sidewalk Repair Issue,1229,4.8
+Phone,Pothole,1090,4.3
+Phone,Street Light Maintenance,1016,4.0
+Phone,Parking Violation,565,2.2
+Phone,Encampment,190,0.7
+Phone,Graffiti - Public,187,0.7
+Phone,Parking - 72-Hours,22,0.1
+Web,Parking Violation,35359,26.6
+Web,Missed Collection,32872,24.7
+Web,Parking - 72-Hours,18426,13.8
+Web,Encampment,14233,10.7
+Web,Pothole,7297,5.5
+Web,Street Light Maintenance,7097,5.3
+Web,Sidewalk Repair Issue,6081,4.6
+Web,Illegal Dumping,5332,4.0
+Web,ROW Maintenance,4301,3.2
+Web,Graffiti - Public,2070,1.6
+Worker App,Illegal Dumping,73330,100.0
+Worker App,Encampment,22,0.0
+Worker App,Missed Collection,4,0.0
+Worker App,Sidewalk Repair Issue,1,0.0

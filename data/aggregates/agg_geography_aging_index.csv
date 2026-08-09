@@ -1,0 +1,51 @@
+area_type,area,active_records,aged_90_plus,median_age_days,pct_of_backlog,pct_of_aged_90,aged_concentration_index,rank_by_index
+Community planning area,(Unknown),921,844,184.0,1.17,1.42,1.208,1
+Community planning area,TORREY PINES,510,439,507.5,0.65,0.74,1.134,2
+Community planning area,LA JOLLA,3074,2628,555.5,3.92,4.41,1.127,3
+Community planning area,MIRAMAR RANCH NORTH,549,465,486.0,0.7,0.78,1.116,4
+Community planning area,CARMEL VALLEY,1359,1140,470.0,1.73,1.91,1.105,5
+Community planning area,MISSION BEACH,967,810,341.0,1.23,1.36,1.104,6
+Community planning area,RANCHO BERNARDO,1442,1188,493.5,1.84,1.99,1.086,7
+Community planning area,MIRA MESA,2486,2038,422.0,3.17,3.42,1.08,8
+Community planning area,PACIFIC BEACH,3502,2853,464.0,4.46,4.79,1.074,9
+Community planning area,PENINSULA,3096,2517,508.0,3.94,4.23,1.071,10
+Community planning area,BALBOA PARK,1289,1046,456.0,1.64,1.76,1.069,11
+Community planning area,TIERRASANTA,956,774,457.0,1.22,1.3,1.067,12
+Community planning area,MID-CITY:KENSINGTON-TALMADGE,1143,919,505.0,1.46,1.54,1.06,13
+Community planning area,UNIVERSITY,1781,1424,461.0,2.27,2.39,1.054,14
+Community planning area,MID-CITY:NORMAL HEIGHTS,1380,1101,501.5,1.76,1.85,1.051,15
+Community planning area,SERRA MESA,1026,817,418.5,1.31,1.37,1.049,16
+Community planning area,RANCHO PENASQUITOS,1472,1170,540.0,1.88,1.96,1.047,17
+Community planning area,SCRIPPS MIRAMAR RANCH,940,746,438.0,1.2,1.25,1.046,18
+Community planning area,DOWNTOWN,6435,5043,338.0,8.2,8.47,1.033,19
+Community planning area,GREATER GOLDEN HILL,1912,1491,497.0,2.44,2.5,1.028,20
+Community planning area,UPTOWN,4265,3319,405.0,5.43,5.57,1.026,21
+Community planning area,BARRIO LOGAN,694,538,444.0,0.88,0.9,1.022,22
+Community planning area,NORTH PARK,3856,2980,459.0,4.91,5.0,1.018,23
+Community planning area,NAVAJO,2685,2067,469.0,3.42,3.47,1.015,24
+Community planning area,MIDWAY-PACIFIC HIGHWAY,1023,785,452.0,1.3,1.32,1.011,25
+Community planning area,KEARNY MESA,909,696,411.0,1.16,1.17,1.009,26
+Community planning area,CLAIREMONT MESA,4492,3313,381.0,5.72,5.56,0.972,27
+Community planning area,COLLEGE AREA,962,701,331.5,1.23,1.18,0.96,28
+Community planning area,MID-CITY:CITY HEIGHTS,3911,2805,271.0,4.98,4.71,0.945,29
+Community planning area,OCEAN BEACH,1276,910,334.0,1.63,1.53,0.94,30
+Community planning area,MISSION BAY PARK,1305,923,312.0,1.66,1.55,0.932,31
+Community planning area,SAN YSIDRO,692,473,276.5,0.88,0.79,0.901,32
+Community planning area,SOUTHEASTERN SAN DIEGO,4551,3077,286.0,5.8,5.17,0.891,33
+Community planning area,ENCANTO NEIGHBORHOODS,2229,1491,258.0,2.84,2.5,0.882,34
+Community planning area,MID-CITY:EASTERN AREA,1828,1212,240.0,2.33,2.03,0.874,35
+Community planning area,MISSION VALLEY,1279,847,311.0,1.63,1.42,0.873,36
+Community planning area,OTAY MESA,739,480,328.0,0.94,0.81,0.856,37
+Community planning area,SKYLINE-PARADISE HILLS,2290,1473,195.0,2.92,2.47,0.848,38
+Community planning area,OTAY MESA-NESTOR,1815,1153,234.0,2.31,1.94,0.837,39
+Community planning area,LINDA VISTA,1451,866,166.0,1.85,1.45,0.787,40
+Council district,(Unknown),911,842,184.0,1.12,1.36,1.214,1
+Council district,1,9649,7970,482.0,11.86,12.87,1.085,2
+Council district,5,5664,4637,529.0,6.96,7.49,1.076,3
+Council district,6,5096,4127,426.5,6.26,6.66,1.064,4
+Council district,3,18414,14346,403.0,22.63,23.17,1.024,5
+Council district,2,12293,9391,399.0,15.11,15.17,1.004,6
+Council district,9,9378,6890,331.0,11.53,11.13,0.965,7
+Council district,7,6768,4971,381.0,8.32,8.03,0.965,8
+Council district,8,7198,4985,324.0,8.85,8.05,0.91,9
+Council district,4,5988,3763,194.0,7.36,6.08,0.826,10

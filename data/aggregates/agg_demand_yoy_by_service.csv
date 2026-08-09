@@ -1,0 +1,36 @@
+service_name,submissions_prior,submissions_current,change_submissions,change_pct,share_of_total_change_pct,pct_of_citywide_prior,pct_of_citywide_current,share_shift_pp,taxonomy_flag,rank_by_absolute_growth
+Parking - 72-Hours,791,31749,30958,3913.8,147.9,0.35,12.88,12.53,STRUCTURAL BREAK - share and volume both moved sharply,1
+Oversized Vehicle,8,4405,4397,54962.5,21.0,0.0,1.79,1.78,NEWLY ADOPTED - negligible prior-year base,2
+Encampment,23422,27503,4081,17.4,19.5,10.38,11.15,0.77,comparable,3
+Missed Collection,16953,20698,3745,22.1,17.9,7.51,8.39,0.88,comparable,4
+ESD Collections,0,2765,2765,,13.2,0.0,1.12,1.12,NEW CATEGORY - no prior-year baseline,5
+(Unclassified),173,2919,2746,1587.3,13.1,0.08,1.18,1.11,VOLATILE - verify against service taxonomy before reporting,6
+Trash/Recycling Collection,941,3576,2635,280.0,12.6,0.42,1.45,1.03,VOLATILE - verify against service taxonomy before reporting,7
+Building and Land Use Enforcement,214,2110,1896,886.0,9.1,0.09,0.86,0.76,VOLATILE - verify against service taxonomy before reporting,8
+Environmental Services Code Compliance,3722,5409,1687,45.3,8.1,1.65,2.19,0.54,comparable,9
+Other,5355,6987,1632,30.5,7.8,2.37,2.83,0.46,comparable,10
+STRO Violation,949,1595,646,68.1,3.1,0.42,0.65,0.23,comparable,11
+Parks Issue,6435,7066,631,9.8,3.0,2.85,2.87,0.01,comparable,12
+Vegetation Encroachment,1941,2500,559,28.8,2.7,0.86,1.01,0.15,comparable,13
+Traffic Engineering,1500,1850,350,23.3,1.7,0.66,0.75,0.09,comparable,14
+Traffic Signal Timing,2547,2782,235,9.2,1.1,1.13,1.13,-0.0,comparable,15
+Street Sweeping,1229,1349,120,9.8,0.6,0.54,0.55,0.0,comparable,16
+Stormwater,1419,1523,104,7.3,0.5,0.63,0.62,-0.01,comparable,17
+Street Light Maintenance,4528,4630,102,2.3,0.5,2.01,1.88,-0.13,comparable,18
+Traffic Signal Issue,3502,3599,97,2.8,0.5,1.55,1.46,-0.09,comparable,19
+Pavement Maintenance,921,927,6,0.7,0.0,0.41,0.38,-0.03,comparable,20
+Sidewalk Repair Issue,3287,3260,-27,-0.8,-0.1,1.46,1.32,-0.13,comparable,21
+Tree Maintenance,3558,3484,-74,-2.1,-0.4,1.58,1.41,-0.16,comparable,22
+Dead Animal,2549,2473,-76,-3.0,-0.4,1.13,1.0,-0.13,comparable,23
+Waste on Private Property,1545,1447,-98,-6.3,-0.5,0.68,0.59,-0.1,comparable,24
+Graffiti - Private,2998,2846,-152,-5.1,-0.7,1.33,1.15,-0.17,comparable,25
+Stormwater Code Enforcement,1781,1588,-193,-10.8,-0.9,0.79,0.64,-0.15,comparable,26
+Weed Cleanup,519,248,-271,-52.2,-1.3,0.23,0.1,-0.13,comparable,27
+Traffic Sign Maintenance,1973,1382,-591,-30.0,-2.8,0.87,0.56,-0.31,comparable,28
+ROW Maintenance,5592,4826,-766,-13.7,-3.7,2.48,1.96,-0.52,comparable,29
+Development Services - Code Enforcement,1157,0,-1157,-100.0,-5.5,0.51,0.0,-0.51,DISCONTINUED - no current-year records under this label,30
+Graffiti - Code Enforcement,6505,4096,-2409,-37.0,-11.5,2.88,1.66,-1.22,comparable,31
+Pothole,12725,10312,-2413,-19.0,-11.5,5.64,4.18,-1.46,comparable,32
+Illegal Dumping,43350,40932,-2418,-5.6,-11.6,19.21,16.6,-2.61,comparable,33
+Graffiti - Public,16093,11237,-4856,-30.2,-23.2,7.13,4.56,-2.58,STRUCTURAL BREAK - share and volume both moved sharply,34
+Parking Violation,45317,22359,-22958,-50.7,-109.7,20.08,9.07,-11.02,STRUCTURAL BREAK - share and volume both moved sharply,35

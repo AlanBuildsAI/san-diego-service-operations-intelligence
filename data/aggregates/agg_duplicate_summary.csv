@@ -1,0 +1,4 @@
+population,case_records,distinct_issues,duplicate_children,duplicate_rate_pct,pct_volume_removed_by_collapsing
+All case records in scope,714925,622135,94687,13.24,12.98
+Active backlog only,81359,60288,21971,27.01,25.9
+Resolved case records,633566,563056,72716,11.48,11.13

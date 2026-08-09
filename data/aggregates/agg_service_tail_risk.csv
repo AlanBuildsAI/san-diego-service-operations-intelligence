@@ -1,0 +1,29 @@
+service_name,active_records,median_age_days,p90_age_days,p90_to_median_ratio,peer_mean_p90,p90_z_score,tail_flag,rank_by_p90
+Pavement Maintenance,5590,1295.5,2710.1000000000004,2.09,986.9,2.33,p90 well above peer categories,1
+Sidewalk Repair Issue,14614,1090.0,2617.0,2.4,986.9,2.21,p90 well above peer categories,2
+Development Services - Code Enforcement,1101,488.0,2378.0,4.87,986.9,1.88,p90 well above peer categories,3
+Stormwater,2337,874.0,2141.0000000000005,2.45,986.9,1.56,p90 well above peer categories,4
+Traffic Sign Maintenance,706,1146.5,1453.5,1.27,986.9,0.63,within normal range,5
+Street Light Maintenance,13665,467.0,1358.6000000000004,2.91,986.9,0.5,within normal range,6
+ROW Maintenance,10245,450.0,1312.0,2.92,986.9,0.44,within normal range,7
+Pothole,332,133.5,1257.1000000000004,9.42,986.9,0.37,long tail relative to own median,8
+Traffic Engineering,1784,201.0,1181.0,5.88,986.9,0.26,long tail relative to own median,9
+Parks Issue,4030,203.0,1133.1,5.58,986.9,0.2,long tail relative to own median,10
+Other,676,208.0,1082.5,5.2,986.9,0.13,long tail relative to own median,11
+Street Sweeping,647,279.0,1079.1999999999998,3.87,986.9,0.12,within normal range,12
+Encampment,2243,15.0,1006.0,67.07,986.9,0.03,long tail relative to own median,13
+Tree Maintenance,1289,158.0,821.6000000000001,5.2,986.9,-0.22,long tail relative to own median,14
+Vegetation Encroachment,2910,239.0,818.2999999999997,3.42,986.9,-0.23,within normal range,15
+Graffiti - Public,1045,89.0,763.6000000000006,8.58,986.9,-0.3,long tail relative to own median,16
+Graffiti - Code Enforcement,3774,195.0,716.0,3.67,986.9,-0.37,within normal range,17
+Illegal Dumping,768,41.5,610.0,14.7,986.9,-0.51,long tail relative to own median,18
+STRO Violation,1378,139.0,564.0,4.06,986.9,-0.57,within normal range,19
+Stormwater Code Enforcement,608,149.0,538.5000000000003,3.61,986.9,-0.61,within normal range,20
+Environmental Services Code Compliance,1079,155.0,537.8000000000004,3.47,986.9,-0.61,within normal range,21
+Graffiti - Private,1109,121.0,511.60000000000036,4.23,986.9,-0.64,within normal range,22
+Building and Land Use Enforcement,1612,186.0,473.0,2.54,986.9,-0.7,within normal range,23
+(Unclassified),741,184.0,185.0,1.01,986.9,-1.09,within normal range,24
+Parking Violation,334,35.5,171.7,4.84,986.9,-1.1,within normal range,25
+Parking - 72-Hours,4694,21.0,140.0,6.67,986.9,-1.15,long tail relative to own median,26
+Oversized Vehicle,370,14.0,68.0,4.86,986.9,-1.24,within normal range,27
+Missed Collection,465,3.0,6.0,2.0,986.9,-1.33,within normal range,28

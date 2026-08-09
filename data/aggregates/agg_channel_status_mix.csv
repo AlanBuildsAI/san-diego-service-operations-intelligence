@@ -1,0 +1,12 @@
+channel_group,status,case_records,pct_within_channel_group
+(Unknown),Closed,99,85.3
+(Unknown),Referred,13,11.2
+(Unknown),In Process,4,3.4
+Resident-submitted,Closed,484285,79.8
+Resident-submitted,In Process,71337,11.8
+Resident-submitted,Referred,42713,7.0
+Resident-submitted,New,8725,1.4
+Staff or system-generated,Closed,105876,98.3
+Staff or system-generated,New,799,0.7
+Staff or system-generated,Referred,580,0.5
+Staff or system-generated,In Process,494,0.5

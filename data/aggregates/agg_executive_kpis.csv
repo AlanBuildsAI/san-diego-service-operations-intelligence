@@ -1,0 +1,28 @@
+metric_key,metric_label,value,unit,grouping
+snapshot_date,Data snapshot date,1786233600.0,epoch_seconds,context
+total_case_records,Case records in scope (all statuses),714925.0,records,scope
+total_distinct_issues,Distinct reported issues in scope (duplicates collapsed),622135.0,issues,scope
+active_backlog,Active request backlog (case records),81359.0,records,backlog
+active_backlog_distinct_issues,"Active backlog, duplicates collapsed",60288.0,issues,backlog
+active_median_age_days,Median active request age,381.0,days,backlog
+active_p90_age_days,P90 active request age,1680.2,days,backlog
+active_mean_age_days,Mean active request age (reported for contrast only),649.8546,days,backlog
+active_aged_60_plus,Active requests aged 60+ days,65648.0,records,backlog
+active_aged_60_plus_pct,Share of active backlog aged 60+ days,80.7,percent,backlog
+active_aged_90_plus,Active requests aged 90+ days,61922.0,records,backlog
+active_aged_90_plus_pct,Share of active backlog aged 90+ days,76.1,percent,backlog
+active_aged_365_plus,Active requests aged 365+ days,41494.0,records,backlog
+active_aged_365_plus_pct,Share of active backlog aged 365+ days,51.0,percent,backlog
+duplicate_children_total,Case records flagged as duplicate children (all statuses),94687.0,records,duplicates
+duplicate_rate_total_pct,"Duplicate-child rate, all case records",13.2,percent,duplicates
+duplicate_children_active,Active case records flagged as duplicate children,21971.0,records,duplicates
+duplicate_rate_active_pct,Duplicate-child rate within the active backlog,27.0,percent,duplicates
+referred_records_total,Case records with a Referred status,43306.0,records,referrals
+referred_rate_resolved_pct,Referred share of resolved case records,6.8,percent,referrals
+referred_external_pct,Referred cases routed outside the City,61.8,percent,referrals
+closed_current_year,Case records with a recorded closure this year,254906.0,records,throughput
+closed_current_year_median_lifecycle,Median recorded lifecycle of cases closed this year,3.0,days,throughput
+closed_current_year_p90_lifecycle,P90 recorded lifecycle of cases closed this year,80.0,days,throughput
+demand_ytd_current,"Submissions, January to last complete month, current year",246572.0,records,demand
+demand_ytd_prior,"Submissions, same months, prior year",225628.0,records,demand
+demand_yoy_change_pct,"Year-over-year change in submissions, like-for-like months",9.3,percent,demand

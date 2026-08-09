@@ -1,0 +1,6 @@
+cluster_size_band,n_issues,n_case_records,pct_of_issues,pct_of_case_records
+1 (no duplicate),568492,568492,91.38,79.52
+2,36529,73058,5.87,10.22
+3-5,14575,50671,2.34,7.09
+6-10,2085,14883,0.34,2.08
+11+,454,7821,0.07,1.09

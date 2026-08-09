@@ -1,0 +1,9 @@
+status,has_referral_text,case_records,pct_of_all_records
+Closed,false,587279,82.15
+Closed,true,2981,0.42
+In Process,false,71126,9.95
+In Process,true,709,0.1
+New,false,9010,1.26
+New,true,514,0.07
+Referred,false,53,0.01
+Referred,true,43253,6.05

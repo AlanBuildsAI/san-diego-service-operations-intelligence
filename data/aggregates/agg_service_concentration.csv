@@ -1,0 +1,7 @@
+threshold_label,n_categories,total_categories,cum_records,total_records,cumulative_pct_of_backlog
+Top 1 categories,1,40,14614,81359,18.0
+Top 3 categories,3,40,38524,81359,47.4
+Top 5 categories,5,40,48808,81359,60.0
+Top 10 categories,10,40,64102,81359,78.8
+Top 15 categories,15,40,71274,81359,87.6
+Top 20 categories,20,40,76008,81359,93.4

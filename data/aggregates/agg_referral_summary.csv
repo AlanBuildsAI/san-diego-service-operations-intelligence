@@ -1,0 +1,3 @@
+status,case_records,pct_of_resolved,median_lifecycle_days,p90_lifecycle_days,resolved_within_1_day,pct_resolved_within_1_day
+Closed,590260,93.2,3.0,78.0,238753,40.4
+Referred,43306,6.8,0.0,8.0,28744,66.4
