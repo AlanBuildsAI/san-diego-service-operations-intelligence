@@ -1,0 +1,17 @@
+# Pinned to the versions this analysis was produced and verified with.
+# Python 3.11+ required (3.13 used for the published run).
+
+# --- core analysis -----------------------------------------------------------
+duckdb==1.5.5              # SQL engine; runs 03_sql/ against the raw CSVs
+pandas==3.0.5              # aggregate handling and document generation
+pyarrow==24.0.0            # parquet export of the fact table
+
+# --- retrieval ---------------------------------------------------------------
+requests==2.34.2           # official-source download with manifest hashing
+
+# --- outputs -----------------------------------------------------------------
+openpyxl==3.1.5            # Excel workbook: tables, charts, conditional formats
+streamlit==1.61.1          # interactive dashboard (optional; static HTML needs nothing)
+
+# --- testing -----------------------------------------------------------------
+pytest==9.1.1

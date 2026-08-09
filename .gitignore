@@ -1,0 +1,33 @@
+# --- source data: never committed -------------------------------------------
+# The official extracts total ~245 MB and are re-downloadable from the City's
+# open data portal. scripts/download_data.py retrieves them; docs/source_manifest.md
+# records exactly which files and versions were used.
+data/raw/*
+!data/raw/.gitkeep
+
+# --- generated intermediates -------------------------------------------------
+data/processed/*
+!data/processed/.gitkeep
+*.duckdb
+*.duckdb.wal
+*.partial
+
+# --- python ------------------------------------------------------------------
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+*.egg-info/
+
+# --- os / editor -------------------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# --- streamlit ---------------------------------------------------------------
+.streamlit/secrets.toml
