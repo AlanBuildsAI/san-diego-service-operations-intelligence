@@ -2,8 +2,12 @@
 
 **Project:** San Diego Service Operations Intelligence
 **Analyst:** Alan Ibarra
-**Stakeholder:** City of San Diego service-operations leadership (hypothetical engagement)
+**Stakeholder:** Hypothetical City of San Diego service-operations leadership
 **Data snapshot:** 2026-08-09
+
+> **Independent portfolio case study** using public City of San Diego data. Not commissioned
+> by, affiliated with, or endorsed by the City of San Diego. The stakeholder and the
+> engagement are simulated for the purposes of this case study.
 
 ---
 
@@ -11,12 +15,12 @@
 
 The City of San Diego receives non-emergency service requests from residents through the
 Get It Done program — a mobile app, a web portal and a telephone line. Over the ten years
-since launch the programme has accumulated a large volume of reports across street repair,
+since launch the program has accumulated a large volume of reports across street repair,
 lighting, parking, waste, code enforcement, parks and stormwater.
 
 Leadership can see the raw feed. What they cannot see from the feed is where work is
-piling up, which parts of the queue are ageing, and which of those patterns are real
-rather than artefacts of how the data is recorded.
+piling up, which parts of the queue are aging, and which of those patterns are real
+rather than artifacts of how the data is recorded.
 
 ## 2. The question leadership is actually asking
 
@@ -28,12 +32,12 @@ That decomposes into twelve questions, answered in
 
 | # | Question | Where answered |
 |---|---|---|
-| 1 | How large is the active request backlog? | [`agg_executive_kpis`](../data/aggregates/agg_executive_kpis.csv) |
+| 1 | How large is the active request inventory? | [`agg_executive_kpis`](../data/aggregates/agg_executive_kpis.csv) |
 | 2 | Which service categories hold the largest share of active workload? | [`agg_service_backlog`](../data/aggregates/agg_service_backlog.csv) |
 | 3 | Which categories have the oldest active requests? | [`agg_service_backlog`](../data/aggregates/agg_service_backlog.csv) |
-| 4 | Which categories have unusually high p90 ageing? | [`agg_service_tail_risk`](../data/aggregates/agg_service_tail_risk.csv) |
+| 4 | Which categories have unusually high p90 aging? | [`agg_service_tail_risk`](../data/aggregates/agg_service_tail_risk.csv) |
 | 5 | Which communities and districts have the highest volume? | [`agg_geography_district`](../data/aggregates/agg_geography_district.csv) |
-| 6 | Which areas have unusually high aged-backlog concentration? | [`agg_geography_aging_index`](../data/aggregates/agg_geography_aging_index.csv) |
+| 6 | Which areas have unusually high aged-record concentration? | [`agg_geography_aging_index`](../data/aggregates/agg_geography_aging_index.csv) |
 | 7 | How many submissions are duplicate children? | [`agg_duplicate_summary`](../data/aggregates/agg_duplicate_summary.csv) |
 | 8 | How materially do duplicates change the rankings? | [`agg_duplicate_rank_impact`](../data/aggregates/agg_duplicate_rank_impact.csv) |
 | 9 | What share of requests are referred, and where to? | [`agg_referral_destinations`](../data/aggregates/agg_referral_destinations.csv) |
@@ -61,12 +65,13 @@ The City states plainly:
 > record of City maintenance work. This data does not include details about any work
 > performed to fix a problem or the date and time work was completed.
 
-This is not boilerplate — it determines what may be said. A closed case means *a case
-record was closed*. It does not mean a pothole was filled. Throughout this project:
+This is not boilerplate — it determines what may be said. A closed case means *a case record
+reached a terminal Get It Done status*. It does not mean a pothole was filled. Throughout
+this project:
 
-- **Used:** request lifecycle, case status, reported workload, active request age,
-  recorded case closure, operational queue.
-- **Not used:** repair time, resolution time, productivity, performance, fixed, resolved.
+- **Used:** request lifecycle, case status, terminal status, reported workload, active
+  request age, recorded case closure, active inventory, operational queue.
+- **Not used:** repair time, resolution time, completion, productivity, performance, fixed.
 
 Nothing in this dataset supports a causal claim. Where a relationship appears, it is
 reported as an association and the confounder is named.

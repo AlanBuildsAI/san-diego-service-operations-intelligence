@@ -1,7 +1,10 @@
 # Methodology
 
 How the analysis was built, what was decided along the way, and why. Written so that
-another analyst can reproduce the result or disagree with a specific choice.
+another analyst can follow the reasoning or disagree with a specific choice.
+
+> **Independent portfolio case study** using public City of San Diego data. Not commissioned
+> by, affiliated with, or endorsed by the City of San Diego.
 
 **Snapshot:** 2026-08-09 · **Engine:** DuckDB 1.5.5 · **Grain:** one row per
 `service_request_id`
@@ -95,6 +98,7 @@ distribution.
 
 | Choice | Reason |
 |---|---|
+| Terminal status, never "completed" | Closed and Referred mean a record reached a terminal Get It Done status. The source carries no work-completion data, so no wording in this project implies a repair occurred. |
 | Median as the headline | Mean active age (649.9 days) is 70% above the median (381) because of a tail reaching 3,731 days. The mean is published alongside so the skew is visible rather than hidden. |
 | P90 as the tail metric | Answers "how bad does it get for the worst tenth", which is what a service commitment is written against. |
 | P90 ÷ own median, and P90 z-score across peers | Two different failure modes. A category can be uniformly slow, or mostly fine with a stranded minority. The two lists barely overlap. |
@@ -122,7 +126,7 @@ The same argument fails for 2024: a request submitted and closed in 2024 appears
 the three files. Those months are flagged `incomplete` and excluded from every chart and
 every stated figure. The monthly table shows January 2024 at 1,648 submissions against
 January 2025 at 33,626 — that twentyfold gap is the coverage boundary, not a demand
-collapse, and it is labelled as such.
+collapse, and it is labeled as such.
 
 The comparison window is January–July, the months fully elapsed at the snapshot. August
 2026 is partial and excluded.
@@ -140,7 +144,7 @@ named `most_common_record_type` to say so.
 **Volume moved between labels in autumn 2025.** Monthly Parking Violation reports fall from
 8,417 (Aug 2025) to 2,111 (Dec 2025) while Parking – 72-Hours rises from 514 to 3,977, with
 the parent Parking record type growing only 17.3% across the comparison window. That is a
-relabelling.
+relabeling.
 
 **Detection.** A category is flagged when its share of citywide demand moves ≥ 2 percentage
 points **and** its volume changes ≥ 25%. Both tests are required: a share shift alone is
@@ -149,9 +153,66 @@ volume) as a break. Additional flags cover new, discontinued, newly-adopted and 
 categories. 9 of 35 categories are flagged.
 
 **Treatment.** Year-over-year demand is reported citywide and by record type, both of which
-absorb a service-name relabelling. No flagged category appears in any written finding. The
+absorb a service-name relabeling. No flagged category appears in any written finding. The
 flag asserts "not comparable without verification" — only the Parking pair is claimed as a
-confirmed relabelling, on the crossover evidence above.
+confirmed relabeling, on the crossover evidence above.
+
+## 7a. Right-censoring in the cohort statistics
+
+The submission-cohort view (Jan–Jun 2026) fixes its denominator at submission time, which
+removes closure-cohort selection. It does **not** remove censoring from the *lifecycle*
+statistic.
+
+Two distinct numbers come out of that cohort and they have different properties:
+
+| Statistic | Value | Censoring |
+|---|---|---|
+| Share in a terminal status at the snapshot | 91.2% | **None.** Denominator is the full cohort. |
+| Median recorded lifecycle | 2 days | **Right-censored.** Computed only over records that had settled by the snapshot; the 8.8% still active are excluded by construction and are, by definition, the slower ones. |
+
+So the terminal-status share is a complete measure of the cohort; the lifecycle median
+describes settled records only and is optimistic for the cohort as a whole. Both are reported
+with that distinction stated. No survival model was fitted — the correct next step is a
+fixed-window measure (share still active at 30 / 60 / 90 days), which is listed in §11 rather
+than built here.
+
+## 7b. Denominator validation
+
+The priority table reports each category's share of the citywide 90+ day active inventory.
+An earlier version computed that share against the **scored subset** — categories with 500+
+active records — while labeling it citywide. The subset covers 60,978 of 61,922 aged records
+(98.5%), so the error was small but the label was wrong.
+
+Corrected in `03_sql/10_priority_table.sql` by computing citywide totals over `v_active` with
+no volume floor. Measured impact:
+
+- Reported shares fall slightly (Sidewalk 22.7% → 22.3%, Street Light 20.2% → 19.9%).
+- **Rank and score are unchanged for all 24 scored categories.** That is expected rather than
+  lucky: the score uses `PERCENT_RANK` over the share, and both candidate denominators are the
+  same numerator divided by a constant, so they induce identical ordering.
+
+The lesson kept from this: a column named "of city" has to be checked against a citywide
+denominator, not assumed from the surrounding query.
+
+## 7c. Priority-weight sensitivity
+
+The 0.45 / 0.35 / 0.20 weighting is an analyst judgment. An earlier draft asserted the top
+three were "stable under any reasonable reweighting." That assertion was tested and is false,
+so it was removed.
+
+Five schemes were run over identical percentile-rank components
+(`agg_priority_weight_sensitivity`):
+
+| Observation | Result |
+|---|---|
+| Sidewalk + Pavement occupy the top two | 5 of 5 schemes (order swaps) |
+| Street Light Maintenance in the top three | 4 of 5 schemes |
+| Top-three membership identical to baseline | 3 of 5 schemes |
+
+Under aged-rate-heavy weighting (0.25 / 0.60 / 0.15) Street Light falls to fifth and
+Development Services – Code Enforcement enters at third. The score is therefore documented as
+a **prioritization heuristic** whose third position reflects a stakeholder preference — volume
+of aged work versus proportion of a queue that is aged — rather than an analytical finding.
 
 ## 8. Duplicate treatment
 
@@ -179,7 +240,7 @@ is written to disk:
 `iamfloc`, `floc`, `sap_notification_number`
 
 The first four are resident free text and exact locations. The raw `referred` message is
-excluded because it contains staff and vendor **email addresses** — it is normalised to a
+excluded because it contains staff and vendor **email addresses** — it is normalized to a
 destination label and a scope instead. The last three are internal identifiers with no
 analytical value here.
 
@@ -187,7 +248,7 @@ Two mechanisms enforce this rather than relying on discipline:
 
 1. `src/pipeline.py` refuses to export the fact table if any suppressed field is present.
 2. `tests/test_privacy.py` fails if any suppressed field name appears in any published
-   artefact, and scans the processed dataset and every aggregate for address-like and
+   artifact, and scans the processed dataset and every aggregate for address-like and
    email-like patterns.
 
 Geography is published at council district, community planning area and ZIP level only.
@@ -202,7 +263,7 @@ Stated plainly, because a reviewer will find them anyway:
 - **Referral destination parsing is rule-based.** Every referred record resolves to a label,
   but "City – Other department" (19.1% of referrals) is a residual bucket, not one
   department.
-- **The priority score's weights are a judgement.** 0.45 / 0.35 / 0.20 is defensible and
+- **The priority score's weights are a judgment.** 0.45 / 0.35 / 0.20 is defensible and
   documented, not derived. Different weights would reorder the middle of the list; the top
   three are stable under any reasonable weighting because they lead on all three components.
 - **A bulk closure event sits in the closure data** — 4,515 cases submitted in 2018 were
@@ -213,6 +274,30 @@ Stated plainly, because a reviewer will find them anyway:
   the workbook. The formulas are written to compare themselves against SQL-derived values
   and display MATCH or REVIEW when opened.
 
+## 10a. Reproducibility: two different things a reviewer might mean
+
+**Validating the published analysis.** Everything needed is committed: the 34 aggregate
+tables, the audit results, the synthetic test fixture, 89 tests, the claim registry and
+verification gate, the dashboard, the Excel workbook, and the
+[source manifest](../docs/source_manifest.md) with SHA-256 hashes and row counts for the exact
+files used. `make test` and `make verify` run against that committed state and need no
+download.
+
+**Refreshing with current City data.** `make download` retrieves the City's files, but those
+are **rolling datasets refreshed daily**. A later download returns current records, not the
+2026-08-09 snapshot, so:
+
+- row counts, ages and every figure in the written documents will differ;
+- the derived snapshot date will move, since the pipeline recovers it from the data;
+- `make verify` will fail, correctly, because the committed prose no longer matches.
+
+That is intended behavior, not a defect: the verification gate is what stops stale figures
+being republished. Written findings must be re-validated after any refresh.
+
+The published analysis is therefore *auditable* rather than *bit-for-bit re-derivable from
+the live source* — a distinction worth stating plainly, because rolling public datasets do
+not support the latter.
+
 ## 11. What would change in production
 
 - Incremental loading against the daily refresh instead of a full rebuild.
@@ -222,5 +307,5 @@ Stated plainly, because a reviewer will find them anyway:
   domain changes.
 - A join to the maintenance work-order system, which is the single change that would convert
   every "case age" statement here into a statement about service delivery.
-- Fixed-window ageing metrics (share of a submission cohort still open at 30/60/90 days) to
+- Fixed-window aging metrics (share of a submission cohort still open at 30/60/90 days) to
   replace closure-cohort medians as the headline throughput measure.

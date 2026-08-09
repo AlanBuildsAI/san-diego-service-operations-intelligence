@@ -86,10 +86,10 @@ Second, and worse: between September and December 2025 the City moved volume bet
 service names. Monthly Parking Violation reports fall from 8,417 to 2,111 while
 Parking – 72-Hours rises from 514 to 3,977 — while the parent Parking record type grew only
 17.3%. Taken at face value, Parking – 72-Hours "grew 3,914% year over year". That is a
-relabelling, not demand.
+relabeling, not demand.
 
 So I built a detector, flagged 9 of 35 categories as not comparable, and moved the reported
-year-over-year to citywide and record-type grain, which absorb a service-name relabelling.
+year-over-year to citywide and record-type grain, which absorb a service-name relabeling.
 
 ### 7. Tell me about a check that gave you a false positive.
 
@@ -164,14 +164,17 @@ accumulate them.
 
 ### 13. Did removing duplicates change your conclusions?
 
-No, and I tested it rather than assuming. Collapsing duplicates removes 25.9% of active
-volume, but across the top 20 categories only 11 change rank at all and none moves more
-than 2 positions. The four largest categories are the same four at either grain.
+I tested one specific thing, so let me be precise about what I can claim. Collapsing
+duplicate child records removes 25.9% of active volume, and across the top 20 categories by
+volume only 11 change rank at all, none by more than 2 positions.
 
-So the grain matters for *sizing* work and not for *targeting* it. The one place it really
-matters is Street Light Maintenance, where 45.3% of the queue is duplicates — if the
-question is "how many streetlights need attention", the case-record count overstates it by
-about 6,000.
+That's a statement about **volume rankings**. I did not re-derive the full composite priority
+score on deduplicated inputs, so I can't claim the priority table is unchanged by
+deduplication — only that the volume ordering it draws on is stable.
+
+The place the grain really matters is Street Light Maintenance, where 45.3% of the active
+queue is duplicates. If the question is "how many streetlights need attention", the
+case-record count overstates it by 6,189.
 
 ### 14. Walk me through your priority score.
 
@@ -181,9 +184,18 @@ share of the category's own queue that is aged 90+ (0.35), and median active age
 Volume carries the most weight because leadership attention is finite and should follow the
 mass of the problem.
 
-The weights are a judgement, not a derivation, and I'd say that in the room. What makes me
-comfortable is that the top three lead on all three components, so they're stable under any
-reasonable reweighting. Different weights would reshuffle the middle of the list.
+The weights are a judgment, not a derivation — so I tested how much they matter rather than
+asserting they don't. I ran the same components under five weightings: baseline, equal
+thirds, volume-heavy, aged-rate-heavy and age-heavy.
+
+The result made me weaken my own earlier claim. Sidewalk Repair Issue and Pavement
+Maintenance hold the top two under all five, though their order swaps. But Street Light
+Maintenance is top-three in only four of five — under aged-rate-heavy weighting it drops to
+fifth and Development Services – Code Enforcement takes third.
+
+So what I'd tell leadership is: the top two are robust, the third slot depends on whether you
+care more about the volume of aged work or the proportion of a queue that's aged. That's your
+call, not mine, and the score should be presented with the weights visible.
 
 Every row also carries a `why_flagged` string, so the ranking is never presented as an
 unexplained number.
@@ -242,7 +254,7 @@ resolved, typically in 2 days. Yet the standing backlog has a median age of 381 
 are true because they describe different populations.
 
 The most likely benign explanation is that sidewalk and pavement repair are multi-year
-capital programmes, and a Get It Done case stays open until the asset is scheduled and
+capital programs, and a Get It Done case stays open until the asset is scheduled and
 treated. If that's what's happening, this is a case-record hygiene and resident-expectation
 problem, not a crew problem.
 
@@ -259,9 +271,16 @@ fast cases by construction — slow cases haven't closed yet, so they're absent 
 denominator. Decomposed by submission year, the same closures show a median of 2 days for
 2026 submissions, 93 days for 2025, and 627 days for 2024.
 
-The unbiased version is a submission cohort: take everything submitted January–June 2026
-and ask what became of it. 91.2% resolved, median 2 days, P90 29 days, 8.8% still active.
-That's the number the recommendations rest on.
+The fix is a submission cohort: fix the denominator at submission time and ask what became of
+it. Of everything submitted January–June 2026, 91.2% had reached a terminal status by the
+snapshot, and among those the median recorded lifecycle was 2 days (P90 29 days), with 8.8%
+still active.
+
+I'd flag one thing even about that: the 91.2% is a complete measure of the cohort, but the
+2-day median is still right-censored — it only covers records that had settled by the
+snapshot, and the ones still open are by definition the slower ones. So I quote the
+terminal-status share as the solid number and treat the lifecycle median as descriptive of
+settled records only.
 
 ### 20. Do submission channels affect outcomes?
 
@@ -277,21 +296,71 @@ Holding service category constant across 29 categories, the median absolute mobi
 difference is 2 days, and 26 of 29 differ by 20 days or less. Two exceptions point in
 opposite directions, which argues against a general channel effect.
 
-My conclusion: channel is not a lever this data supports pulling. That's a negative
-finding and I report it as one.
+My conclusion, stated carefully: the data does not show a broad, consistent
+channel-associated lifecycle difference after stratifying by service category. That is not
+the same as "channel doesn't matter" — residents choose their own channel, so it's tangled up
+with reporter and problem characteristics I can't observe. Nothing here isolates a channel
+effect in either direction.
 
 ### 21. Did you find geographic inequity?
 
-No — and I think that's a more useful answer than a manufactured one.
+Not under the metric I used, and I'd be careful about how far that goes.
 
-The aged-concentration index spans only 0.826 to 1.085 across the nine council districts.
-Every district holds close to the share of aged work its queue size implies. Ageing in this
-dataset is a property of service category, not geography, so a district-targeted
-intervention would be aimed at the wrong axis.
+The aged-concentration index — a district's share of the citywide 90+ day inventory divided
+by its share of all active records — varies only from 0.826 to 1.085 across the nine
+districts. So no strong district-level over-concentration is evident.
 
-I'd add a caveat I can't resolve: this measures reports, not conditions. If some
-communities report less for reasons of trust, language or app access, an equity problem
-could exist and be invisible here. Answering that needs survey or asset-condition data.
+What I would not say is "aging isn't geographic." That's one descriptive ratio, at one
+snapshot, on reported requests rather than conditions, with no population or asset
+denominators available. An effect could exist in reporting propensity, in asset age, or at a
+finer level than a council district, and none of that is observable here.
+
+What it does support is sequencing: service category discriminates far more strongly than
+district does on this data, so category is the better axis to investigate first. And there's
+an equity caveat I can't resolve — if some communities report less for reasons of trust,
+language or app access, that would be invisible in a dataset made of reports.
+
+### 21a. Why isn't Closed the same as a physical repair?
+
+Because the City says so, and because the field simply isn't there. Get It Done records a
+*case status*. There is no work-order id, no completion date, no crew, no cost. A record
+moves to Closed when the case is closed in the system — which could mean the work was done,
+or that it was a duplicate, or out of jurisdiction, or unverifiable, or administratively
+closed.
+
+So throughout the project I say "reached a terminal Get It Done status", never "completed" or
+"repaired". It sounds pedantic until you realize the alternative is publishing a repair-time
+metric that isn't a repair time.
+
+### 21b. Why can't you infer backlog growth from one active snapshot?
+
+Because I have a stock, not a flow. 81,359 active records is a photograph of one moment. To
+say the backlog is growing I'd need at least two snapshots of the same measure, and the
+open-requests extract is overwritten daily — there is no history of it in the source.
+
+I can see submissions rising 9.3% year over year, and I can see the active inventory is old.
+What I cannot do is subtract one from the other and call it growth, because I don't observe
+the exit rate for the standing inventory separately from recent intake. That's why the next
+measurement step in the memo is a daily snapshot table — it converts a stock into a
+measurable flow.
+
+I'll also flag the trap I avoided here: the monthly table shows the share of each month's
+submissions still active rising from 4.3% to 21.2%. That looks like deterioration and is
+mostly just recency — recent months have had less time to settle.
+
+### 21c. What additional data would you request from the stakeholder?
+
+Four things, in priority order:
+
+1. **The maintenance work-order feed.** Single highest value. It converts every "case age"
+   statement in this project into a statement about service delivery.
+2. **A daily or weekly snapshot of the open queue**, so backlog change becomes measurable.
+3. **Denominators** — population, street mileage, streetlight and sidewalk asset counts by
+   district — so geographic comparison becomes meaningful rather than a proxy for district
+   size.
+4. **The service taxonomy change log.** I detected the autumn 2025 relabeling from the data,
+   but I had to infer it. A change log would have made it a lookup instead of an
+   investigation.
 
 ### 22. What conclusion are you least confident in?
 
@@ -324,7 +393,7 @@ needs, and one snapshot can't produce it.
 Incremental loads against the daily refresh instead of a full rebuild. A daily snapshot
 table so backlog change becomes measurable. Schema contract tests that fail loudly when a
 column type or status domain changes upstream — this dataset has already demonstrated it
-will change its taxonomy without warning. And fixed-window ageing metrics replacing
+will change its taxonomy without warning. And fixed-window aging metrics replacing
 closure-cohort medians as the headline, for the reason in question 19.
 
 The single highest-value change isn't technical: it's getting the maintenance work-order
@@ -353,12 +422,12 @@ output: resident free text, exact street address, lat/lng, the raw referral mess
 internal asset identifiers and SAP numbers.
 
 The referral field is the one worth mentioning — it's a canned routing message, but it
-contains staff and vendor **email addresses**, so I normalise it to a destination label and
+contains staff and vendor **email addresses**, so I normalize it to a destination label and
 drop the text.
 
 Two mechanisms enforce it rather than relying on my discipline: the pipeline refuses to
 export the fact table if a suppressed field is present, and a test fails if any suppressed
-field name or address/email-like pattern appears in any published artefact. Raw CSVs are
+field name or address/email-like pattern appears in any published artifact. Raw CSVs are
 git-ignored.
 
 ### 27. Why DuckDB rather than pandas or a warehouse?

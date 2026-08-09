@@ -3,10 +3,15 @@
 **San Diego Service Operations Intelligence** · data snapshot **2026-08-09**
 Source: City of San Diego Open Data Portal — Get It Done service requests.
 
+> **Independent portfolio case study** using public City of San Diego data. Not commissioned
+> by, affiliated with, or endorsed by the City of San Diego. The stakeholder is hypothetical.
+>
 > **Data boundary.** Get It Done records represent submitted service requests and case
-> statuses, not verified maintenance completion. A closed case records a case closure, not
-> a completed repair. Nothing below measures crew performance, and no relationship
-> reported here is causal.
+> statuses, not verified maintenance completion. A record reaching Closed or Referred
+> status means it reached a terminal Get It Done status — not that a physical repair
+> occurred. The dataset contains no work-order, staffing, capacity or satisfaction data, so
+> it cannot establish why any pattern exists. Nothing below measures crew performance, and
+> no relationship reported here is causal.
 
 Every figure traces to a table in [`data/aggregates/`](../data/aggregates/) and is
 re-verified against those tables by
@@ -16,23 +21,32 @@ re-verified against those tables by
 
 ## The headline
 
-**The City is not slow at closing service requests. It is carrying a specific, ageing
-accumulation in four asset-maintenance categories.**
+**Most recent submissions reach a terminal status quickly, while the standing active
+inventory is old and concentrated in four asset-maintenance categories.**
 
-Those two statements sound contradictory and are both true. They describe different
-populations, and separating them is the single most useful thing this analysis does.
+Those two statements describe different populations — a recent submission cohort and the
+current active inventory of all vintages. Separating them is the single most useful thing
+this analysis does. Neither statement explains *why* the older inventory persists; the
+dataset does not carry the information needed to establish that.
 
 | | |
 |---|---|
 | Requests submitted Jan–Jun 2026 | **209,411** |
-| …already resolved | **91.2%**, typically in **2** days (P90 **29** days) |
+| …in a terminal status at the snapshot | **91.2%** |
+| …median recorded lifecycle *among those* | **2** days (P90 **29** days) |
 | …still active | 8.8% |
 | Active backlog, all vintages | **81,359** case records / **60,288** distinct issues |
 | Median age of that backlog | **381** days (P90 **1,680** days) |
 | Backlog aged 90+ days | **61,922** (**76.1%**) |
 | Backlog aged 365+ days | **41,494** (**51.0%**) |
 
-Most of what arrives leaves quickly. What remains is old, and it is concentrated.
+Most of what arrives reaches a terminal status quickly. What remains active is old, and it
+is concentrated in a few categories.
+
+Note the right-censoring: the 2-day median is computed only over the 91.2% of the cohort
+that had already reached a terminal status by the snapshot. Records still open are excluded
+from that statistic by construction, so it describes settled records, not the cohort as a
+whole.
 
 ---
 
@@ -79,8 +93,11 @@ Decomposed by submission year, the same closures look very different:
 | 2024 | 2,561 | 1.0% | 627 days |
 | 2023 | 1,732 | 0.7% | 1,008 days |
 
-The submission-cohort view in the headline table is the unbiased version and is what the
-recommendations rest on.
+The submission-cohort view in the headline table fixes the denominator at submission time,
+which removes that particular distortion. It is not free of censoring — its lifecycle
+median still covers only records that had settled by the snapshot — but its *terminal-status
+share* is a complete, uncensored measure of the cohort, and that is what the recommendations
+rest on.
 → [`agg_closure_cohort_bias`](../data/aggregates/agg_closure_cohort_bias.csv),
 [`agg_submission_cohort`](../data/aggregates/agg_submission_cohort.csv)
 
@@ -97,9 +114,13 @@ Four categories hold **54.2%** of the entire active backlog:
 | ROW Maintenance | 10,245 | 12.6% | 450 | 1,312 | 85.7% |
 | Pavement Maintenance | 5,590 | 6.9% | 1,295.5 | 2,710 | 95.7% |
 
-All four sit under the same owning group — record type **TSW**, which holds **52,063**
-active records, **64.0%** of the backlog. Concentration continues past the top four: ten
-categories account for **78.8%** of the queue, out of 40 present.
+**TSW** is the modal `case_record_type` for each of these four categories, and records
+carrying that label account for **52,063** active records — **64.0%** of the active
+inventory. Treat that as a labeling concentration, not a confirmed org chart:
+`case_record_type` is a higher-level staff-group label, audit check DQ-08 found it is
+many-to-many with `service_name`, and this dataset does not establish which current City
+department owns any queue. Concentration continues past the top four: ten categories account
+for **78.8%** of the active inventory, out of 40 present.
 
 For contrast, the fifth-largest category, Parking – 72-Hours, has 4,694 active records at a
 median age of **21** days and only 14.6% aged 90+. Size of queue and age of queue are
@@ -123,7 +144,7 @@ is what makes them the top investigation priorities: they are simultaneously big
 
 ---
 
-## Q4 · Which categories have unusually high p90 ageing?
+## Q4 · Which categories have unusually high p90 aging?
 
 "Unusually high" is measured two ways, because they identify different problems.
 
@@ -145,11 +166,15 @@ minority sit for years:
 | Traffic Engineering | 201 | 1,181 | 5.88 |
 | Parks Issue | 203 | 1,133 | 5.58 |
 
-These two lists barely overlap, and they call for different responses. A category in the
-first list has a queue that is old throughout. A category in the second list mostly works —
-Pothole's typical active request is 133.5 days old — but has a small population of cases that
-appear to have fallen out of the process. The second pattern is usually the cheaper one to
-fix, and it is invisible if only medians are reported.
+These two lists barely overlap, and they describe different shapes. A category in the first
+list has an active queue that is old throughout. A category in the second has a much younger
+typical record — Pothole's median active age is 133.5 days — alongside a small population of
+very old ones.
+
+One hypothesis worth testing is that the long tail in the second group reflects records that
+stopped progressing rather than work that is genuinely slow. This dataset cannot distinguish
+those, since it carries no work-order activity. The distinction matters operationally, and
+it is invisible if only medians are reported.
 → [`agg_service_tail_risk`](../data/aggregates/agg_service_tail_risk.csv)
 
 ---
@@ -182,20 +207,26 @@ district; District 4 sits at the opposite end on both.
 
 ## Q6 · Which areas have unusually high aged-backlog concentration?
 
-**None do. This is a negative finding and it is reported as one.**
+**Council-district variation in the descriptive aged-concentration index is modest
+(0.826–1.085); no strong district-level over-concentration is evident under this metric.**
 
-The aged-concentration index divides a district's share of the city's 90+ day backlog by
-its share of all active work. A value of 1.0 means the district holds exactly the aged
-share its queue size implies.
+The index divides a district's share of the citywide 90+ day active inventory by its share
+of all active records. A value of 1.0 means the district holds exactly the aged share its
+inventory size implies.
 
-Across the nine council districts the index spans only **0.826** to **1.085**. Aged work is
-distributed almost exactly in proportion to queue size. There is no district where old
-requests pile up disproportionately.
+Across the nine council districts the index spans only **0.826** to **1.085** — aged records
+sit close to proportional with inventory size everywhere.
 
-The practical consequence: **ageing in this dataset is a property of service category, not
-of geography.** A district-based intervention would be aimed at the wrong axis. The
-category-by-district hotspot table confirms this — the top cells are simply the largest
-categories in the largest districts.
+**What this does not establish.** It does not prove geography is irrelevant. The index is a
+single descriptive ratio at one snapshot, computed on reported requests rather than
+conditions, with no population or asset denominators available. A geographic effect could
+exist in reporting propensity, in asset condition, or at a finer level than a council
+district, and none of those is observable here.
+
+What it does support is a sequencing judgment: on this metric, service category
+discriminates far more strongly than district does, so category is the more informative axis
+to investigate first. The category-by-district hotspot table is consistent with that — the
+top cells are the largest categories in the largest districts.
 → [`agg_geography_aging_index`](../data/aggregates/agg_geography_aging_index.csv),
 [`agg_priority_hotspots`](../data/aggregates/agg_priority_hotspots.csv)
 
@@ -235,11 +266,13 @@ metric. The true duplicate rate is therefore *at least* this, not exactly this.
 
 ## Q8 · How materially do duplicates change rankings or volume metrics?
 
-**They change the volume, but not the decision.**
+**Collapsing duplicate child records changes top-20 service-category volume rankings by no
+more than two positions.**
 
-Collapsing duplicates removes 25.9% of active case-record volume. Yet across the top 20
-categories, **11** change rank at all, and no category moves by more than **2** positions.
-The four largest categories remain the four largest at either grain:
+That is the specific test that was run, and it is the specific claim being made. Collapsing
+duplicates removes 25.9% of active case-record volume. Across the top 20 categories by
+volume, **11** change rank at all, and none moves by more than **2** positions. The four
+largest categories remain the four largest at either grain:
 
 | Category | Rank (case records) | Rank (distinct issues) | Shift |
 |---|---:|---:|---:|
@@ -248,8 +281,13 @@ The four largest categories remain the four largest at either grain:
 | ROW Maintenance | 3 | 2 | +1 |
 | Pavement Maintenance | 4 | 4 | 0 |
 
-So the choice of grain matters for *sizing* work and not for *targeting* it. Both are
-reported everywhere, and the priority list is stable either way.
+So the choice of grain materially changes volume totals but barely reorders the volume
+ranking. Both grains are reported throughout.
+
+**Scope of this test.** It compares *volume rankings only*. A full sensitivity analysis
+re-deriving the composite priority score on deduplicated inputs was not run, so this does
+not establish that the priority table is unchanged by deduplication — only that the volume
+ordering it draws on is stable.
 
 The one place the choice genuinely matters is Street Light Maintenance, where 45.3% of the
 queue is duplicates — it is the second-largest queue by case record and the third-largest
@@ -297,28 +335,33 @@ bucket, not a single department.
 **Volume: yes, substantially.** Mobile is **54.0%** of all case records, Web **23.9%**,
 Phone 6.7%. A further 15.1% are staff or system-generated.
 
-**Ageing: no, once you control for what is being reported.**
+**Recorded lifecycle: no consistent difference once service category is held constant.**
 
-The raw comparison is misleading because channel is confounded with problem type. Missed
+The raw comparison is confounded, because channel is associated with problem type. Missed
 Collection arrives 32,872 times by web and 17,946 by phone against only 403 by mobile;
 Parking Violation arrives 60,033 times by mobile. Comparing channel medians without
 controlling compares waste collection against parking enforcement.
 
-Holding service category constant across **29** categories with enough volume in both
-channels, the median absolute mobile-vs-web difference in recorded lifecycle is **2** days,
-and **26** of 29 categories differ by 20 days or less.
+Among resolved records, after stratifying by service category across **29** categories with
+enough volume in both channels, the median absolute Mobile-vs-Web recorded-lifecycle
+difference is **2** days, and **26** of 29 categories differ by 20 days or less.
 
 Two exceptions are worth a look rather than a conclusion:
 
 - **Development Services – Code Enforcement**: mobile 682 days vs web 163.5 days (n = 1,945 / 522)
 - **Pavement Maintenance**: mobile 199 days vs web 360 days (n = 1,242 / 414)
 
-They point in opposite directions, which argues against a general channel effect and for
-something specific to how those two categories are intaken.
+They point in opposite directions, which is not the pattern a general channel-associated
+difference would produce, and is more consistent with something specific to how those two
+categories are intaken. Neither is established by this data.
 
-**Conclusion: submission channel is not an operational lever this data supports pulling.**
-Any residual difference could equally be caused by what residents choose to report through
-each channel, which is not observable here. This is an association, not an effect.
+**Conclusion: the data does not show a broad, consistent channel-associated lifecycle
+difference after stratifying by service category.**
+
+That is a statement about what was measured, not about causation. Residents choose their own
+channel, so channel is associated with reporter characteristics and problem types that are
+not observable in this dataset. Nothing here isolates a channel effect, and the absence of a
+consistent difference is not evidence that channel could never matter operationally.
 → [`agg_channel_controlled_comparison`](../data/aggregates/agg_channel_controlled_comparison.csv),
 [`agg_channel_mix_by_service`](../data/aggregates/agg_channel_mix_by_service.csv)
 
@@ -349,7 +392,7 @@ By owning department (record type), which is the stable grain:
 **Category-level year-over-year cannot be read directly.** Between September and December
 2025 the City migrated volume between service names: monthly Parking Violation reports fall
 from 8,417 to 2,111 while Parking – 72-Hours rises from 514 to 3,977, with the parent
-Parking record type growing only 17.3% overall. That is a relabelling, not a demand shift.
+Parking record type growing only 17.3% overall. That is a rerelabeling, not a demand shift.
 **9** of 35 categories are flagged as not comparable in
 [`agg_demand_yoy_by_service`](../data/aggregates/agg_demand_yoy_by_service.csv); anyone
 quoting a category change should filter to `taxonomy_flag = 'comparable'` first.
@@ -357,7 +400,7 @@ quoting a category change should filter to `taxonomy_flag = 'comparable'` first.
 Among comparable categories, the largest increase is Encampment at **+4,081** submissions
 (+17.4%), followed by Missed Collection (+3,745, +22.1%).
 
-Note also the ageing pressure visible in the monthly table: the share of each month's
+Note also the aging pressure visible in the monthly table: the share of each month's
 submissions still active rises from 4.3% (January 2025) to 21.2% (July 2026). Most of that
 is simply recency — recent months have had less time to resolve — so it should not be read
 as deterioration without a fixed-window follow-up.
@@ -369,32 +412,67 @@ as deterioration without a fixed-window follow-up.
 ## Q12 · Which 3 operational areas would you recommend leadership investigate first?
 
 The ranked list is in
-[`agg_priority_table`](../data/aggregates/agg_priority_table.csv). The top three:
+[`agg_priority_table`](../data/aggregates/agg_priority_table.csv). The score is a
+**prioritization heuristic**, not a measurement: it combines three percentile-ranked
+components using analyst-selected weights (0.45 share of the citywide 90+ day active
+inventory, 0.35 share of the category's own active queue aged 90+, 0.20 median active age).
+
+Under the baseline weighting the top three are:
 
 ### 1. Sidewalk Repair Issue — score 93.7
-14,614 active records (18.0% of the backlog), median age 1,090 days, 94.7% aged 90+,
-holding **22.4%** of the city's entire 90+ day backlog (22.7% of the scored subset used
-for the score). Largest queue in the city and one of the oldest.
+14,614 active records (18.0% of the active inventory), median active age 1,090 days, 94.7%
+aged 90+, holding **22.3%** of the citywide 90+ day active inventory. Largest active queue
+in the city and among the oldest.
 
 ### 2. Pavement Maintenance — score 91.1
-5,590 active records, median age **1,295.5 days** — the oldest typical request of any
-category — with 95.7% aged 90+ and a P90 of 2,710 days.
+5,590 active records, median active age **1,295.5 days** — the oldest typical active record
+of any category — with 95.7% aged 90+ and a P90 of 2,710 days, holding **8.6%** of the
+citywide 90+ day active inventory.
 
 ### 3. Street Light Maintenance — score 86.1
-13,665 active records (16.8%), median age 467 days, 90.2% aged 90+, holding **19.9%** of the
-city's aged backlog (20.2% of the scored subset). Also the most duplicated queue at 45.3%, meaning roughly 6,189 of its
-records are repeat reports of issues already logged.
+13,665 active records (16.8%), median active age 467 days, 90.2% aged 90+, holding **19.9%**
+of the citywide 90+ day active inventory. Also the most duplicated active queue at 45.3% —
+6,189 of its records are repeat reports of issues already logged.
 
-**What the evidence supports.** These three are where aged work is concentrated. Together
-they hold over half of the city's 90+ day active backlog.
+### How sensitive is this to the weights?
 
-**What the evidence does not support.** It does not show that these categories are
-under-resourced, mismanaged, or failing. The most likely benign explanation is that
-sidewalk and pavement repair are capital programmes with multi-year cycles, and that a Get
-It Done case stays open until the asset is scheduled and treated. If that is what is
-happening, the finding is about **case-record hygiene and resident expectation**, not about
-crews. Distinguishing the two requires the City's maintenance work-order system, which is
-not in this dataset. That is exactly why the recommendations are framed as investigations.
+Tested rather than assumed. The same three components were recombined under **5** weighting
+schemes — baseline, equal thirds, volume-heavy, aged-rate-heavy and age-heavy — in
+[`agg_priority_weight_sensitivity`](../data/aggregates/agg_priority_weight_sensitivity.csv).
+
+**The result does not fully support a "stable top three" claim, so that claim is not made.**
+
+| What was observed | Across the 5 schemes |
+|---|---|
+| Sidewalk Repair Issue and Pavement Maintenance occupy the top two positions | **5** of **5** (their relative order swaps) |
+| Street Light Maintenance is in the top three | **4** of **5** |
+| Top-three membership identical to baseline | 3 of 5 |
+
+Under the aged-rate-heavy weighting (0.25 / 0.60 / 0.15) Street Light Maintenance falls to
+fifth and Development Services – Code Enforcement enters at third. Under age-heavy and equal
+weighting, Pavement overtakes Sidewalk for first place.
+
+**What this means for a reader.** The two leading categories are robust to how the score is
+weighted. The third position is not — it depends on whether leadership cares more about the
+volume of aged work or the proportion of a queue that is aged. That is a stakeholder
+judgment, not an analytical one, and the score should be presented to leadership with the
+weights visible and adjustable rather than as a settled ranking.
+
+### What the evidence supports, and what it does not
+
+**Supported.** These categories are where aged active records are concentrated. Sidewalk and
+Pavement together account for **30.9%** of the citywide 90+ day active inventory.
+
+**Not supported.** Nothing here shows that these categories are under-resourced, mismanaged
+or failing. This dataset contains no staffing, budget, cost, work-order or completion data.
+
+**A hypothesis worth testing, not a conclusion.** Sidewalk and pavement repair are commonly
+delivered through multi-year capital programs, and a service-request record may remain in an
+active status until the asset is scheduled and treated. If that is what is happening here,
+the finding would be about record-keeping and resident expectation rather than about field
+capacity. This dataset cannot distinguish that from any other explanation — testing it
+requires the City's maintenance work-order system. That is why every recommendation is
+framed as an investigation.
 
 ---
 

@@ -57,7 +57,7 @@ Count of case records, no filter. `COUNT(*)` over `fct_requests`. **714,925.**
 Case records grouped by `requested_month_start`. Only submission months from
 **January 2025 onward** are complete under this scope, because a request submitted on or
 after 2025-01-01 must be either still open, closed in 2025, or closed in 2026 — all three
-of which are in scope. Earlier months are labelled `incomplete` in
+of which are in scope. Earlier months are labeled `incomplete` in
 [`agg_demand_monthly`](../data/aggregates/agg_demand_monthly.csv) and must not be read as
 a demand decline.
 
@@ -75,12 +75,13 @@ status IN ('New', 'In Process')
 also not counted as a service outcome — it is reported separately from `Closed` everywhere,
 because a referral records a hand-off, not a result.
 
-### Resolved
+### Resolved (terminal status)
 ```sql
 status IN ('Closed', 'Referred')
 ```
-Note the word: *resolved* refers to the case record reaching a terminal state. It carries
-no claim that a physical problem was corrected.
+*Resolved* here means **the case record reached a terminal Get It Done status**. It carries
+no claim that a physical problem was corrected, and this project never uses "completed",
+"repaired" or "fixed" to describe it.
 
 ---
 
@@ -159,7 +160,7 @@ already past a year, which makes 60 and 90 days too weak a discriminator on thei
 ### Duplicate child request
 A case record with a populated `service_request_parent_id`. The City sets this field when
 a report is judged to describe an issue that is already reported and still open. **This is
-the City's determination, recorded in the source — not a fuzzy-matching judgement made by
+the City's determination, recorded in the source — not a fuzzy-matching judgment made by
 this analysis.** No attempt is made here to detect additional duplicates by address or
 description similarity; that would be a different project with its own error rate.
 
@@ -188,7 +189,7 @@ Always computed from **status**, never from the presence of referral text: audit
 
 ### Referral destination and scope
 The raw `referred` field is free text containing staff and vendor email addresses. It is
-normalised in [`03_sql/01_clean_base.sql`](../03_sql/01_clean_base.sql) to a destination
+normalized in [`03_sql/01_clean_base.sql`](../03_sql/01_clean_base.sql) to a destination
 label and a scope of `External (non-City entity)` / `Internal (City department)`, and the
 raw text is never written to any output. **61.8%** of referrals route outside the City.
 
@@ -215,9 +216,14 @@ aged_concentration_index = (area's share of the city's 90+ day active backlog)
 
 Unit-free, so districts of different sizes compare directly.
 
-### Backlog per recent submission
-`active_records / submissions in the last 12 months`. Separates "large district" from
-"district whose queue is not clearing".
+### Active records per recent submission
+`active_records / submissions in the last 12 months`.
+
+A **descriptive ratio of a stock to a recent inflow**, not a clearance or throughput rate. It
+distinguishes a district that simply receives many requests from one holding a large active
+inventory relative to its recent volume. It does not measure how fast anything is worked:
+the numerator and denominator cover different populations and different time bases, and no
+exit rate is observable in this source.
 
 ---
 
@@ -229,7 +235,7 @@ that measures on different units combine without one dominating by scale:
 
 | Weight | Component | Question it answers |
 |---:|---|---|
-| 0.45 | Share of the city's 90+ day active backlog | How much aged work sits here? |
+| 0.45 | Share of the **citywide** 90+ day active inventory (denominator = all active records aged 90+, no volume floor) | How much aged work sits here? |
 | 0.35 | Share of the category's own queue aged 90+ | How stuck is this queue? |
 | 0.20 | Median active age | How old is a typical request here? |
 
@@ -237,9 +243,16 @@ Volume carries the largest weight because leadership attention is a fixed resour
 should follow the mass of the problem. Every row carries a `why_flagged` string so the
 score is never presented without its reason.
 
+**This is a prioritization heuristic, not a measurement.** The weights are analyst-selected
+and the ranking is sensitive to them. Tested across five schemes
+([`agg_priority_weight_sensitivity`](../data/aggregates/agg_priority_weight_sensitivity.csv)):
+Sidewalk and Pavement hold the top two in 5 of 5, but Street Light Maintenance is top-three
+in only 4 of 5. The third position depends on whether volume of aged work or proportion of a
+queue is weighted more heavily — a stakeholder judgment.
+
 **What this score cannot do:** it contains no staffing, budget, cost or work-completion
 data, so it cannot indicate that any area is under-resourced or under-performing. It
-indicates only where the aged queue is.
+indicates only where aged active records are concentrated.
 
 ---
 
@@ -251,7 +264,9 @@ indicates only where the aged queue is.
 | `Referred` counted as active backlog | The case has left the queue; counting it would overstate open workload by 6.8% of resolved volume. |
 | `Referred` counted as a service outcome | A referral is a hand-off, not a result. Reported separately throughout. |
 | Mean age as the headline | 70% above the median here; describes neither the typical case nor the tail. |
+| Reporting the cohort lifecycle median as unbiased | It is right-censored — computed only over records that had reached a terminal status by the snapshot. Reported with that stated. |
+| A citywide-labeled share computed over the scored subset | The subset applies a 500-record floor and covers 98.5% of aged records; a column labeled "of city" must use a citywide denominator. Corrected. |
 | A single `181+` bucket | Absorbs 66.2% of the backlog — no information content. |
 | Trimming ages above five years as outliers | They are genuine long-lived open cases and are the subject of the analysis. Median and p90 handle the skew without discarding data. |
-| Year-over-year demand at service-category grain | A confirmed relabelling between two Parking categories in autumn 2025 makes category-level comparison invalid (DQ-08). Reported citywide and at record-type grain instead. |
+| Year-over-year demand at service-category grain | A confirmed relabeling between two Parking categories in autumn 2025 makes category-level comparison invalid (DQ-08). Reported citywide and at record-type grain instead. |
 | Fuzzy-matching to find additional duplicates | Would introduce an unmeasured error rate into a headline metric. The City's own parent/child flag is used instead. |
