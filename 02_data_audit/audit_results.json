@@ -1,6 +1,6 @@
 {
   "snapshot_date": "2026-08-09",
-  "generated_at_utc": "2026-08-09 19:11 UTC",
+  "generated_at_utc": "2026-08-09 20:49 UTC",
   "checks": [
     {
       "check_id": "DQ-01",
@@ -220,7 +220,7 @@
       "name": "Service taxonomy stability",
       "question": "Is the service classification stable enough to compare across years?",
       "grade": "FAIL",
-      "headline": "Two problems. First, service_name and case_record_type are many-to-many: 36 service names appear under more than one record type, so record type cannot be treated as a parent of service name. Second, 3 categories moved their share of citywide demand by 2 percentage points or more between Jan-Jul 2025 and Jan-Jul 2026 (Parking - 72-Hours (+12.53pp), Parking Violation (-11.02pp), Graffiti - Public (-2.58pp)). For the Parking pair this is a confirmed relabelling \u2014 monthly volumes cross over during autumn 2025 while the parent Parking record type grows only 17.3% \u2014 so their year-over-year change measures the label move. The remaining flagged categories are marked not-comparable pending verification; this check does not claim to know why they moved.",
+      "headline": "Two problems. First, service_name and case_record_type are many-to-many: 36 service names appear under more than one record type, so record type cannot be treated as a parent of service name. Second, 3 categories moved their share of citywide demand by 2 percentage points or more between Jan-Jul 2025 and Jan-Jul 2026 (Parking - 72-Hours (+12.53pp), Parking Violation (-11.02pp), Graffiti - Public (-2.58pp)). For the Parking pair this is a confirmed relabeling \u2014 monthly volumes cross over during autumn 2025 while the parent Parking record type grows only 17.3% \u2014 so their year-over-year change measures the label move. The remaining flagged categories are marked not-comparable pending verification; this check does not claim to know why they moved.",
       "detail": {
         "distinct_service_names": 45,
         "distinct_case_record_types": 12,
@@ -433,7 +433,7 @@
             "share_shift_pp": -2.58
           }
         ],
-        "confirmed_relabelling_parking_monthly_crossover": [
+        "confirmed_relabeling_parking_monthly_crossover": [
           {
             "month": "2025-08-01",
             "parking_violation": 8417,
@@ -466,7 +466,7 @@
           }
         ]
       },
-      "treatment": "Year-over-year demand is reported citywide and at case_record_type grain, both of which absorb a service-name relabelling. Service-level year-over-year rows carry a taxonomy_flag and flagged rows are excluded from every written finding. Wherever a record type is shown against a service name it is the modal value, computed with MODE() rather than picked arbitrarily."
+      "treatment": "Year-over-year demand is reported citywide and at case_record_type grain, both of which absorb a service-name relabeling. Service-level year-over-year rows carry a taxonomy_flag and flagged rows are excluded from every written finding. Wherever a record type is shown against a service name it is the modal value, computed with MODE() rather than picked arbitrarily."
     },
     {
       "check_id": "DQ-09",
@@ -544,7 +544,7 @@
     {
       "check_id": "DQ-11",
       "name": "Age outliers",
-      "question": "Are extreme ages real records or artefacts?",
+      "question": "Are extreme ages real records or artifacts?",
       "grade": "INFO",
       "headline": "The oldest active request is 3,731 days old. 6,869 active records (8.44%) exceed five years. No negative active ages.",
       "detail": {
@@ -646,7 +646,7 @@
           "zipcode"
         ]
       },
-      "treatment": "Resident free text, exact addresses and coordinates are dropped in 01_clean_base.sql before anything is written to disk. The referral message is normalised to a destination label because the raw text contains staff and vendor email addresses. src/pipeline.py refuses to export if any suppressed field is present."
+      "treatment": "Resident free text, exact addresses and coordinates are dropped in 01_clean_base.sql before anything is written to disk. The referral message is normalized to a destination label because the raw text contains staff and vendor email addresses. src/pipeline.py refuses to export if any suppressed field is present."
     },
     {
       "check_id": "DQ-13",

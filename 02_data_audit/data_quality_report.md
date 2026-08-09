@@ -6,7 +6,7 @@ Get It Done extracts before any business analysis was performed.
 | | |
 |---|---|
 | Data snapshot | 2026-08-09 |
-| Report generated | 2026-08-09 19:11 UTC |
+| Report generated | 2026-08-09 20:49 UTC |
 | Checks run | 13 |
 | Result | 4 PASS · 6 WARN · 2 FAIL · 1 INFO |
 
@@ -30,7 +30,7 @@ the *Treatment* line records how.
 | [DQ-05 Extract boundary integrity](#dq-05-extract-boundary-integrity) | **PASS** | 0 records fall outside the closure year their file claims. |
 | [DQ-06 Missing values by field](#dq-06-missing-values-by-field) | **WARN** | Highest missingness among dimensions used for grouping is zipcode at 3.29%. Nulls in parent_request_id, date_closed, active_age_days and lifecycle_days are structural, not defects. |
 | [DQ-07 Geography completeness and validity](#dq-07-geography-completeness-and-validity) | **WARN** | 0.99% of case records carry no valid council district (1-9); 911 of those are in the active backlog. |
-| [DQ-08 Service taxonomy stability](#dq-08-service-taxonomy-stability) | **FAIL** | Two problems. First, service_name and case_record_type are many-to-many: 36 service names appear under more than one record type, so record type cannot be treated as a parent of service name. Second, 3 categories moved their share of citywide demand by 2 percentage points or more between Jan-Jul 2025 and Jan-Jul 2026 (Parking - 72-Hours (+12.53pp), Parking Violation (-11.02pp), Graffiti - Public (-2.58pp)). For the Parking pair this is a confirmed relabelling — monthly volumes cross over during autumn 2025 while the parent Parking record type grows only 17.3% — so their year-over-year change measures the label move. The remaining flagged categories are marked not-comparable pending verification; this check does not claim to know why they moved. |
+| [DQ-08 Service taxonomy stability](#dq-08-service-taxonomy-stability) | **FAIL** | Two problems. First, service_name and case_record_type are many-to-many: 36 service names appear under more than one record type, so record type cannot be treated as a parent of service name. Second, 3 categories moved their share of citywide demand by 2 percentage points or more between Jan-Jul 2025 and Jan-Jul 2026 (Parking - 72-Hours (+12.53pp), Parking Violation (-11.02pp), Graffiti - Public (-2.58pp)). For the Parking pair this is a confirmed relabeling — monthly volumes cross over during autumn 2025 while the parent Parking record type grows only 17.3% — so their year-over-year change measures the label move. The remaining flagged categories are marked not-comparable pending verification; this check does not claim to know why they moved. |
 | [DQ-09 Duplicate parent/child lineage](#dq-09-duplicate-parentchild-lineage) | **WARN** | 94,687 case records are duplicate children (13.24%). 3,421 (3.61%) point to a parent outside the three extracts in scope — expected, since a parent closed before 2025 is not in scope. 428 children point at another child. |
 | [DQ-10 Referral field consistency](#dq-10-referral-field-consistency) | **WARN** | 4,204 records carry referral text but do not have a Referred status, and 53 Referred records carry no text. Destination parsing resolves 43,306 of 43,306 referred records. |
 | [DQ-11 Age outliers](#dq-11-age-outliers) | **INFO** | The oldest active request is 3,731 days old. 6,869 active records (8.44%) exceed five years. No negative active ages. |
@@ -321,9 +321,9 @@ the *Treatment* line records how.
 
 **Question:** Is the service classification stable enough to compare across years?
 
-**Finding:** Two problems. First, service_name and case_record_type are many-to-many: 36 service names appear under more than one record type, so record type cannot be treated as a parent of service name. Second, 3 categories moved their share of citywide demand by 2 percentage points or more between Jan-Jul 2025 and Jan-Jul 2026 (Parking - 72-Hours (+12.53pp), Parking Violation (-11.02pp), Graffiti - Public (-2.58pp)). For the Parking pair this is a confirmed relabelling — monthly volumes cross over during autumn 2025 while the parent Parking record type grows only 17.3% — so their year-over-year change measures the label move. The remaining flagged categories are marked not-comparable pending verification; this check does not claim to know why they moved.
+**Finding:** Two problems. First, service_name and case_record_type are many-to-many: 36 service names appear under more than one record type, so record type cannot be treated as a parent of service name. Second, 3 categories moved their share of citywide demand by 2 percentage points or more between Jan-Jul 2025 and Jan-Jul 2026 (Parking - 72-Hours (+12.53pp), Parking Violation (-11.02pp), Graffiti - Public (-2.58pp)). For the Parking pair this is a confirmed relabeling — monthly volumes cross over during autumn 2025 while the parent Parking record type grows only 17.3% — so their year-over-year change measures the label move. The remaining flagged categories are marked not-comparable pending verification; this check does not claim to know why they moved.
 
-**Treatment:** Year-over-year demand is reported citywide and at case_record_type grain, both of which absorb a service-name relabelling. Service-level year-over-year rows carry a taxonomy_flag and flagged rows are excluded from every written finding. Wherever a record type is shown against a service name it is the modal value, computed with MODE() rather than picked arbitrarily.
+**Treatment:** Year-over-year demand is reported citywide and at case_record_type grain, both of which absorb a service-name relabeling. Service-level year-over-year rows carry a taxonomy_flag and flagged rows are excluded from every written finding. Wherever a record type is shown against a service name it is the modal value, computed with MODE() rather than picked arbitrarily.
 
 <details><summary>Measured values</summary>
 
@@ -540,7 +540,7 @@ the *Treatment* line records how.
       "share_shift_pp": -2.58
     }
   ],
-  "confirmed_relabelling_parking_monthly_crossover": [
+  "confirmed_relabeling_parking_monthly_crossover": [
     {
       "month": "2025-08-01",
       "parking_violation": 8417,
@@ -672,7 +672,7 @@ the *Treatment* line records how.
 
 **Grade:** INFO
 
-**Question:** Are extreme ages real records or artefacts?
+**Question:** Are extreme ages real records or artifacts?
 
 **Finding:** The oldest active request is 3,731 days old. 6,869 active records (8.44%) exceed five years. No negative active ages.
 
@@ -725,7 +725,7 @@ the *Treatment* line records how.
 
 **Finding:** 8 source fields are suppressed and 0 reached the fact table.
 
-**Treatment:** Resident free text, exact addresses and coordinates are dropped in 01_clean_base.sql before anything is written to disk. The referral message is normalised to a destination label because the raw text contains staff and vendor email addresses. src/pipeline.py refuses to export if any suppressed field is present.
+**Treatment:** Resident free text, exact addresses and coordinates are dropped in 01_clean_base.sql before anything is written to disk. The referral message is normalized to a destination label because the raw text contains staff and vendor email addresses. src/pipeline.py refuses to export if any suppressed field is present.
 
 <details><summary>Measured values</summary>
 
