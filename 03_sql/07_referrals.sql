@@ -1,19 +1,19 @@
 -- =============================================================================
 -- 07_referrals.sql
--- Purpose : Size the referral stream, show where referred work goes, and test
---           whether including referred cases in "resolved" distorts the picture.
+-- Purpose : Size the referral stream, show where referred records go, and test
+--           how referrals affect terminal-status lifecycle context.
 -- Depends : 01_clean_base.sql
 -- Outputs : agg_referral_summary, agg_referral_destinations,
 --           agg_referral_by_service, agg_referral_by_district,
 --           agg_referral_status_consistency
 --
 -- Treatment decision: a Referred case has left the Get It Done queue, so it is
--- counted as resolved for backlog purposes but is reported separately from
+-- treated as terminal for backlog purposes but is reported separately from
 -- Closed throughout, because a referral records a hand-off, not an outcome.
 -- =============================================================================
 
 -- -----------------------------------------------------------------------------
--- Referral share of resolved work, and how the recorded lifecycle of a referral
+-- Referral share of terminal-status records, and how the recorded lifecycle of a referral
 -- compares with a closure.
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE TABLE agg_referral_summary AS
@@ -28,10 +28,10 @@ SELECT
           / NULLIF(COUNT(*), 0), 1)                         AS pct_resolved_within_1_day
 FROM v_resolved
 GROUP BY status
-ORDER BY case_records DESC;
+ORDER BY case_records DESC, status;
 
 -- -----------------------------------------------------------------------------
--- Where referred work is routed. The raw referral message is not exposed; it is
+-- Where referred records are routed. The raw referral message is not exposed; it is
 -- normalized to a destination in 01_clean_base.sql because it contains staff and
 -- vendor email addresses.
 -- -----------------------------------------------------------------------------
@@ -45,7 +45,7 @@ SELECT
 FROM fct_requests
 WHERE status = 'Referred'
 GROUP BY 1, 2
-ORDER BY referred_records DESC;
+ORDER BY referred_records DESC, referral_scope, referred_to;
 
 -- -----------------------------------------------------------------------------
 -- Referral rate by service category. A high rate means a large share of what
@@ -77,7 +77,7 @@ SELECT
 FROM v_resolved
 GROUP BY service_name
 HAVING COUNT(*) >= 250
-ORDER BY referral_rate_pct DESC;
+ORDER BY referral_rate_pct DESC, service_name;
 
 -- -----------------------------------------------------------------------------
 -- Geographic concentration of referrals.
@@ -98,7 +98,7 @@ SELECT
                                                              AS referral_concentration_index
 FROM v_resolved
 GROUP BY 1
-ORDER BY referred_records DESC;
+ORDER BY referred_records DESC, council_district;
 
 -- -----------------------------------------------------------------------------
 -- Consistency check surfaced from the audit: records carrying referral text

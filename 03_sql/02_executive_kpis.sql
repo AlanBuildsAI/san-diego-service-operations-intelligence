@@ -111,7 +111,7 @@ metrics AS (
     UNION ALL SELECT 'referred_records_total', 'Case records with a Referred status',
            CAST(COUNT(*) FILTER (WHERE status = 'Referred') AS DOUBLE), 'records', 'referrals' FROM fct_requests
 
-    UNION ALL SELECT 'referred_rate_resolved_pct', 'Referred share of resolved case records',
+    UNION ALL SELECT 'referred_rate_resolved_pct', 'Referred share of terminal-status records',
            ROUND(100.0 * COUNT(*) FILTER (WHERE status = 'Referred') / NULLIF(COUNT(*), 0), 1),
            'percent', 'referrals' FROM v_resolved
 
@@ -121,13 +121,13 @@ metrics AS (
            FROM fct_requests WHERE status = 'Referred'
 
     UNION ALL SELECT 'closed_current_year', 'Case records with a recorded closure this year',
-           CAST(COUNT(*) AS DOUBLE), 'records', 'throughput' FROM resolved_ytd
+           CAST(COUNT(*) AS DOUBLE), 'records', 'lifecycle context' FROM resolved_ytd
 
     UNION ALL SELECT 'closed_current_year_median_lifecycle', 'Median recorded lifecycle of cases closed this year',
-           CAST(MEDIAN(lifecycle_days) AS DOUBLE), 'days', 'throughput' FROM resolved_ytd
+           CAST(MEDIAN(lifecycle_days) AS DOUBLE), 'days', 'lifecycle context' FROM resolved_ytd
 
     UNION ALL SELECT 'closed_current_year_p90_lifecycle', 'P90 recorded lifecycle of cases closed this year',
-           CAST(QUANTILE_CONT(lifecycle_days, 0.90) AS DOUBLE), 'days', 'throughput' FROM resolved_ytd
+           CAST(QUANTILE_CONT(lifecycle_days, 0.90) AS DOUBLE), 'days', 'lifecycle context' FROM resolved_ytd
 
     UNION ALL SELECT 'demand_ytd_current', 'Submissions, January to last complete month, current year',
            CAST(curr_records AS DOUBLE), 'records', 'demand' FROM yoy

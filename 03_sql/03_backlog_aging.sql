@@ -55,8 +55,8 @@ FROM ordered
 ORDER BY bucket_order;
 
 -- -----------------------------------------------------------------------------
--- Same profile split by the City staff group that owns the request type. This is
--- what separates "genuine aging queue" from "asset program backlog".
+-- Same profile split by the higher-level staff-group label attached to the
+-- request type, providing grouping context for differences in queue age.
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE TABLE agg_backlog_aging_by_record_type AS
 SELECT

@@ -21,12 +21,12 @@ re-verified against those tables by
 
 ## The headline
 
-**Most recent submissions reach a terminal status quickly, while the standing active
-inventory is old and concentrated in four asset-maintenance categories.**
+**A recent submission cohort has a high terminal-status share; separately, the standing
+active inventory is old and concentrated in four asset-maintenance categories.**
 
 Those two statements describe different populations — a recent submission cohort and the
-current active inventory of all vintages. Separating them is the single most useful thing
-this analysis does. Neither statement explains *why* the older inventory persists; the
+active inventory of all vintages at the snapshot. They should not be interpreted as the
+same lifecycle measure. Neither statement explains *why* the older inventory persists; the
 dataset does not carry the information needed to establish that.
 
 | | |
@@ -40,13 +40,13 @@ dataset does not carry the information needed to establish that.
 | Backlog aged 90+ days | **61,922** (**76.1%**) |
 | Backlog aged 365+ days | **41,494** (**51.0%**) |
 
-Most of what arrives reaches a terminal status quickly. What remains active is old, and it
-is concentrated in a few categories.
+The recent cohort's status-at-snapshot and the standing inventory's age profile answer
+different questions. The active inventory is old and concentrated in a few categories.
 
 Note the right-censoring: the 2-day median is computed only over the 91.2% of the cohort
 that had already reached a terminal status by the snapshot. Records still open are excluded
-from that statistic by construction, so it describes settled records, not the cohort as a
-whole.
+from that statistic by construction, so it describes terminal-status records, not the cohort
+as a whole.
 
 ---
 
@@ -79,10 +79,10 @@ median of **381**, inflated by a tail reaching 3,731 days.
 
 ### A trap worth naming: closure-cohort bias
 
-The obvious throughput metric — median lifecycle of cases closed this year — is **3 days**.
-That number is real but nearly useless on its own, because **88.1%** of this year's
-closures were also *submitted* this year. Slow cases are missing from a closure cohort by
-construction: they have not closed yet.
+The tempting lifecycle summary — median recorded lifecycle of cases closed this year — is
+**3 days**. That number is real but nearly useless on its own, because **88.1%** of this
+year's closures were also *submitted* this year. Slower cases are missing from a closure
+cohort by construction: they have not closed yet.
 
 Decomposed by submission year, the same closures look very different:
 
@@ -95,9 +95,10 @@ Decomposed by submission year, the same closures look very different:
 
 The submission-cohort view in the headline table fixes the denominator at submission time,
 which removes that particular distortion. It is not free of censoring — its lifecycle
-median still covers only records that had settled by the snapshot — but its *terminal-status
-share* is a complete, uncensored measure of the cohort, and that is what the recommendations
-rest on.
+median still covers only records that had reached a terminal status by the snapshot — but
+its *terminal-status share* completely observes the cohort's status at the snapshot. It
+should not be compared with the standing inventory as though both were the same lifecycle
+measure.
 → [`agg_closure_cohort_bias`](../data/aggregates/agg_closure_cohort_bias.csv),
 [`agg_submission_cohort`](../data/aggregates/agg_submission_cohort.csv)
 
@@ -245,7 +246,7 @@ oldest queues are also the most duplicated.
 |---|---:|---:|---:|
 | All records in scope | 714,925 | 622,135 | 13.24% |
 | Active backlog | 81,359 | 60,288 | 27.01% |
-| Resolved | 633,566 | 563,056 | 11.48% |
+| Terminal status | 633,566 | 563,056 | 11.48% |
 
 Repeat reporting is broad rather than driven by a few hotspots: 91.4% of issues have no
 duplicate at all, and clusters of 11+ reports account for 0.07% of issues and 1.09% of case
@@ -299,7 +300,7 @@ count overstates it by 6,189.
 
 ## Q9 · What share of requests are referred and where are referrals concentrated?
 
-**6.8%** of resolved case records (**43,306**) were referred rather than closed, and
+**6.8%** of terminal-status records (**43,306**) were referred rather than closed, and
 **61.8%** of those were routed outside the City entirely.
 
 | Destination | Referrals | % of referrals | Scope |
@@ -310,10 +311,10 @@ count overstates it by 6,189.
 | SDG&E (utility) | 5,280 | 12.2% | External |
 | AT&T (utility) | 2,303 | 5.3% | External |
 
-Referred cases are resolved fast — median lifecycle **0** days, and 66.4% within one day —
-because a referral records a routing decision, not work. They are counted as resolved for
-backlog purposes and reported separately from closures everywhere in this project, since
-treating a hand-off as an outcome would flatter every completion metric.
+Referred records have a short recorded lifecycle in the case system — median **0** days, and
+66.4% within one day — because a referral records a routing decision, not work. They are
+terminal for backlog arithmetic and reported separately from Closed status everywhere in
+this project, since treating a hand-off as an outcome would flatter any outcome metric.
 
 By category, referral rates are high where jurisdiction is ambiguous: "Other" at 66.4%,
 Graffiti – Code Enforcement at 29.0%, Building and Land Use Enforcement at 26.4%. Roughly
@@ -342,7 +343,7 @@ Collection arrives 32,872 times by web and 17,946 by phone against only 403 by m
 Parking Violation arrives 60,033 times by mobile. Comparing channel medians without
 controlling compares waste collection against parking enforcement.
 
-Among resolved records, after stratifying by service category across **29** categories with
+Among terminal-status records, after stratifying by service category across **29** categories with
 enough volume in both channels, the median absolute Mobile-vs-Web recorded-lifecycle
 difference is **2** days, and **26** of 29 categories differ by 20 days or less.
 
@@ -360,8 +361,9 @@ difference after stratifying by service category.**
 
 That is a statement about what was measured, not about causation. Residents choose their own
 channel, so channel is associated with reporter characteristics and problem types that are
-not observable in this dataset. Nothing here isolates a channel effect, and the absence of a
-consistent difference is not evidence that channel could never matter operationally.
+not observable in this dataset. Nothing here separates channel from those unobserved factors,
+and the absence of a consistent difference is not evidence that channel could never matter
+operationally.
 → [`agg_channel_controlled_comparison`](../data/aggregates/agg_channel_controlled_comparison.csv),
 [`agg_channel_mix_by_service`](../data/aggregates/agg_channel_mix_by_service.csv)
 
@@ -379,7 +381,7 @@ submission month from January 2025 is completely covered. Months before that are
 and are flagged `incomplete` rather than charted; plotting them would show a fabricated
 collapse in demand.
 
-By owning department (record type), which is the stable grain:
+By `case_record_type` (higher-level staff-group label), which is the stable grain:
 
 | Record type | Jan–Jul 2025 | Jan–Jul 2026 | Change |
 |---|---:|---:|---:|
@@ -425,9 +427,9 @@ aged 90+, holding **22.3%** of the citywide 90+ day active inventory. Largest ac
 in the city and among the oldest.
 
 ### 2. Pavement Maintenance — score 91.1
-5,590 active records, median active age **1,295.5 days** — the oldest typical active record
-of any category — with 95.7% aged 90+ and a P90 of 2,710 days, holding **8.6%** of the
-citywide 90+ day active inventory.
+5,590 active records, median active age **1,295.5 days** — the highest median active age
+among categories eligible for the 500+ record priority score — with 95.7% aged 90+ and a P90
+of 2,710 days, holding **8.6%** of the citywide 90+ day active inventory.
 
 ### 3. Street Light Maintenance — score 86.1
 13,665 active records (16.8%), median active age 467 days, 90.2% aged 90+, holding **19.9%**
@@ -456,7 +458,7 @@ weighting, Pavement overtakes Sidewalk for first place.
 weighted. The third position is not — it depends on whether leadership cares more about the
 volume of aged work or the proportion of a queue that is aged. That is a stakeholder
 judgment, not an analytical one, and the score should be presented to leadership with the
-weights visible and adjustable rather than as a settled ranking.
+weights visible and adjustable rather than as a final ranking.
 
 ### What the evidence supports, and what it does not
 

@@ -2,8 +2,9 @@
 
 ### Alan Ibarra — Data & Operations Analyst
 
-**A city took 389,940 non-emergency service requests in 2025. Today 81,359 sit open — half
-of them for more than a year. Where should leadership look first?**
+**San Diego received 389,940 Get It Done submissions in 2025. At the Aug. 9, 2026
+snapshot, 81,359 requests were active; 51.0% had been open for more than a year. Where
+should leadership investigate first?**
 
 An end-to-end analyst case study on **714,925 real service requests** from the City of San
 Diego's Get It Done program: source retrieval → data quality audit → SQL analysis →
@@ -32,11 +33,12 @@ Done](https://data.sandiego.gov/datasets/get-it-done-reports/), 714,925 case rec
 snapshot 2026-08-09. Every figure below is recomputed from the generated data by
 [`scripts/verify_claims.py`](scripts/verify_claims.py) and fails the build if it drifts.
 
-**1 — Recent requests settle fast; the standing inventory is old.**
-Of requests submitted Jan–Jun 2026, **91.2%** reached a terminal status by the snapshot
-(median **2** days among those). Yet **81,359** requests are still active — **60,288**
-distinct issues once duplicates collapse — with a median age of **381** days. Two different
-populations; separating them is the core of the analysis.
+**1 — Recent-cohort status and active-inventory age are different measures.**
+Of requests submitted Jan–Jun 2026, **91.2%** had reached Closed or Referred status by the
+snapshot; among those terminal-status records, median recorded lifecycle was **2** days.
+Separately, the standing active inventory contained **81,359** requests — **60,288**
+distinct issues once duplicates collapse — with a median age of **381** days. These are
+different populations and should not be interpreted as the same lifecycle measure.
 
 **2 — Three quarters of the active inventory is past 90 days.**
 **61,922** records (**76.1%**) exceed 90 days; **51.0%** exceed a year, and the P90 is
@@ -47,7 +49,7 @@ Sidewalk Repair Issue (**14,614** active, median **1,090** days), Street Light M
 ROW Maintenance and Pavement Maintenance (median **1,295.5** days) together are **54.2%** of
 active records. Sidewalk and Pavement alone hold **30.9%** of the citywide 90+ day inventory.
 **TSW** is the modal `case_record_type` for all four — **64.0%** of active records carry it,
-though that is a staff-group label in the source, not a confirmed department owner.
+though `case_record_type` is a higher-level staff-group label, not a current ownership field.
 
 **4 — A quarter of the active queue is duplicate reports.**
 **21,971** records (**27.0%**) duplicate an already-open request. Street Light Maintenance
@@ -55,10 +57,10 @@ carries **6,189** of them — **45.3%** of its own queue. Collapsing duplicates 
 volume rankings by no more than **2** positions.
 
 **5 — Two headline metrics are traps. I caught both.**
-The "**3**-day median closure time" is a cohort artifact — **88.1%** of this year's closures
-were also submitted this year, so slow records are absent by construction. And submission
-channel looks influential until you stratify by service category, after which the median
-Mobile-vs-Web difference is **2** days.
+The **3**-day median recorded lifecycle for records closed this year is a cohort artifact —
+**88.1%** of those records were also submitted this year, so slower records are absent by
+construction. And submission channel looks influential until you stratify by service
+category, after which the median Mobile-vs-Web difference is **2** days.
 
 **6 — Two patterns are *not* in the data, and I report that too.**
 Council-district aged concentration varies only **0.826**–**1.085**, so no strong
@@ -101,7 +103,7 @@ Framed as investigations, not fixes: this dataset shows *where* to look, not *wh
 | **Dashboarding** | [Self-contained HTML](05_dashboard/dashboard.html) + [Streamlit](05_dashboard/app.py); every panel answers a stated business question |
 | **Executive communication** | [One-page memo](06_executive_memo/executive_memo.md): findings → implications → limitations → next step |
 | **Analytical judgment** | Denominator validation, negative findings reported as negative, and a sensitivity test that disproved my own earlier claim |
-| **Reproducibility** | [Source manifest](docs/source_manifest.md) with hashes, 89 tests, automated figure verification in CI |
+| **Reproducibility** | [Source manifest](docs/source_manifest.md) with hashes, an automated pytest suite, and figure verification in CI |
 
 ### The two data-quality findings that changed the analysis
 
@@ -152,7 +154,7 @@ denominators). Every recommendation is framed as an investigation for that reaso
 | [`06_executive_memo/`](06_executive_memo/) | [One-page memo](06_executive_memo/executive_memo.md) |
 | [`07_methodology/`](07_methodology/) | [Methodology](07_methodology/methodology.md) — decisions and known weaknesses |
 | [`08_interview_defense/`](08_interview_defense/) | [Interview guide](08_interview_defense/interview_guide.md) |
-| [`src/`](src/) · [`scripts/`](scripts/) · [`tests/`](tests/) | Pipeline, audit harness, claim registry, 89 tests |
+| [`src/`](src/) · [`scripts/`](scripts/) · [`tests/`](tests/) | Pipeline, audit harness, claim registry, automated test suite |
 | [`docs/`](docs/) | [Source manifest](docs/source_manifest.md) — files, hashes, row counts, licensing |
 
 **SQL worth opening:** [`01_clean_base.sql`](03_sql/01_clean_base.sql) (grain, deduplication,
@@ -171,7 +173,7 @@ Requires Python 3.11+.
 
 ```bash
 make install
-make test      # 89 tests, run against a synthetic fixture
+make test      # automated pytest suite against a synthetic fixture
 make verify    # re-check every written figure against the committed aggregates
 ```
 

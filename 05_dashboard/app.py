@@ -117,9 +117,10 @@ def main() -> None:
         st.markdown(
             f"As of the snapshot, **{c['active_aged_90_plus_pct']}** of active requests are "
             f"past 90 days and **{c['active_aged_365_plus_pct']}** past a year. The single "
-            f"largest age bucket is the oldest one. By contrast **{c['cohort_pct_resolved']}** "
+            f"largest age bucket is the oldest one. Separately, **{c['cohort_pct_resolved']}** "
             f"of requests submitted Jan–Jun 2026 had reached a terminal status by the "
-            f"snapshot — recent intake and the standing inventory behave differently."
+            f"snapshot. These are different populations and should not be interpreted as "
+            f"the same lifecycle measure."
         )
         st.bar_chart(buckets.set_index("age_bucket")["n_records"],
                      color=SERIES_2, height=340)
@@ -206,7 +207,11 @@ def main() -> None:
             f"{c['dup_max_rank_shift']} positions."
         )
         st.dataframe(load("agg_duplicate_summary"), hide_index=True, use_container_width=True)
-        st.markdown("**Does collapsing duplicates reorder the priority list?**")
+        st.markdown("**Does collapsing duplicates reorder service-category volume?**")
+        st.caption(
+            "This table tests volume rankings only. The composite priority score was not "
+            "re-derived on deduplicated inputs."
+        )
         st.dataframe(load("agg_duplicate_rank_impact"), hide_index=True,
                      use_container_width=True)
         with st.expander("Duplicate rate by category and cluster sizes"):
@@ -220,7 +225,7 @@ def main() -> None:
         st.subheader("Where referred requests go")
         st.caption("Q9 · What share of requests are referred, and where are they concentrated?")
         st.markdown(
-            f"**{c['referred_rate_resolved_pct']}** of resolved case records were referred "
+            f"**{c['referred_rate_resolved_pct']}** of terminal-status records were referred "
             f"rather than closed, and **{c['referred_external_pct']}** of those left the City. "
             f"Caltrans alone takes **{c['caltrans_pct']}** of all referrals "
             f"({c['caltrans_records']} records). A referral is a hand-off, not an outcome."
@@ -228,7 +233,10 @@ def main() -> None:
         dest = load("agg_referral_destinations").nlargest(15, "referred_records")
         st.bar_chart(dest.set_index("referred_to")["referred_records"],
                      color=SERIES_2, height=440, horizontal=True)
-        st.dataframe(load("agg_referral_by_service"), hide_index=True, use_container_width=True)
+        referral_service = load("agg_referral_by_service").rename(
+            columns={"resolved_records": "terminal_status_records"}
+        )
+        st.dataframe(referral_service, hide_index=True, use_container_width=True)
         with st.expander("Referral status consistency (audit check DQ-10)"):
             st.dataframe(load("agg_referral_status_consistency"), hide_index=True,
                          use_container_width=True)

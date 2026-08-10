@@ -217,7 +217,7 @@ def build_claims() -> dict[str, Claim]:
               bucket_181_plus_pct, _pct(bucket_181_plus_pct),
               "agg_backlog_aging_buckets (181-365 + 366-730 + 731+)", (FINDINGS,)),
 
-        # ---- throughput contrast --------------------------------------------
+        # ---- recorded-lifecycle context -------------------------------------
         # Not quoted in prose on purpose: the closure-cohort total is misleading
         # without its decomposition, so the documents use the submission-cohort
         # figures instead. Retained for the dashboard and the Excel workbook.
@@ -357,7 +357,7 @@ def build_claims() -> dict[str, Claim]:
               "agg_duplicate_rank_impact", (FINDINGS,)),
 
         # ---- Q9 referrals ----------------------------------------------------
-        Claim("referred_rate_resolved_pct", "Referred share of resolved records",
+        Claim("referred_rate_resolved_pct", "Referred share of terminal-status records",
               kpi("referred_rate_resolved_pct"), _pct(kpi("referred_rate_resolved_pct")),
               "agg_executive_kpis.referred_rate_resolved_pct", (README, FINDINGS)),
         Claim("referred_records_total", "Case records with a Referred status",

@@ -42,7 +42,7 @@ FROM v_active
 UNION ALL
 
 SELECT
-    'Resolved case records',
+    'Terminal-status case records',
     COUNT(*),
     COUNT(DISTINCT issue_key),
     COUNT(*) FILTER (WHERE is_duplicate_child),

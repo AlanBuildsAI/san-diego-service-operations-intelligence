@@ -79,7 +79,8 @@ because a referral records a hand-off, not a result.
 ```sql
 status IN ('Closed', 'Referred')
 ```
-*Resolved* here means **the case record reached a terminal Get It Done status**. It carries
+*Terminal-status* here means **the case record reached Closed or Referred status in Get It
+Done**. It carries
 no claim that a physical problem was corrected, and this project never uses "completed",
 "repaired" or "fixed" to describe it.
 
@@ -101,7 +102,7 @@ CASE WHEN status IN ('New','In Process')
 Days a request has been in an open state as of the snapshot. **Not** a measure of how long
 work took — no work-completion data exists in this source.
 
-### Lifecycle age (closed and referred records)
+### Recorded lifecycle (Closed and Referred records)
 ```sql
 CASE WHEN status IN ('Closed','Referred')
       AND date_closed IS NOT NULL
@@ -171,9 +172,9 @@ description similarity; that would be a different project with its own error rat
 |---|---:|
 | All case records | 13.24% |
 | Active backlog | 27.01% |
-| Resolved records | 11.48% |
+| Terminal-status records | 11.48% |
 
-The active rate is more than double the resolved rate — expected, since a duplicate can
+The active rate is more than double the terminal-status rate — expected, since a duplicate can
 only attach to a parent that is still open, so long-lived open cases accumulate them.
 
 ---
@@ -181,7 +182,7 @@ only attach to a parent that is still open, so long-lived open cases accumulate 
 ## Referral metrics
 
 ### Referred rate
-`records with status = 'Referred' / resolved records` = **6.8%**.
+`records with status = 'Referred' / terminal-status records` = **6.8%**.
 
 Always computed from **status**, never from the presence of referral text: audit check
 [DQ-10](../02_data_audit/data_quality_report.md#dq-10-referral-field-consistency) found
@@ -261,7 +262,7 @@ indicates only where aged active records are concentrated.
 | Considered | Rejected because |
 |---|---|
 | Using the published `case_age_days` directly | Means two different things depending on status (DQ-03). |
-| `Referred` counted as active backlog | The case has left the queue; counting it would overstate open workload by 6.8% of resolved volume. |
+| `Referred` counted as active backlog | The case has left the queue; counting it would overstate open workload by 6.8% of terminal-status volume. |
 | `Referred` counted as a service outcome | A referral is a hand-off, not a result. Reported separately throughout. |
 | Mean age as the headline | 70% above the median here; describes neither the typical case nor the tail. |
 | Reporting the cohort lifecycle median as unbiased | It is right-censored — computed only over records that had reached a terminal status by the snapshot. Reported with that stated. |

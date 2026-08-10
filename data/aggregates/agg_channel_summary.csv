@@ -16,13 +16,13 @@ Residential Patrol,Staff or system-generated,110,0.02,11,10.0,7,6.4,529.0,621.0,
 (Unknown),(Unknown),92,0.01,3,3.3,1,1.1,753.0,2305.8,21.0,105.80000000000004
 Famosa Patrol,(Unknown),11,0.0,0,0.0,2,18.2,,,233.0,393.0
 Irrigation Patrol,(Unknown),6,0.0,0,0.0,0,0.0,,,0.0,0.0
-Referral Notice,Staff or system-generated,4,0.0,1,25.0,0,0.0,3303.0,3303.0,141.0,261.8
 Referral,Staff or system-generated,4,0.0,2,50.0,1,25.0,130.5,179.70000000000002,170.0,300.4
-Letter,Resident-submitted,2,0.0,1,50.0,0,0.0,2686.0,2686.0,2078.0,2078.0
-FO Self Generate,Staff or system-generated,2,0.0,1,50.0,0,0.0,783.0,783.0,22.0,22.0
+Referral Notice,Staff or system-generated,4,0.0,1,25.0,0,0.0,3303.0,3303.0,141.0,261.8
 999,(Unknown),2,0.0,1,50.0,0,0.0,613.0,613.0,6.0,6.0
 Council,(Unknown),2,0.0,0,0.0,0,0.0,,,1.0,1.8
-Station 38 Incident Reports,(Unknown),1,0.0,0,0.0,0,0.0,,,204.0,204.0
-Special Events,(Unknown),1,0.0,0,0.0,0,0.0,,,75.0,75.0
+FO Self Generate,Staff or system-generated,2,0.0,1,50.0,0,0.0,783.0,783.0,22.0,22.0
+Letter,Resident-submitted,2,0.0,1,50.0,0,0.0,2686.0,2686.0,2078.0,2078.0
 Claim Related,(Unknown),1,0.0,0,0.0,0,0.0,,,2.0,2.0
+Special Events,(Unknown),1,0.0,0,0.0,0,0.0,,,75.0,75.0
+Station 38 Incident Reports,(Unknown),1,0.0,0,0.0,0,0.0,,,204.0,204.0
 Walk-In,Resident-submitted,1,0.0,1,100.0,0,0.0,3062.0,3062.0,,

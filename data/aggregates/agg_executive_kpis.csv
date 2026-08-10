@@ -18,11 +18,11 @@ duplicate_rate_total_pct,"Duplicate-child rate, all case records",13.2,percent,d
 duplicate_children_active,Active case records flagged as duplicate children,21971.0,records,duplicates
 duplicate_rate_active_pct,Duplicate-child rate within the active backlog,27.0,percent,duplicates
 referred_records_total,Case records with a Referred status,43306.0,records,referrals
-referred_rate_resolved_pct,Referred share of resolved case records,6.8,percent,referrals
+referred_rate_resolved_pct,Referred share of terminal-status records,6.8,percent,referrals
 referred_external_pct,Referred cases routed outside the City,61.8,percent,referrals
-closed_current_year,Case records with a recorded closure this year,254906.0,records,throughput
-closed_current_year_median_lifecycle,Median recorded lifecycle of cases closed this year,3.0,days,throughput
-closed_current_year_p90_lifecycle,P90 recorded lifecycle of cases closed this year,80.0,days,throughput
+closed_current_year,Case records with a recorded closure this year,254906.0,records,lifecycle context
+closed_current_year_median_lifecycle,Median recorded lifecycle of cases closed this year,3.0,days,lifecycle context
+closed_current_year_p90_lifecycle,P90 recorded lifecycle of cases closed this year,80.0,days,lifecycle context
 demand_ytd_current,"Submissions, January to last complete month, current year",246572.0,records,demand
 demand_ytd_prior,"Submissions, same months, prior year",225628.0,records,demand
 demand_yoy_change_pct,"Year-over-year change in submissions, like-for-like months",9.3,percent,demand

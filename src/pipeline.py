@@ -19,6 +19,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -44,6 +45,11 @@ ANALYSIS_SQL = (
     "10_priority_table.sql",
 )
 
+AGG_TABLE_DECLARATION = re.compile(
+    r"CREATE\s+OR\s+REPLACE\s+TABLE\s+(agg_[A-Za-z0-9_]+)\b",
+    flags=re.IGNORECASE,
+)
+
 
 def connect(read_only: bool = False) -> duckdb.DuckDBPyConnection:
     """Open the project database, with the process working directory at the repo root.
@@ -61,15 +67,26 @@ def connect(read_only: bool = False) -> duckdb.DuckDBPyConnection:
 
 
 def _run_file(con: duckdb.DuckDBPyConnection, name: str) -> list[str]:
-    """Execute one SQL file; return the agg_* tables it left behind."""
+    """Execute one SQL file; return the aggregate tables it declares.
+
+    Comparing table names before and after execution fails on repeat runs:
+    ``CREATE OR REPLACE`` refreshes an existing table without introducing a new
+    name. Parsing the explicit declarations keeps CSV export deterministic on a
+    fresh database and on every subsequent refresh.
+    """
     path = config.SQL_DIR / name
     if not path.exists():
         raise FileNotFoundError(f"SQL file missing: {path}")
 
-    before = _agg_tables(con)
-    con.execute(path.read_text())
-    after = _agg_tables(con)
-    return sorted(after - before)
+    sql = path.read_text()
+    declared = {match.lower() for match in AGG_TABLE_DECLARATION.findall(sql)}
+    con.execute(sql)
+    missing = declared - _agg_tables(con)
+    if missing:
+        raise RuntimeError(
+            f"{name} declared aggregate tables that were not created: {sorted(missing)}"
+        )
+    return sorted(declared)
 
 
 def _agg_tables(con: duckdb.DuckDBPyConnection) -> set[str]:

@@ -54,9 +54,9 @@ This is the finding I'd lead with.
 
 The official dictionary says `case_age_days` is "the number of days between request
 submission and request closure." I didn't assume that; I tested it separately for active
-and resolved records.
+and terminal-status records.
 
-For resolved records it matches `date_closed − date_requested` 99.88% of the time — as
+For terminal-status records it matches `date_closed − date_requested` 99.88% of the time — as
 documented. For active records, which have no close date at all, it instead matches
 `snapshot_date − date_requested` 99.63% of the time. **The field carries two different
 meanings depending on status, and the dictionary documents only one.**
@@ -65,7 +65,7 @@ An analyst who took the dictionary at face value and filtered on `case_age_days`
 mixing two different quantities in one column.
 
 So I stopped using the published field and computed two metrics from the dates:
-`active_age_days` for open records, `lifecycle_days` for resolved ones. The published value
+`active_age_days` for open records, `lifecycle_days` for terminal-status ones. The published value
 is retained as `case_age_days_published` so the comparison stays reproducible.
 
 A bonus fell out of it: because the field encodes age-to-extract-date for open records, I
@@ -126,10 +126,10 @@ to find.
 The decision that needed thought was `Referred`. I excluded it from active backlog: a
 referred case has left the Get It Done queue, so counting it as open workload would
 overstate the queue. But I also refuse to count it as a service outcome, because a referral
-is a hand-off, not a result. It sits in "resolved" for backlog arithmetic and is reported
-separately from "closed" everywhere else. That distinction matters — referred cases have a
-median lifecycle of 0 days, so folding them into closures would flatter every completion
-metric.
+is a hand-off, not a result. It is terminal for backlog arithmetic and is reported
+separately from Closed status everywhere else. That distinction matters — referred records
+have a median recorded lifecycle of 0 days, so folding them into closures would flatter
+every outcome metric.
 
 ### 10. Why median instead of mean?
 
@@ -249,20 +249,21 @@ The list matters more than any finding:
 That's the question I most want to be asked, because the honest answer is no — or at least,
 not yet demonstrated.
 
-Two facts sit side by side. Of requests submitted January–June 2026, 91.2% have already
-resolved, typically in 2 days. Yet the standing backlog has a median age of 381 days. Both
-are true because they describe different populations.
+Two facts sit side by side. Of requests submitted January–June 2026, 91.2% had reached
+Closed or Referred status by the snapshot; among those terminal-status records, median
+recorded lifecycle was 2 days. Separately, the standing active inventory had a median age
+of 381 days. These are different populations and should not be interpreted as the same
+lifecycle measure.
 
-The most likely benign explanation is that sidewalk and pavement repair are multi-year
-capital programs, and a Get It Done case stays open until the asset is scheduled and
-treated. If that's what's happening, this is a case-record hygiene and resident-expectation
-problem, not a crew problem.
+One benign hypothesis is that sidewalk and pavement repair are multi-year capital programs,
+and a Get It Done case stays open until the asset is scheduled and treated. If that's what's
+happening, this is a case-record hygiene and resident-expectation problem, not a crew problem.
 
 I can't distinguish those two worlds with this data, which is exactly why my
 recommendations say "investigate" and my next measurement step is a join to the work-order
 system.
 
-### 19. You reported that closed cases have a 3-day median lifecycle. Is that a good number?
+### 19. You reported a 3-day median for records closed in 2026. Is that a good lifecycle metric?
 
 It's a real number and a misleading one, and I flagged it myself rather than quoting it.
 
@@ -277,10 +278,10 @@ snapshot, and among those the median recorded lifecycle was 2 days (P90 29 days)
 still active.
 
 I'd flag one thing even about that: the 91.2% is a complete measure of the cohort, but the
-2-day median is still right-censored — it only covers records that had settled by the
+2-day median is still right-censored — it only covers records that had reached a terminal status by the
 snapshot, and the ones still open are by definition the slower ones. So I quote the
 terminal-status share as the solid number and treat the lifecycle median as descriptive of
-settled records only.
+terminal-status records only.
 
 ### 20. Do submission channels affect outcomes?
 
@@ -294,13 +295,13 @@ waste collection to parking enforcement.
 
 Holding service category constant across 29 categories, the median absolute mobile-vs-web
 difference is 2 days, and 26 of 29 differ by 20 days or less. Two exceptions point in
-opposite directions, which argues against a general channel effect.
+opposite directions, which argues against a broad, consistent channel-associated pattern.
 
 My conclusion, stated carefully: the data does not show a broad, consistent
 channel-associated lifecycle difference after stratifying by service category. That is not
 the same as "channel doesn't matter" — residents choose their own channel, so it's tangled up
-with reporter and problem characteristics I can't observe. Nothing here isolates a channel
-effect in either direction.
+with reporter and problem characteristics I can't observe. Nothing here separates channel
+from those unobserved factors.
 
 ### 21. Did you find geographic inequity?
 
@@ -346,7 +347,7 @@ measurable flow.
 
 I'll also flag the trap I avoided here: the monthly table shows the share of each month's
 submissions still active rising from 4.3% to 21.2%. That looks like deterioration and is
-mostly just recency — recent months have had less time to settle.
+mostly just recency — recent months have had less time to reach a terminal status.
 
 ### 21c. What additional data would you request from the stakeholder?
 
@@ -434,7 +435,9 @@ git-ignored.
 
 The SQL is the deliverable. An analytics team reads and reviews SQL; they don't review a
 chain of pandas transformations as easily. DuckDB runs that SQL against 715,000 rows in
-seconds with no server, so the whole project is `git clone` plus `make all`.
+seconds with no server. A reviewer can validate the published snapshot with the committed
+aggregates, automated test suite, claim verification and source hashes; `make all` instead
+downloads the City's rolling extracts and refreshes the outputs with current data.
 
 Python does what SQL shouldn't: orchestration, the audit harness, rendering. `src/pipeline.py`
 executes files and exports results — it holds no business logic. Anyone can run

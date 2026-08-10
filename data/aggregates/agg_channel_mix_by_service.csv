@@ -5,8 +5,8 @@ CC Self Generate,Parking - 72-Hours,262,7.5
 CC Self Generate,Encampment,105,3.0
 CC Self Generate,Missed Collection,7,0.2
 CC Self Generate,ROW Maintenance,5,0.1
-CC Self Generate,Sidewalk Repair Issue,1,0.0
 CC Self Generate,Pothole,1,0.0
+CC Self Generate,Sidewalk Repair Issue,1,0.0
 Crew/Self Generated,Graffiti - Public,15980,100.0
 Crew/Self Generated,ROW Maintenance,2,0.0
 Mobile,Parking Violation,60033,23.2

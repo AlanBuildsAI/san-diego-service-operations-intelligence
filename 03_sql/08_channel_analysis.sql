@@ -1,8 +1,8 @@
 -- =============================================================================
 -- 08_channel_analysis.sql
 -- Purpose : Test whether submission channel is associated with different volume,
---           status mix or aging — and, critically, whether any apparent channel
---           effect survives controlling for what is being reported.
+--           status mix or aging — and, critically, whether any apparent
+--           difference persists after controlling for what is being reported.
 -- Depends : 01_clean_base.sql
 -- Outputs : agg_channel_summary, agg_channel_status_mix, agg_channel_mix_by_service,
 --           agg_channel_controlled_comparison
@@ -34,7 +34,7 @@ SELECT
     QUANTILE_CONT(lifecycle_days, 0.90)                          AS p90_lifecycle_days
 FROM fct_requests
 GROUP BY case_origin
-ORDER BY case_records DESC;
+ORDER BY case_records DESC, case_origin;
 
 -- -----------------------------------------------------------------------------
 -- Status mix by channel group.
@@ -48,7 +48,7 @@ SELECT
         AS pct_within_channel_group
 FROM fct_requests
 GROUP BY channel_group, status
-ORDER BY channel_group, case_records DESC;
+ORDER BY channel_group, case_records DESC, status;
 
 -- -----------------------------------------------------------------------------
 -- What each channel is actually used to report. This is the confounder, made
@@ -66,7 +66,7 @@ top_services AS (
     SELECT service_name
     FROM fct_requests
     GROUP BY service_name
-    ORDER BY COUNT(*) DESC
+    ORDER BY COUNT(*) DESC, service_name
     LIMIT 10
 )
 SELECT
@@ -79,7 +79,7 @@ FROM fct_requests AS f
 JOIN top_channels  AS c ON f.case_origin = c.case_origin
 JOIN top_services  AS s ON f.service_name = s.service_name
 GROUP BY f.case_origin, f.service_name
-ORDER BY f.case_origin, case_records DESC;
+ORDER BY f.case_origin, case_records DESC, f.service_name;
 
 -- -----------------------------------------------------------------------------
 -- Controlled comparison: within a single service category, do the two main
@@ -124,7 +124,7 @@ SELECT
         AS max_channel_gap_days
 FROM pivoted
 WHERE mobile_records IS NOT NULL AND web_records IS NOT NULL
-ORDER BY ABS(mobile_median_days - web_median_days) DESC;
+ORDER BY ABS(mobile_median_days - web_median_days) DESC, service_name;
 
 -- -----------------------------------------------------------------------------
 -- Summary of the controlled comparison: how large is the channel gap once

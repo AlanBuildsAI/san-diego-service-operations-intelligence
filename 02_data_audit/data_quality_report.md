@@ -6,7 +6,7 @@ Get It Done extracts before any business analysis was performed.
 | | |
 |---|---|
 | Data snapshot | 2026-08-09 |
-| Report generated | 2026-08-09 20:49 UTC |
+| Report generated | 2026-08-10 00:18 UTC |
 | Checks run | 13 |
 | Result | 4 PASS · 6 WARN · 2 FAIL · 1 INFO |
 
@@ -25,7 +25,7 @@ the *Treatment* line records how.
 |---|---|---|
 | [DQ-01 Row counts and parse integrity](#dq-01-row-counts-and-parse-integrity) | **PASS** | 714,934 rows read across 3 extracts; 714,925 unique case records retained after resolving 9 cross-file duplicate ids. |
 | [DQ-02 Primary key uniqueness](#dq-02-primary-key-uniqueness) | **WARN** | No duplicate ids within any extract. 9 ids appear in more than one extract with conflicting states. |
-| [DQ-03 Semantics of the published case_age_days](#dq-03-semantics-of-the-published-case_age_days) | **FAIL** | The field carries two different meanings. For resolved records it matches (date_closed - date_requested) in 99.88% of cases, as documented. For active records — which have no close date at all — it instead matches (extract date - date_requested) in 99.63% of cases. The dictionary describes only the first meaning. |
+| [DQ-03 Semantics of the published case_age_days](#dq-03-semantics-of-the-published-case_age_days) | **FAIL** | The field carries two different meanings. For terminal-status records it matches (date_closed - date_requested) in 99.88% of cases, as documented. For active records — which have no close date at all — it instead matches (extract date - date_requested) in 99.63% of cases. The dictionary describes only the first meaning. |
 | [DQ-04 Date validity and ordering](#dq-04-date-validity-and-ordering) | **WARN** | 5 records have a close date earlier than their request date (0.0007% of records). No missing request dates. Request dates span 2016-05-22 to 2026-08-08. |
 | [DQ-05 Extract boundary integrity](#dq-05-extract-boundary-integrity) | **PASS** | 0 records fall outside the closure year their file claims. |
 | [DQ-06 Missing values by field](#dq-06-missing-values-by-field) | **WARN** | Highest missingness among dimensions used for grouping is zipcode at 3.29%. Nulls in parent_request_id, date_closed, active_age_days and lifecycle_days are structural, not defects. |
@@ -142,7 +142,7 @@ the *Treatment* line records how.
 
 **Question:** Does case_age_days mean what the official dictionary says it means?
 
-**Finding:** The field carries two different meanings. For resolved records it matches (date_closed - date_requested) in 99.88% of cases, as documented. For active records — which have no close date at all — it instead matches (extract date - date_requested) in 99.63% of cases. The dictionary describes only the first meaning.
+**Finding:** The field carries two different meanings. For terminal-status records it matches (date_closed - date_requested) in 99.88% of cases, as documented. For active records — which have no close date at all — it instead matches (extract date - date_requested) in 99.63% of cases. The dictionary describes only the first meaning.
 
 **Treatment:** The project does not use the published field for analysis. active_age_days and lifecycle_days are computed from the dates in 01_clean_base.sql. The published field is retained as case_age_days_published for this comparison only.
 
@@ -801,7 +801,7 @@ the *Treatment* line records how.
 
 **Finding:** Status takes 4 values with no unexpected members. case_origin takes 27 values, of which 8 are unmapped placeholders (116 records).
 
-**Treatment:** Active is defined as status in (New, In Process); resolved as (Closed, Referred). Unmapped origins fall into an explicit '(Unknown)' channel group.
+**Treatment:** Active is defined as status in (New, In Process); terminal status as (Closed, Referred). Unmapped origins fall into an explicit '(Unknown)' channel group.
 
 <details><summary>Measured values</summary>
 

@@ -56,7 +56,10 @@ def main() -> int:
         verify_code, verify_out = -1, "SKIPPED"
     else:
         print("Running pytest ...")
-        test_code, test_out = run([PYTHON, "-m", "pytest", "-q"])
+        # pytest.ini already supplies -q. Adding another -q suppresses the
+        # final "N passed" line and prevents the packet from reporting the
+        # measured current test count.
+        test_code, test_out = run([PYTHON, "-m", "pytest"])
         print("Running claim verification ...")
         verify_code, verify_out = run([PYTHON, "scripts/verify_claims.py"])
 
@@ -80,9 +83,9 @@ def main() -> int:
     a("Everything needed to check this project, generated from the actual run by")
     a("[`scripts/build_review_packet.py`](scripts/build_review_packet.py).")
     a("")
-    a(f"**Generated:** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}  ")
-    a(f"**Data snapshot:** {run_meta['snapshot_date']}  ")
-    a(f"**DuckDB:** {run_meta['duckdb_version']}  ")
+    a(f"**Generated:** {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}<br>")
+    a(f"**Data snapshot:** {run_meta['snapshot_date']}<br>")
+    a(f"**DuckDB:** {run_meta['duckdb_version']}<br>")
     a(f"**Python:** {sys.version.split()[0]}")
     a("")
     a("---")
@@ -164,17 +167,20 @@ def main() -> int:
     a("## 4. Main findings")
     a("")
     c = built_claims
-    a(f"1. **Recent submissions settle quickly; the standing inventory is old.** "
-      f"{c['cohort_pct_resolved'].formatted} of requests submitted Jan-Jun 2026 had reached a "
-      f"terminal status by the snapshot (median {c['cohort_median_lifecycle'].formatted} days "
-      f"among those) - yet {c['active_backlog'].formatted} requests are active with a median "
-      f"age of {c['active_median_age_days'].formatted} days.")
+    a(f"1. **Recent-cohort status and active-inventory age are different measures.** "
+      f"{c['cohort_pct_resolved'].formatted} of requests submitted Jan-Jun 2026 had reached "
+      f"Closed or Referred status by the snapshot; among those terminal-status records, median "
+      f"recorded lifecycle was {c['cohort_median_lifecycle'].formatted} days. Separately, "
+      f"{c['active_backlog'].formatted} requests were active with a median age of "
+      f"{c['active_median_age_days'].formatted} days. These populations should not be "
+      f"interpreted as the same lifecycle measure.")
     a(f"2. **{c['active_aged_90_plus_pct'].formatted} of the active inventory is past 90 days** "
       f"({c['active_aged_90_plus'].formatted} records); "
       f"{c['active_aged_365_plus_pct'].formatted} is past a year.")
     a(f"3. **Four categories hold {c['top4_share_pct'].formatted} of active records.** TSW is "
       f"the modal case_record_type for all four ({c['tsw_pct_of_backlog'].formatted} of active "
-      f"records carry that label - a staff-group label, not a confirmed department owner).")
+      f"records carry that label - a higher-level staff-group label, not a current ownership "
+      f"field).")
     a(f"4. **No strong district-level over-concentration is evident** - the descriptive "
       f"aged-concentration index varies only {c['aging_index_min'].formatted} to "
       f"{c['aging_index_max'].formatted} across the nine council districts. This does not "
@@ -235,10 +241,9 @@ def main() -> int:
     a("| Native Excel PivotTables | **BLOCKED** | openpyxl cannot author a PivotTable cache. "
       "The workbook uses native Excel Tables, charts, conditional formatting and live "
       "formulas, and states this on its first sheet. |")
-    a("| Excel formula recalculation | **UNVERIFIED** | openpyxl writes formulas but does not "
-      "evaluate them, and no spreadsheet engine was available in this environment. The "
-      "formulas are written to compare against SQL-derived values and show MATCH/REVIEW "
-      "when opened. |")
+    a("| Excel formula recalculation | **VERIFIED IN EXCEL** | The final workbook was opened "
+      "in Microsoft Excel during visual QA. Its three SQL cross-check formulas recalculated "
+      "to MATCH, and the audit totals recalculated to 4 PASS / 6 WARN / 2 FAIL / 1 INFO. |")
     a("| Streamlit app under load | **PARTIAL** | Verified to start and serve HTTP 200 with a "
       "healthy `/_stcore/health`; not click-tested page by page. |")
     a("| Reproducing the exact snapshot from the source URLs | **NOT POSSIBLE** | The City's "
@@ -290,7 +295,8 @@ def main() -> int:
     a("**Adversarial questions worth asking:**")
     a("")
     a("1. Is the coverage argument in §6 of the methodology actually airtight?")
-    a("2. Does the priority score's weighting change the top three? (It should not.)")
+    a("2. How sensitive is the priority shortlist to analyst-selected weights, and does the "
+      "repository report that sensitivity accurately?")
     a("3. Is the 2pp + 25% taxonomy-break threshold defensible, or tuned to the answer?")
     a("4. Does any recommendation assert more than the evidence supports?")
     a("5. Is the negative finding on geography genuinely negative, or under-powered?")

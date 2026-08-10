@@ -51,8 +51,8 @@ rank_by_aged_volume,service_name,council_district,active_records,aged_90_plus,pc
 50,Stormwater,9,287,259,90.2,874.0,2055.6000000000004,1.147,0.48
 51,Vegetation Encroachment,3,357,253,70.9,157.0,625.4000000000001,0.9,0.47
 52,Traffic Engineering,3,345,245,71.0,274.0,1286.2000000000005,0.902,0.46
-53,Vegetation Encroachment,2,377,244,64.7,138.0,796.8000000000001,0.822,0.45
 53,Stormwater,2,270,244,90.4,891.0,2198.2,1.148,0.45
+53,Vegetation Encroachment,2,377,244,64.7,138.0,796.8000000000001,0.822,0.45
 55,Pavement Maintenance,4,251,242,96.4,1010.0,2343.0,1.225,0.45
 56,Stormwater,7,250,224,89.6,910.5,2149.2999999999997,1.139,0.42
 57,Development Services - Code Enforcement,3,221,221,100.0,501.0,2479.0,1.271,0.41
@@ -82,8 +82,8 @@ rank_by_aged_volume,service_name,council_district,active_records,aged_90_plus,pc
 81,Environmental Services Code Compliance,9,223,115,51.6,115.0,521.8,0.655,0.21
 82,Traffic Engineering,7,211,113,53.6,132.0,911.0,0.68,0.21
 83,Encampment,3,738,109,14.8,7.0,394.30000000000416,0.188,0.2
-84,STRO Violation,1,266,95,35.7,59.0,355.0,0.454,0.18
 84,Graffiti - Private,4,218,95,43.6,69.0,256.0,0.554,0.18
+84,STRO Violation,1,266,95,35.7,59.0,355.0,0.454,0.18
 86,Parking - 72-Hours,9,560,79,14.1,14.5,236.20000000000005,0.179,0.15
 87,Encampment,8,249,63,25.3,16.0,792.0,0.321,0.12
 88,Parking - 72-Hours,7,363,61,16.8,20.0,235.8,0.214,0.11

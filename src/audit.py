@@ -149,7 +149,7 @@ def check_case_age_semantics(con) -> CheckResult:
         "DQ-03", "Semantics of the published case_age_days",
         "Does case_age_days mean what the official dictionary says it means?",
         "FAIL",
-        f"The field carries two different meanings. For resolved records it matches "
+        f"The field carries two different meanings. For terminal-status records it matches "
         f"(date_closed - date_requested) in {detail['resolved_pct_matching']}% of cases, as "
         f"documented. For active records — which have no close date at all — it instead "
         f"matches (extract date - date_requested) in {detail['active_pct_matching']}% of cases. "
@@ -559,7 +559,7 @@ def check_status_domain(con) -> CheckResult:
         f"{origins} values, of which {len(odd)} are unmapped placeholders "
         f"({sum(o[1] for o in odd)} records).",
         detail,
-        "Active is defined as status in (New, In Process); resolved as (Closed, Referred). "
+        "Active is defined as status in (New, In Process); terminal status as (Closed, Referred). "
         "Unmapped origins fall into an explicit '(Unknown)' channel group.",
     )
 

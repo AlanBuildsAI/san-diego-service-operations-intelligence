@@ -96,7 +96,17 @@ def write_table(ws, df: pd.DataFrame, start_row: int, name: str,
             cell.border = BOX
             fmt = number_formats.get(df.columns[j - 1])
             if fmt:
-                cell.number_format = fmt
+                # Excel can render an optional decimal format such as ``#,##0.#``
+                # with a dangling decimal point for integer-valued floats. Keep
+                # whole values clean while preserving one decimal where the data
+                # actually carries a fractional day.
+                if (fmt == "#,##0.#" and isinstance(value, (int, float))
+                        and float(value).is_integer()):
+                    cell.number_format = "#,##0"
+                elif fmt == "#,##0.#":
+                    cell.number_format = "#,##0.0"
+                else:
+                    cell.number_format = fmt
 
     last_row = header_row + len(df)
     ref = f"A{header_row}:{get_column_letter(len(df.columns))}{last_row}"
@@ -239,13 +249,16 @@ def build() -> Path:
     ws[f"A{note_row}"].alignment = Alignment(wrap_text=True, vertical="top")
     ws.merge_cells(f"A{note_row}:G{note_row + 2}")
     ws.column_dimensions["A"].width = 52
+    ws.column_dimensions["B"].width = 18
+    ws.column_dimensions["C"].width = 22
+    ws.column_dimensions["D"].width = 14
 
     # =====================================================================
     # 2. Monthly KPI Review
     # =====================================================================
     ws = wb.create_sheet("Monthly KPI Review")
     row = title_block(
-        ws, "Monthly demand and recorded closures",
+        ws, "Monthly demand and terminal-status lifecycle context",
         f"Snapshot {snapshot}. Coverage flags matter: months before January 2025 are not "
         f"fully covered by the extracts in scope.",
         "Q11 - How has demand changed where the source data allows a fair comparison?")
@@ -276,6 +289,7 @@ def build() -> Path:
     cats = Reference(ws, min_col=1, min_row=first + 1, max_row=last)
     chart.add_data(data, titles_from_data=True)
     chart.set_categories(cats)
+    chart.y_axis.numFmt = "#,##0"
     ws.add_chart(chart, f"I{first}")
 
     closures = agg("agg_closure_monthly")[
@@ -288,10 +302,11 @@ def build() -> Path:
         "p90_lifecycle_days": "P90 lifecycle (days)", "coverage_status": "Coverage"})
     closures["Month"] = pd.to_datetime(closures["Month"]).dt.strftime("%Y-%m")
     row2 = last + 22
-    ws.cell(row=row2 - 1, column=1, value="Recorded case closures by month").font = H2_FONT
+    ws.cell(row=row2 - 1, column=1,
+            value="Terminal-status records by recorded closure month").font = H2_FONT
     write_table(ws, closures, row2, "tblClosures",
                 {"Closures recorded": "#,##0", "Closed": "#,##0", "Referred": "#,##0",
-                 "Median lifecycle (days)": "#,##0", "P90 lifecycle (days)": "#,##0"})
+                 "Median lifecycle (days)": "#,##0.#", "P90 lifecycle (days)": "#,##0.#"})
 
     # =====================================================================
     # 3. Service Categories
@@ -309,7 +324,7 @@ def build() -> Path:
          "mean_age_days", "aged_60_plus", "aged_90_plus", "aged_365_plus",
          "pct_aged_90_plus", "pct_of_aged_90_backlog", "rank_by_volume", "rank_by_median_age"]
     ].rename(columns={
-        "service_name": "Service category", "most_common_record_type": "Most common record type",
+        "service_name": "Service category", "most_common_record_type": "Modal case_record_type",
         "active_records": "Active records", "active_distinct_issues": "Distinct issues",
         "duplicate_rate_pct": "Duplicate rate %", "pct_of_active_backlog": "% of backlog",
         "median_age_days": "Median age (days)", "p90_age_days": "P90 age (days)",
@@ -321,11 +336,11 @@ def build() -> Path:
     first, last = write_table(ws, service, row, "tblService",
                               {"Active records": "#,##0", "Distinct issues": "#,##0",
                                "Duplicate rate %": "0.0", "% of backlog": "0.00",
-                               "Median age (days)": "#,##0", "P90 age (days)": "#,##0",
+                               "Median age (days)": "#,##0.#", "P90 age (days)": "#,##0.#",
                                "Mean age (days)": "#,##0.0", "Aged 60+": "#,##0",
                                "Aged 90+": "#,##0", "Aged 365+": "#,##0",
                                "% of own queue aged 90+": "0.0",
-                               "% of citywide 90+ inventory": "0.00"})
+                               "% of city aged 90+": "0.00"})
     ws.conditional_formatting.add(
         f"C{first + 1}:C{last}",
         DataBarRule(start_type="min", end_type="max", color="FF2A78D6", showValue=True))
@@ -342,6 +357,7 @@ def build() -> Path:
     chart.add_data(Reference(ws, min_col=3, min_row=first, max_row=top_last),
                    titles_from_data=True)
     chart.set_categories(Reference(ws, min_col=1, min_row=first + 1, max_row=top_last))
+    chart.x_axis.numFmt = "#,##0"
     ws.add_chart(chart, f"R{first}")
 
     # =====================================================================
@@ -371,9 +387,9 @@ def build() -> Path:
                               {"Active records": "#,##0", "% of backlog": "0.0",
                                "Submissions, last 12 months": "#,##0",
                                "Backlog per recent submission": "0.000",
-                               "Median age (days)": "#,##0", "P90 age (days)": "#,##0",
+                               "Median age (days)": "#,##0.#", "P90 age (days)": "#,##0.#",
                                "Aged 90+": "#,##0", "% of own queue aged 90+": "0.0",
-                               "% of citywide 90+ inventory": "0.0", "Duplicate rate %": "0.0"})
+                               "% of city aged 90+": "0.0", "Duplicate rate %": "0.0"})
     ws.conditional_formatting.add(
         f"E{first + 1}:E{last}",
         ColorScaleRule(start_type="min", start_color="FFFFFFFF",
@@ -394,7 +410,7 @@ def build() -> Path:
                   "its queue size implies)").font = H2_FONT
     f2, l2 = write_table(ws, index_df, row2, "tblAgingIndex",
                          {"Active records": "#,##0", "Aged 90+": "#,##0",
-                          "Median age (days)": "#,##0", "% of backlog": "0.00",
+                          "Median age (days)": "#,##0.#", "% of backlog": "0.00",
                           "% of aged 90+": "0.00", "Aged concentration index": "0.000"})
     ws.conditional_formatting.add(
         f"G{f2 + 1}:G{l2}",
@@ -414,7 +430,7 @@ def build() -> Path:
             value="Community planning areas with 100+ active records").font = H2_FONT
     write_table(ws, community, row3, "tblCommunity",
                 {"Active records": "#,##0", "% of backlog": "0.00",
-                 "Median age (days)": "#,##0", "P90 age (days)": "#,##0",
+                 "Median age (days)": "#,##0.#", "P90 age (days)": "#,##0.#",
                  "Aged 90+": "#,##0", "% of own queue aged 90+": "0.0"})
 
     # =====================================================================
@@ -437,7 +453,7 @@ def build() -> Path:
         "cumulative_pct": "Cumulative %"})
     first, last = write_table(ws, buckets, row, "tblBuckets",
                               {"Active records": "#,##0", "Distinct issues": "#,##0",
-                               "Median age (days)": "#,##0", "% of backlog": "0.0",
+                               "Median age (days)": "#,##0.#", "% of backlog": "0.0",
                                "Cumulative records": "#,##0", "Cumulative %": "0.0"})
     ws.conditional_formatting.add(
         f"B{first + 1}:B{last}",
@@ -448,6 +464,7 @@ def build() -> Path:
     chart.height, chart.width = 9, 18
     chart.add_data(Reference(ws, min_col=2, min_row=first, max_row=last), titles_from_data=True)
     chart.set_categories(Reference(ws, min_col=1, min_row=first + 1, max_row=last))
+    chart.y_axis.numFmt = "#,##0"
     ws.add_chart(chart, f"J{first}")
 
     priority = agg("agg_priority_table")[
@@ -465,8 +482,8 @@ def build() -> Path:
     ws.cell(row=row2 - 1, column=1,
             value="Investigation priority - a triage order, not a performance ranking").font = H2_FONT
     f2, l2 = write_table(ws, priority, row2, "tblPriority",
-                         {"Active records": "#,##0", "Median age (days)": "#,##0",
-                          "P90 age (days)": "#,##0", "Aged 90+": "#,##0",
+                         {"Active records": "#,##0", "Median age (days)": "#,##0.#",
+                          "P90 age (days)": "#,##0.#", "Aged 90+": "#,##0",
                           "% of own queue aged 90+": "0.0", "% of citywide 90+ inventory": "0.0",
                           "Priority score": "0.0"})
     ws.conditional_formatting.add(
@@ -502,7 +519,7 @@ def build() -> Path:
                   "active records)").font = H2_FONT
     write_table(ws, hotspots, row3, "tblHotspots",
                 {"Active records": "#,##0", "Aged 90+": "#,##0", "% aged 90+": "0.0",
-                 "Median age (days)": "#,##0", "Aged concentration index": "0.000"})
+                 "Median age (days)": "#,##0.#", "Aged concentration index": "0.000"})
 
     # =====================================================================
     # 6. Data Quality
@@ -543,7 +560,7 @@ def build() -> Path:
     for k, grade in enumerate(("PASS", "WARN", "FAIL", "INFO")):
         ws.cell(row=summary_row + 1 + k, column=1, value=grade)
         ws.cell(row=summary_row + 1 + k, column=2,
-                value=f'=COUNTIF(tblAudit[Grade],"{grade}")').number_format = "0"
+                value=f'=COUNTIF(tblAudit[Grade],"{grade}")').number_format = "#,##0"
 
     for sheet in wb.worksheets:
         sheet.sheet_view.showGridLines = False

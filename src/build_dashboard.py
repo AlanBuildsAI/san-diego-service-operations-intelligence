@@ -203,8 +203,8 @@ def build_html() -> str:
 
     parts.append(section(
         "01", "How large is the active inventory, and how old is it?",
-        "The starting position: volume and age of everything currently in an active "
-        "status, across all vintages."))
+        "The starting position: volume and age of everything in an active status at "
+        "the snapshot, across all vintages."))
 
     # ---- Q1 aging profile --------------------------------------------------
     buckets = agg("agg_backlog_aging_buckets").sort_values("bucket_order")
@@ -216,10 +216,10 @@ def build_html() -> str:
         f'As of the snapshot, <strong>{c["active_aged_90_plus_pct"].formatted}</strong> of '
         f'active requests are past 90 days and '
         f'<strong>{c["active_aged_365_plus_pct"].formatted}</strong> past a year. The single '
-        f'largest age bucket is the oldest one. By contrast, '
+        f'largest age bucket is the oldest one. Separately, '
         f'<strong>{c["cohort_pct_resolved"].formatted}</strong> of requests submitted '
-        f'Jan–Jun 2026 had reached a terminal status by the snapshot — recent intake and the '
-        f'standing inventory behave very differently.',
+        f'Jan–Jun 2026 had reached Closed or Referred status by the snapshot. These are '
+        f'different populations and should not be interpreted as the same lifecycle measure.',
         two_series + '<div class="chart-scroll">'
         + charts.vertical_bars(list(buckets["age_bucket"]),
                                [float(v) for v in buckets["n_records"]], colors)
@@ -241,8 +241,8 @@ def build_html() -> str:
         "Q2 · Which service categories account for the largest share of active workload?",
         f'The top four categories — {charts.esc(c["top4_category_names"].formatted)} — hold '
         f'<strong>{c["top4_share_pct"].formatted}</strong> of all active records, and in each '
-        f'the aged segment dominates. TSW is the modal case_record_type for all four; that is '
-        f'a staff-group label in the source, not a confirmed department owner.',
+        f'the aged segment dominates. TSW is the modal case_record_type for all four; '
+        f'case_record_type is a higher-level staff-group label, not a current ownership field.',
         two_series + '<div class="chart-scroll">'
         + charts.horizontal_bars(list(service["service_name"]), under90, aged90,
                                  primary_label="Under 90 days",
@@ -325,8 +325,8 @@ def build_html() -> str:
         f'to Pothole at {c["pothole_dup_rate"].formatted}, but on only '
         f'{c["pothole_active"].formatted} active records. Collapsing duplicates onto their parent '
         f'moves <strong>{c["dup_ranks_moved"].formatted}</strong> of the top 20 categories, never '
-        f'by more than {c["dup_max_rank_shift"].formatted} positions — so the priority order holds '
-        f'at either grain.',
+        f'by more than {c["dup_max_rank_shift"].formatted} positions. This tests volume rankings '
+        f'only; the composite priority score was not re-derived on deduplicated inputs.',
         charts.legend([("Distinct issues", "var(--series-1)"),
                        ("Duplicate child records", "var(--series-2)")])
         + '<div class="chart-scroll">'
@@ -345,7 +345,7 @@ def build_html() -> str:
     parts.append(panel(
         "Where referred requests go",
         "Q9 · What share of requests are referred, and where are referrals concentrated?",
-        f'<strong>{c["referred_rate_resolved_pct"].formatted}</strong> of resolved case records '
+        f'<strong>{c["referred_rate_resolved_pct"].formatted}</strong> of terminal-status records '
         f'were referred rather than closed, and <strong>{c["referred_external_pct"].formatted}</strong> '
         f'of those left the City entirely. Caltrans alone takes '
         f'<strong>{c["caltrans_pct"].formatted}</strong> of all referrals '

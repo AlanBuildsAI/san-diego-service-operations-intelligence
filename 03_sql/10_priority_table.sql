@@ -113,7 +113,7 @@ SELECT
         WHEN median_age_days >= 365
             THEN 'Typical active request in this category is over a year old'
         WHEN own_queue_aged_90_rate <= 0.30
-            THEN 'Queue turns over quickly; low investigation priority'
+            THEN 'Most active records are under 90 days; lower priority under this heuristic'
         ELSE 'Mid-range on volume and aging'
     END AS why_flagged
 FROM composite
@@ -160,7 +160,7 @@ SELECT
     aged_concentration_index,
     ROUND(100.0 * aged_90_plus / NULLIF(total_scored_aged_90, 0), 2) AS pct_of_scored_aged_90
 FROM indexed
-ORDER BY aged_90_plus DESC;
+ORDER BY aged_90_plus DESC, service_name, council_district;
 
 -- =============================================================================
 -- Weight sensitivity.

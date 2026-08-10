@@ -27,10 +27,11 @@ an active status (**60,288** distinct issues once duplicate child records are co
 Median active age is **381** days; **61,922** records (**76.1%**) exceed 90 days and
 **41,494** (**51.0%**) exceed a year.
 
-**2. Recent submissions settle quickly.** Of the **209,411** requests submitted January–June
-2026, **91.2%** had reached a terminal Get It Done status by the snapshot. Among records that
-reached a terminal status, median recorded lifecycle was **2** days. Recent intake and the
-standing inventory are two different populations.
+**2. Recent-cohort status and active-inventory age are different measures.** Of the
+**209,411** requests submitted January–June 2026, **91.2%** had reached Closed or Referred
+status by the snapshot. Among those terminal-status records, median recorded lifecycle was
+**2** days. The recent cohort and standing active inventory are different populations and
+should not be interpreted as the same lifecycle measure.
 
 **3. Four categories hold most of the aged work.** Sidewalk Repair Issue, Street Light
 Maintenance, ROW Maintenance and Pavement Maintenance together account for **54.2%** of

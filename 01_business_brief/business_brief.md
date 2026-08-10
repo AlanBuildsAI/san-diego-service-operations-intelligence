@@ -96,5 +96,5 @@ orders would convert every "case age" statement in this project into a statement
 actual service delivery. Without it, this analysis describes a request queue, and says so.
 
 Second would be **denominators**: population, street mileage, streetlight and sidewalk asset
-counts by district. Request volume by district is currently uninterpretable as a service-level
+counts by district. Request volume by district is uninterpretable as a service-level
 comparison because a district with more streetlights will generate more streetlight reports.

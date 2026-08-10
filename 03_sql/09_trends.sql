@@ -198,7 +198,7 @@ ORDER BY change_submissions DESC;
 
 -- -----------------------------------------------------------------------------
 -- The same year-over-year comparison at case_record_type grain. Record type is
--- the department-level grouping and did not absorb the service-name migration,
+-- a higher-level staff-group label and did not absorb the service-name migration,
 -- so this is the comparison that can be reported without a caveat attached to
 -- every row.
 -- -----------------------------------------------------------------------------
@@ -239,7 +239,7 @@ ORDER BY change_submissions DESC;
 -- -----------------------------------------------------------------------------
 -- Closure-cohort bias.
 --
--- "Median lifecycle of cases closed this year" is the obvious throughput metric
+-- "Median lifecycle of cases closed this year" is a tempting lifecycle summary,
 -- and it is misleading on its own: a closure cohort is dominated by cases that
 -- closed quickly, because slow cases are still open and therefore absent. This
 -- table decomposes the current year's closures by the year they were submitted
@@ -258,12 +258,14 @@ GROUP BY requested_year
 ORDER BY submitted_year DESC;
 
 -- -----------------------------------------------------------------------------
--- Submission-cohort view — the unbiased complement to the table above.
+-- Submission-cohort view — a denominator-stable complement to the table above.
 --
 -- Takes every request submitted in a given period and asks what has become of
 -- it. Because the denominator is fixed at submission time, this cannot be
 -- flattered by slow cases being absent. The cohort is cut off before the
--- snapshot month so that every request in it has had comparable time to resolve.
+-- snapshot month so that every request in it has at least one full month of
+-- follow-up. Follow-up still differs within the cohort, so its recorded-lifecycle
+-- median remains right-censored and is reported with that caveat.
 -- -----------------------------------------------------------------------------
 CREATE OR REPLACE TABLE agg_submission_cohort AS
 WITH snap AS (

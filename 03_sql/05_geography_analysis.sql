@@ -80,7 +80,10 @@ ORDER BY b.active_records DESC;
 CREATE OR REPLACE TABLE agg_geography_community AS
 SELECT
     community,
-    ANY_VALUE(COALESCE(CAST(council_district AS VARCHAR), '(Unknown)')) AS example_council_district,
+    -- A community can cross district boundaries. Report its modal district and
+    -- resolve exact frequency ties by the label so repeat builds are stable.
+    MODE(COALESCE(CAST(council_district AS VARCHAR), '(Unknown)')
+         ORDER BY COALESCE(CAST(council_district AS VARCHAR), '(Unknown)')) AS example_council_district,
     COUNT(*)                                                      AS active_records,
     ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 2)            AS pct_of_active_backlog,
     MEDIAN(active_age_days)                                       AS median_age_days,
@@ -92,7 +95,7 @@ SELECT
 FROM v_active
 GROUP BY community
 HAVING COUNT(*) >= 100
-ORDER BY active_records DESC;
+ORDER BY active_records DESC, community;
 
 -- -----------------------------------------------------------------------------
 -- Aged-backlog concentration index.
@@ -158,4 +161,4 @@ SELECT
     ROUND(aged_concentration_index, 3)   AS aged_concentration_index,
     RANK() OVER (PARTITION BY area_type ORDER BY aged_concentration_index DESC) AS rank_by_index
 FROM indexed
-ORDER BY area_type, aged_concentration_index DESC;
+ORDER BY area_type, aged_concentration_index DESC, area;

@@ -19,7 +19,7 @@ scripts/download_data.py     official CSVs -> data/raw/ (git-ignored) + manifest
 03_sql/00_sources.sql        typed views over the raw CSVs; snapshot date derived
 03_sql/01_clean_base.sql     union -> deduplicate -> derive -> suppress -> fct_requests
       |
-03_sql/02..10_*.sql          33 aggregate tables -> data/aggregates/*.csv
+03_sql/02..10_*.sql          34 aggregate tables -> data/aggregates/*.csv
       |
 src/audit.py                 13 reproducible checks -> data_quality_report.md
 src/claims.py                canonical numbers for every written document
@@ -74,7 +74,7 @@ Tested against the data:
 
 | Population | Hypothesis tested | Agreement |
 |---|---|---|
-| Resolved records (633,566) | `case_age_days = date_closed − date_requested` | **99.88%** |
+| Terminal-status records (633,566) | `case_age_days = date_closed − date_requested` | **99.88%** |
 | Active records (81,359) | `case_age_days = date_closed − date_requested` | impossible — no close date exists |
 | Active records (81,359) | `case_age_days = snapshot_date − date_requested` | **99.63%** |
 
@@ -87,7 +87,7 @@ documents only one. It also let the snapshot date be recovered: the modal value 
 are computed from the dates instead:
 
 - `active_age_days` = `snapshot_date − date_requested`, for active records only
-- `lifecycle_days` = `date_closed − date_requested`, for resolved records only
+- `lifecycle_days` = `date_closed − date_requested`, for terminal-status records only
 
 The 0.37% of active records that disagree (298 records) are stale by up to 59 days,
 consistent with rows not
@@ -168,13 +168,14 @@ Two distinct numbers come out of that cohort and they have different properties:
 | Statistic | Value | Censoring |
 |---|---|---|
 | Share in a terminal status at the snapshot | 91.2% | **None.** Denominator is the full cohort. |
-| Median recorded lifecycle | 2 days | **Right-censored.** Computed only over records that had settled by the snapshot; the 8.8% still active are excluded by construction and are, by definition, the slower ones. |
+| Median recorded lifecycle | 2 days | **Right-censored.** Computed only over records that had reached a terminal status by the snapshot; the 8.8% still active are excluded by construction and are, by definition, the slower ones. |
 
-So the terminal-status share is a complete measure of the cohort; the lifecycle median
-describes settled records only and is optimistic for the cohort as a whole. Both are reported
-with that distinction stated. No survival model was fitted — the correct next step is a
-fixed-window measure (share still active at 30 / 60 / 90 days), which is listed in §11 rather
-than built here.
+So the terminal-status share completely observes the cohort's status at the snapshot; the
+lifecycle median describes terminal-status records only and is optimistic for the cohort as
+a whole. The cohort and standing active inventory are different populations and should not
+be interpreted as the same lifecycle measure. No survival model was fitted — the correct
+next step is a fixed-window measure (share still active at 30 / 60 / 90 days), which is
+listed in §11 rather than built here.
 
 ## 7b. Denominator validation
 
@@ -264,8 +265,10 @@ Stated plainly, because a reviewer will find them anyway:
   but "City – Other department" (19.1% of referrals) is a residual bucket, not one
   department.
 - **The priority score's weights are a judgment.** 0.45 / 0.35 / 0.20 is defensible and
-  documented, not derived. Different weights would reorder the middle of the list; the top
-  three are stable under any reasonable weighting because they lead on all three components.
+  documented, not derived. Sidewalk and Pavement occupy the top two under all five tested
+  schemes, though their order changes. Street Light is top-three under four of five; under
+  aged-rate-heavy weighting, Development Services – Code Enforcement enters third and Street
+  Light drops to fifth.
 - **A bulk closure event sits in the closure data** — 4,515 cases submitted in 2018 were
   closed during 2026 with a median lifecycle of 2,753 days. This is visible in
   `agg_closure_cohort_bias` and is not investigated further here.
@@ -277,8 +280,8 @@ Stated plainly, because a reviewer will find them anyway:
 ## 10a. Reproducibility: two different things a reviewer might mean
 
 **Validating the published analysis.** Everything needed is committed: the 34 aggregate
-tables, the audit results, the synthetic test fixture, 89 tests, the claim registry and
-verification gate, the dashboard, the Excel workbook, and the
+tables, the audit results, the synthetic test fixture, the automated pytest suite, the claim
+registry and verification gate, the dashboard, the Excel workbook, and the
 [source manifest](../docs/source_manifest.md) with SHA-256 hashes and row counts for the exact
 files used. `make test` and `make verify` run against that committed state and need no
 download.
@@ -302,10 +305,10 @@ not support the latter.
 
 - Incremental loading against the daily refresh instead of a full rebuild.
 - A snapshot table capturing backlog by category and age bucket each day, so backlog *change*
-  becomes measurable — currently only one point in time exists.
+  becomes measurable — only one point in time exists in the published analysis.
 - Schema contract tests against the source, failing loudly when a column type or a status
   domain changes.
 - A join to the maintenance work-order system, which is the single change that would convert
   every "case age" statement here into a statement about service delivery.
 - Fixed-window aging metrics (share of a submission cohort still open at 30/60/90 days) to
-  replace closure-cohort medians as the headline throughput measure.
+  replace closure-cohort medians as the headline recorded-lifecycle measure.
