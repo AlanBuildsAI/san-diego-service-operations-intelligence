@@ -257,8 +257,8 @@ def build_html() -> str:
         "Typical age against tail age, by category",
         "Q3 & Q4 · Which categories hold the oldest requests, and which have an unusually long tail?",
         'Each row spans that category\'s median (blue) to its P90 (orange). A long span means '
-        'most requests move while a minority sit for years — a different problem from a queue '
-        'that is uniformly slow. Categories with at least 250 active records only.',
+        'P90 is far above the median — a younger typical active record alongside a small '
+        'very-old tail. Categories with at least 250 active records only.',
         charts.legend([("Median age", "var(--series-1)"), ("P90 age", "var(--series-2)")])
         + '<div class="chart-scroll">'
         + charts.dumbbell(list(tail["service_name"]),

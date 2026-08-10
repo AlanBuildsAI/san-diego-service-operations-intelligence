@@ -52,17 +52,17 @@ investigate first.
 
 **1. Reconcile the sidewalk and pavement active queues against the capital maintenance
 schedule.** These two categories hold **30.9%** of the citywide 90+ day active inventory.
-Determine what share is already committed to a scheduled program. If a large share is, the
-issue to address is status taxonomy and resident communication rather than field capacity —
-but that has to be measured, not assumed.
+Determine what share is already committed to a scheduled program. If a large share is
+already scheduled, investigate whether status taxonomy and resident communication are more
+relevant questions before drawing conclusions about field capacity.
 
 **2. Review duplicate handling in Street Light Maintenance.** **6,189** active records are
 repeat reports of already-open issues. Test whether the intake flow surfaces an existing open
 case at the point of submission, and measure whether that changes repeat-report volume.
 
 **3. Examine the Caltrans referral path.** **9,123** case records — **21.1%** of all
-referrals — are routed to Caltrans for state right-of-way. Review whether the reporting
-interface can identify state right-of-way before a City case is opened.
+referrals — are routed to Caltrans. Review whether likely jurisdiction can be identified
+earlier in the intake flow.
 
 ### Key limitations
 
@@ -85,11 +85,11 @@ interface can identify state right-of-way before a City case is opened.
 
 ### Next measurement step
 
-**Join a sample of the sidewalk and pavement active queues to the maintenance work-order
-system.** A few thousand records is enough. That single join answers what this dataset cannot:
-whether an old active record means work is outstanding, or that the record was never updated.
-Until then, the inventory figures above should be read as counts of **open case records**,
-not of outstanding physical work.
+**Join a stratified sample of the sidewalk and pavement active queues to the maintenance
+work-order system.** That single join answers what this dataset cannot: whether an old active
+record means work is outstanding, or that the record was never updated. Until then, the
+inventory figures above should be read as counts of **open case records**, not of outstanding
+physical work.
 
 Second: adopt a fixed-window aging measure — the share of each month's submissions still
 active at 30, 60 and 90 days — so inventory health can be tracked over time without the

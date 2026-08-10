@@ -69,8 +69,9 @@ The queue's age distribution is the finding, not its size:
 | 731+ | 26,388 | 32.4% | 100.0% |
 
 **66.2%** of the active queue is older than 180 days, and the largest single bucket is the
-oldest one. A queue in steady state does not look like this; a queue with a structural tail
-does.
+oldest one. This snapshot shows a pronounced long-lived tail in the active inventory. A
+single snapshot cannot establish whether the inventory is growing, shrinking, or in steady
+state.
 
 Median is used rather than mean throughout: the mean active age is **649.9** days against a
 median of **381**, inflated by a tail reaching 3,731 days.
@@ -158,8 +159,8 @@ is what makes them the top investigation priorities: they are simultaneously big
 | Development Services – Code Enforcement | 488 | 2,378 | 1.88 | p90 well above peers |
 | Stormwater | 874 | 2,141 | 1.56 | p90 well above peers |
 
-**Against their own median** (P90 ÷ median ≥ 5) — categories where most requests move but a
-minority sit for years:
+**Against their own median** (P90 ÷ median ≥ 5) — categories where P90 is far above their
+own median — a younger typical active record alongside a small very-old tail:
 
 | Category | Median | P90 | Ratio |
 |---|---:|---:|---:|
@@ -238,9 +239,10 @@ top cells are the largest categories in the largest districts.
 **94,687** case records across the full scope carry a parent id — a **13.2%** duplicate
 rate. Within the active backlog the rate is **27.0%** (**21,971** records).
 
-The gap is structural rather than surprising: a duplicate can only attach to a parent that
-is still open, so long-lived open cases accumulate repeat reports. The categories with the
-oldest queues are also the most duplicated.
+The higher duplicate rate among active records is consistent with the source rule that a
+duplicate child references an existing open request. This snapshot does not establish that
+request age causes repeat reporting, and duplicate rates vary substantially by service
+category.
 
 | | Case records | Distinct issues | Duplicate rate |
 |---|---:|---:|---:|
@@ -316,10 +318,9 @@ Referred records have a short recorded lifecycle in the case system — median *
 terminal for backlog arithmetic and reported separately from Closed status everywhere in
 this project, since treating a hand-off as an outcome would flatter any outcome metric.
 
-By category, referral rates are high where jurisdiction is ambiguous: "Other" at 66.4%,
-Graffiti – Code Enforcement at 29.0%, Building and Land Use Enforcement at 26.4%. Roughly
-one in five referrals goes to Caltrans, which points at state highway right-of-way being a
-recurring source of misdirected reports.
+Referral rates vary substantially by category. Roughly one in five referrals is classified
+as Caltrans. That makes the Caltrans routing path useful to investigate; this dataset alone
+does not show why those reports were referred or whether they were misdirected.
 
 **Caveat.** Referral destination is parsed from free text by a rule set in
 [`01_clean_base.sql`](../03_sql/01_clean_base.sql); the raw text is never published because

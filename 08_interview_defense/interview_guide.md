@@ -144,12 +144,11 @@ can see the skew rather than take my word for it.
 
 The value below which 90% of observations fall. Active P90 is 1,680 days.
 
-I report it because a median alone hides the cases that generate complaints. More usefully,
-the *relationship* between median and P90 identifies two different operational problems.
-Pavement Maintenance has a median of 1,295.5 days and a P90 of 2,710 — that queue is old
-throughout. Pothole has a median of 133.5 days and a P90 of 1,257, a ratio of 9.4 — that
-queue mostly works but has a small population of cases stranded outside the process. Those
-need different responses, and only the median would make them look similar.
+I report it because a median alone does not describe the upper tail. Pavement Maintenance
+has both a high median (1,295.5 days) and high P90 (2,710 days), while Pothole has a much
+younger median (133.5 days) but a long upper tail (P90 1,257 days, a ratio of 9.4). Those
+are different active-age profiles and would lead me to ask different stakeholder questions;
+the dataset does not reveal process progression or why individual records remain active.
 
 ### 12. How did you treat duplicate reports?
 
@@ -158,9 +157,11 @@ populates when it judges a report to describe an already-open issue. I did **not
 fuzzy matching on address or description, because that would put an unmeasured error rate
 into a headline metric. So my duplicate rate is a floor, not an exact figure, and I say so.
 
-13.2% of all case records are duplicate children; 27.0% within the active backlog. The gap
-is structural — a duplicate can only attach to a still-open parent, so long-lived cases
-accumulate them.
+13.2% of all case records are duplicate children; 27.0% within the active backlog. The
+higher duplicate rate among active records is consistent with the source rule that a
+duplicate child references an existing open request. This snapshot does not establish that
+request age causes repeat reporting, and duplicate rates vary substantially by service
+category.
 
 ### 13. Did removing duplicates change your conclusions?
 

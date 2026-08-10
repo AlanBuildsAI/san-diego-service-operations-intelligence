@@ -67,7 +67,7 @@ Council-district aged concentration varies only **0.826**–**1.085**, so no str
 district-level over-concentration is evident; and no consistent channel-associated
 lifecycle difference survives stratification by service category. Neither result rules out an effect — both say service category is the more
 informative axis to investigate first. District 3 has the largest active inventory
-(**18,414**, **22.6%**) largely because it is the largest district by demand.
+(**18,414**, **22.6%**) and also the largest recent submission volume.
 
 **Supporting context.** **6.8%** of records reaching a terminal status were referred rather
 than closed, **61.8%** of those to entities outside the City. Citywide January–July demand
@@ -81,8 +81,8 @@ not comparable across the 2025/26 boundary because of a service relabeling.
    before assuming a capacity problem.
 2. **Review duplicate handling in Street Light Maintenance** — 6,189 repeat reports. Test
    whether intake surfaces existing open cases at submission.
-3. **Examine the Caltrans referral path** — 9,123 records (21.1% of referrals) route to the
-   State for right-of-way the City cannot action.
+3. **Examine the Caltrans referral path** — 9,123 records (21.1% of referrals) route to
+   Caltrans. Test whether likely jurisdiction can be identified earlier in the intake flow.
 
 Framed as investigations, not fixes: this dataset shows *where* to look, not *why*.
 → **[Read the memo](06_executive_memo/executive_memo.md)**

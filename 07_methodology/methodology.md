@@ -101,7 +101,7 @@ distribution.
 | Terminal status, never "completed" | Closed and Referred mean a record reached a terminal Get It Done status. The source carries no work-completion data, so no wording in this project implies a repair occurred. |
 | Median as the headline | Mean active age (649.9 days) is 70% above the median (381) because of a tail reaching 3,731 days. The mean is published alongside so the skew is visible rather than hidden. |
 | P90 as the tail metric | Answers "how bad does it get for the worst tenth", which is what a service commitment is written against. |
-| P90 ÷ own median, and P90 z-score across peers | Two different failure modes. A category can be uniformly slow, or mostly fine with a stranded minority. The two lists barely overlap. |
+| P90 ÷ own median, and P90 z-score across peers | A category can have both an old median and old tail, or a younger median with a disproportionately old upper tail. These are different descriptive age profiles; the source does not reveal process progression. The two lists barely overlap. |
 | Percentile ranks in the priority score | Combines measures on different units (counts, rates, days) without one dominating by scale. |
 | Volume floors (250 / 500 records) | A p90 on 40 records is noise. Floors are stated in each SQL file and in the table headers. |
 | A unit-free concentration index for geography | Raw district counts mostly measure district size. The index divides share-of-aged by share-of-total, so areas of different sizes compare directly. |
