@@ -3,9 +3,9 @@
 Everything needed to check this project, generated from the actual run by
 [`scripts/build_review_packet.py`](scripts/build_review_packet.py).
 
-**Generated:** 2026-08-09 20:51 UTC  
-**Data snapshot:** 2026-08-09  
-**DuckDB:** 1.5.5  
+**Generated:** 2026-08-10 00:21 UTC<br>
+**Data snapshot:** 2026-08-09<br>
+**DuckDB:** 1.5.5<br>
 **Python:** 3.13.5
 
 ---
@@ -82,7 +82,7 @@ Aggregate tables produced: **34**
 
 | Gate | Command | Result |
 |---|---|---|
-| Unit and integration tests | `make test` | **PASS** — ....................                                                     [100%] |
+| Unit and integration tests | `make test` | **PASS** — 92 passed in 0.94s |
 | Written-figure verification | `make verify` | **PASS** |
 | Data-quality audit | `make audit` | 4 PASS · 6 WARN · 2 FAIL · 1 INFO |
 
@@ -105,9 +105,9 @@ RESULT: PASS
 
 ## 4. Main findings
 
-1. **Recent submissions settle quickly; the standing inventory is old.** 91.2% of requests submitted Jan-Jun 2026 had reached a terminal status by the snapshot (median 2 days among those) - yet 81,359 requests are active with a median age of 381 days.
+1. **Recent-cohort status and active-inventory age are different measures.** 91.2% of requests submitted Jan-Jun 2026 had reached Closed or Referred status by the snapshot; among those terminal-status records, median recorded lifecycle was 2 days. Separately, 81,359 requests were active with a median age of 381 days. These populations should not be interpreted as the same lifecycle measure.
 2. **76.1% of the active inventory is past 90 days** (61,922 records); 51.0% is past a year.
-3. **Four categories hold 54.2% of active records.** TSW is the modal case_record_type for all four (64.0% of active records carry that label - a staff-group label, not a confirmed department owner).
+3. **Four categories hold 54.2% of active records.** TSW is the modal case_record_type for all four (64.0% of active records carry that label - a higher-level staff-group label, not a current ownership field).
 4. **No strong district-level over-concentration is evident** - the descriptive aged-concentration index varies only 0.826 to 1.085 across the nine council districts. This does not prove geography is irrelevant.
 5. **Duplicates are 27.0% of the active queue** (21,971 records). Collapsing them moves top-20 volume rankings by no more than 2 positions; the composite priority score was not re-derived on deduplicated inputs.
 6. **Two metrics are traps and both are handled**: the 3-day closure median is a cohort artifact (88.1% of this year's closures were also submitted this year), and the apparent channel difference falls to 2 days once service category is held constant.
@@ -146,7 +146,7 @@ Stated explicitly rather than glossed:
 |---|---|---|
 | Tableau workbook | **BLOCKED** | Tableau cannot be automated here. No `.twb` was fabricated; a full build spec is at [`05_dashboard/tableau_build_spec.md`](05_dashboard/tableau_build_spec.md). |
 | Native Excel PivotTables | **BLOCKED** | openpyxl cannot author a PivotTable cache. The workbook uses native Excel Tables, charts, conditional formatting and live formulas, and states this on its first sheet. |
-| Excel formula recalculation | **UNVERIFIED** | openpyxl writes formulas but does not evaluate them, and no spreadsheet engine was available in this environment. The formulas are written to compare against SQL-derived values and show MATCH/REVIEW when opened. |
+| Excel formula recalculation | **VERIFIED IN EXCEL** | The final workbook was opened in Microsoft Excel during visual QA. Its three SQL cross-check formulas recalculated to MATCH, and the audit totals recalculated to 4 PASS / 6 WARN / 2 FAIL / 1 INFO. |
 | Streamlit app under load | **PARTIAL** | Verified to start and serve HTTP 200 with a healthy `/_stcore/health`; not click-tested page by page. |
 | Reproducing the exact snapshot from the source URLs | **NOT POSSIBLE** | The City's files are rolling datasets refreshed daily; a later download returns current records. The committed aggregates, hashes, tests and claim registry are what make the published snapshot auditable. |
 | Cause of the aging inventory | **UNRESOLVED BY DESIGN** | Requires the City's maintenance work-order system, which is not in this dataset. This is why the recommendations say *investigate*. |
@@ -178,7 +178,7 @@ Stated explicitly rather than glossed:
 **Adversarial questions worth asking:**
 
 1. Is the coverage argument in §6 of the methodology actually airtight?
-2. Does the priority score's weighting change the top three? (It should not.)
+2. How sensitive is the priority shortlist to analyst-selected weights, and does the repository report that sensitivity accurately?
 3. Is the 2pp + 25% taxonomy-break threshold defensible, or tuned to the answer?
 4. Does any recommendation assert more than the evidence supports?
 5. Is the negative finding on geography genuinely negative, or under-powered?
