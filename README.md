@@ -17,8 +17,8 @@ executive dashboard → Excel workbook → one-page decision memo.
 > **Independent portfolio case study** using public City of San Diego data. Not commissioned
 > by, affiliated with, or endorsed by the City of San Diego. The stakeholder is hypothetical.
 
-**[▶ Executive dashboard](05_dashboard/dashboard.html)** · **[Executive
-memo](06_executive_memo/executive_memo.md)** · **[SQL](03_sql/)** · **[Excel
+**[▶ Live executive dashboard](https://alanbuildsai.github.io/san-diego-service-operations-intelligence/)** · **[Dashboard
+source](05_dashboard/dashboard.html)** · **[Executive memo](06_executive_memo/executive_memo.md)** · **[SQL](03_sql/)** · **[Excel
 workbook](05_dashboard/san_diego_ops_review.xlsx)** · **[Data quality
 audit](02_data_audit/data_quality_report.md)** · **[Full findings](04_analysis/findings.md)**
 
