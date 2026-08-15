@@ -38,7 +38,7 @@ CHROME_CANDIDATES = (
 # full-page shot must be re-measured, or the capture silently truncates.
 SHOTS = (
     ("dashboard_full.png", 1280, 6650),
-    ("dashboard_overview.png", 1280, 1000),
+    ("dashboard_overview.png", 1280, 1135),
 )
 
 

@@ -1,8 +1,9 @@
 # Tableau Build Specification
 
-**Status: NOT BUILT.** Tableau Desktop cannot be automated in this environment and no
-`.twb`/`.twbx` file has been fabricated. This document is a complete build specification so
-the workbook can be reproduced by hand in roughly 60–90 minutes.
+**Status: MANUAL BUILD SPECIFICATION ONLY.** No `.twb`/`.twbx` file or Tableau Public URL is
+included or claimed. Build and validate the workbook in Tableau Desktop or Tableau Public,
+then publish it separately after completing the acceptance checks below. This specification
+supports a manual build in roughly 60–90 minutes.
 
 The equivalent analysis is already delivered two other ways:
 [`dashboard.html`](dashboard.html) (self-contained, no install) and
@@ -33,7 +34,8 @@ totals.
 
 If a record-level extract is wanted instead, use
 `data/processed/fct_service_requests.parquet` (714,925 rows, 30 columns, already
-privacy-filtered). Publish as a `.hyper` extract, not a live connection.
+privacy-filtered). That generated file is intentionally git-ignored and is not included in
+this repository. Publish it as a `.hyper` extract, not a live connection.
 
 **Refresh:** re-run `make all` to regenerate the aggregates, then refresh the extracts.
 
@@ -161,7 +163,7 @@ backgrounds.
 - **Marks:** Text table
 - **Rows:** `investigation_rank`, `service_name`, `why_flagged`
 - **Measures:** `active_records`, `median_age_days`, `aged_90_plus`,
-  `pct_of_own_queue_aged_90`, `pct_of_scored_aged_90_backlog`, `priority_score`
+  `pct_of_own_queue_aged_90`, `pct_of_city_aged_90_backlog`, `priority_score`
 - **Colour:** highlight table on `priority_score`, white → `#eb6834`
 - **Caption (required):** "A triage order, not a performance ranking. No staffing, budget or
   work-completion data exists in this source."
@@ -208,9 +210,10 @@ numbers as static text — they must refresh with the data.
 **Boundary banner text (verbatim, required):**
 
 > **Data boundary.** Get It Done records represent submitted service requests and case
-> statuses, not verified maintenance completion. A closed case records a case closure, not a
-> completed repair. Nothing on this dashboard measures crew performance, and no relationship
-> shown is causal.
+> statuses, not verified maintenance completion. A record reaching Closed or Referred status
+> means it reached a terminal Get It Done status, not that a repair occurred. This source
+> carries no work-order, staffing or capacity data, so nothing here measures crew performance
+> and no relationship shown is causal.
 
 ---
 
@@ -224,10 +227,9 @@ propagate cleanly. Keep filtering local and minimal:
 | Top N categories | 2, 3, 6 | parameter, 5–30, default 12 |
 | `area_type` | 5 | fixed to "Council district" |
 | Month range | 8 | fixed ≥ 2025-01-01, **not** user-adjustable below that floor |
-| `taxonomy_flag` | any category-trend sheet added later | fixed to "comparable" |
 
-The last two are guard rails, not conveniences. Exposing them invites a reader to produce a
-figure the data does not support.
+The fixed area type and month floor are guard rails, not conveniences. Exposing them invites
+a reader to produce a figure the data does not support.
 
 ---
 

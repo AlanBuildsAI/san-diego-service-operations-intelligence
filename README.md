@@ -2,27 +2,56 @@
 
 ### Alan Ibarra — Data & Operations Analyst
 
-**San Diego received 389,940 Get It Done submissions in 2025. At the Aug. 9, 2026
+**Business question:** San Diego received 389,940 Get It Done submissions in 2025. At the Aug. 9, 2026
 snapshot, 81,359 requests were active; 51.0% had been open for more than a year. Where
-should leadership investigate first?**
+should leadership investigate first?
 
 An end-to-end analyst case study on **714,925 real service requests** from the City of San
 Diego's Get It Done program: source retrieval → data quality audit → SQL analysis →
 executive dashboard → Excel workbook → one-page decision memo.
 
-`SQL / DuckDB` · `Python / pandas` · `Excel` · `Dashboarding` · `Data Quality` ·
+`SQL / DuckDB` · `Python / pandas` · `Excel` · `Tableau build path` · `Dashboarding` · `Data Quality` ·
 `KPI Definition` · `Cohort Analysis` · `Business Analysis` · `Executive Communication` ·
 `Git / CI`
 
 > **Independent portfolio case study** using public City of San Diego data. Not commissioned
 > by, affiliated with, or endorsed by the City of San Diego. The stakeholder is hypothetical.
 
-**[▶ Executive dashboard](05_dashboard/dashboard.html)** · **[Executive
-memo](06_executive_memo/executive_memo.md)** · **[SQL](03_sql/)** · **[Excel
-workbook](05_dashboard/san_diego_ops_review.xlsx)** · **[Data quality
-audit](02_data_audit/data_quality_report.md)** · **[Full findings](04_analysis/findings.md)**
+**[Dashboard](05_dashboard/assets/readme_01_overview.png)** · **[Excel](05_dashboard/san_diego_ops_review.xlsx)** ·
+**[SQL](03_sql/)** · **[Tableau guide](05_dashboard/tableau_build_spec.md)** ·
+**[Memo](06_executive_memo/executive_memo.md)** · **[Data quality](02_data_audit/data_quality_report.md)** ·
+**[Methodology](07_methodology/methodology.md)**
 
-![Executive dashboard — active inventory, aging profile, category concentration and investigation priority](05_dashboard/assets/dashboard_overview.png)
+![Executive dashboard overview — title, data boundary, KPI cards and active-inventory aging](05_dashboard/assets/readme_01_overview.png)
+
+*81,359 active requests at the Aug. 9 snapshot; 76.1% were older than 90 days.*
+
+<details>
+<summary><strong>Open the dashboard walkthrough</strong></summary>
+
+### Where the workload is concentrated
+
+![Service-category workload concentration and median-to-P90 active-age profiles](05_dashboard/assets/readme_02_concentration.png)
+
+The category view separates workload concentration from the shape of each category's
+active-age profile; it does not reveal process progression.
+
+### What changes the interpretation
+
+![Duplicate reporting and referral-destination context](05_dashboard/assets/readme_03_context.png)
+
+Duplicate grain and referral routing change how inventory and terminal-status records
+should be read; neither panel establishes why individual requests remain active or are
+referred.
+
+### Investigation priority
+
+![Investigation-priority table and weight-sensitivity check](05_dashboard/assets/readme_04_priority.png)
+
+The priority score is an analyst-created triage heuristic, not a performance ranking, and
+its shortlist was tested across five weighting schemes.
+
+</details>
 
 ---
 
@@ -101,6 +130,7 @@ Framed as investigations, not fixes: this dataset shows *where* to look, not *wh
 | **Duplicate handling** | Two grains reported side by side, with rank impact tested rather than assumed |
 | **Excel reporting** | [Six-sheet workbook](05_dashboard/san_diego_ops_review.xlsx): tables, charts, conditional formatting, live cross-check formulas |
 | **Dashboarding** | [Self-contained HTML](05_dashboard/dashboard.html) + [Streamlit](05_dashboard/app.py); every panel answers a stated business question |
+| **Tableau publishing path** | [Manual build specification](05_dashboard/tableau_build_spec.md): nine sheets from committed aggregate CSVs, dashboard layout, acceptance checks and a separate Tableau Public publishing workflow; no `.twb`/`.twbx` or public link is claimed |
 | **Executive communication** | [One-page memo](06_executive_memo/executive_memo.md): findings → implications → limitations → next step |
 | **Analytical judgment** | Denominator validation, negative findings reported as negative, and a sensitivity test that disproved my own earlier claim |
 | **Reproducibility** | [Source manifest](docs/source_manifest.md) with hashes, an automated pytest suite, and figure verification in CI |
