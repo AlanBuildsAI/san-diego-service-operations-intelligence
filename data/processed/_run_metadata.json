@@ -1,0 +1,4 @@
+{
+  "snapshot_date": "2026-08-09",
+  "note": "Published portfolio snapshot. Source and derivation documented in docs/source_manifest.md. This committed metadata allows the public Streamlit dashboard to render from committed aggregate outputs without requiring the raw source files."
+}
